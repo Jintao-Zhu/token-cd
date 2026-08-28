@@ -1,0 +1,36 @@
+{
+  "experiment": "coreact_region_sign_probe_v3_capture",
+  "row_identity": [
+    "suite",
+    "task_id",
+    "episode_id",
+    "frame_id",
+    "initial_sim_state_sha256",
+    "observation_sha256",
+    "rgb_camera1_sha256",
+    "rgb_camera2_sha256",
+    "segmentation_camera1_sha256",
+    "segmentation_camera2_sha256"
+  ],
+  "per_camera_region_fields": [
+    "camera_id",
+    "visual_token_index",
+    "prefix_index",
+    "row",
+    "column",
+    "target_object_fraction",
+    "goal_container_fraction",
+    "protected_fraction",
+    "background_fraction",
+    "ambiguous_fraction",
+    "region_mapping_sha256"
+  ],
+  "rules": {
+    "segmentation_source": "same raw simulator observation as policy RGB",
+    "token_mapping": "ordered source footprint after verified connector topology; not a pixel-level causal map",
+    "protected_tokens": "state, language, special, padding, and robot/gripper regions cannot be selected",
+    "labels": "anchor/nuisance labels come only from frozen-model Q_rel; no closed-loop success labels",
+    "split": "leave-one-task-out; no episode overlap"
+  },
+  "required_gate": "all rows must have all row_identity fields and exactly 128 mapped visual tokens across two cameras"
+}
