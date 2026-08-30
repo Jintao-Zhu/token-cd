@@ -73,7 +73,7 @@ grasping/insertion tasks (close_drawer +15, open_drawer +13, pick_coke +10).
 
 ## Coverage note
 
-Rollout reached 4488/4500 episode summaries at analysis time (882/900 complete 5-arm
-pairs); the remaining 12 episodes are `place_apple` (0% SR across all arms) and cannot
-change the decision. Final table will be re-emitted by `analyze_semantic_recon.py` once
-all 45 `.done` markers land.
+Final: **4500/4500** episode summaries, **900/900** complete 5-arm pairs, 45/45 `.done`
+markers. The table above is the final re-emit from `analyze_semantic_recon.py` on the
+complete dataset. (An interim run at 882/900 pairs produced identical metrics — the 18
+outstanding pairs were all `place_apple`, 0% SR across every arm.)
