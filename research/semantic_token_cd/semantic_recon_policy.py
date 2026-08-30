@@ -94,14 +94,26 @@ def reconstruct_groups(
     M: int = M_BASIS,
     rho_scale: float = RHO_SCALE,
     return_raw: bool = False,
+    strength_mode: str = "full",
 ) -> tuple[np.ndarray, dict]:
     """Reconstruct every selected-group token from a context basis and return
     (h_tilde [256,d] float32, diagnostics). h is [256,d] float32 projector out.
 
+    The negative branch degrades each selected token v_i toward its context
+    reconstruction hat{v}_i by a per-token strength s_i:
+
+        v_i^- = (1 - s_i) v_i + s_i hat{v}_i
+
+    ``strength_mode`` selects how s_i is assigned (Error-Guided Recon spec):
+        "full"             — s_i = 1                 (Phase-1 operator: keep only hat{v}).
+        "error_guided"     — s_i = clip(e_i, 0, 1)   (weaken by reconstruction error).
+        "matched_strength" — s_i = mean_j clip(e_j, 0, 1) (uniform, matches total strength).
+
     If ``return_raw`` is True the return becomes (h_tilde, diag, raw) where ``raw``
-    holds the float64 per-token arrays ``e_rel`` / ``q_ratio`` / ``cos`` (length
-    |G|). The Phase 0 integrity probe uses this for pooled per-task distributions;
-    the rollout passes the default (aggregates only) to keep every trace step small.
+    holds the float64 per-token arrays ``e_rel`` / ``q_ratio`` / ``cos`` / ``s``
+    (length |G|). The Phase 0 integrity probe uses this for pooled per-task
+    distributions; the rollout passes the default (aggregates only) to keep every
+    trace step small.
     """
     h64 = h.astype(np.float64)
     g_idx = np.array(
@@ -134,8 +146,31 @@ def reconstruct_groups(
     q_ratio = vn_hat / (vn + _EPS)
     cos = np.sum(v_orig * v_hat, axis=1) / (vn * vn_hat + _EPS)
 
+    # --- degradation strength (Error-Guided Recon spec) ----------------------
+    # e_i = ||v_i - v_hat_i|| / (||v_i|| + eps) is the relative reconstruction
+    # error the spec calls e_i. Assign per-token strength s_i from it:
+    s_hat = np.clip(e_rel, 0.0, 1.0)
+    if strength_mode == "full":
+        s_used = np.ones_like(e_rel)
+        v_deg = v_hat
+    elif strength_mode == "error_guided":
+        s_used = s_hat
+        v_deg = (1.0 - s_used)[:, None] * v_orig + s_used[:, None] * v_hat
+    elif strength_mode == "matched_strength":
+        s_bar = float(s_hat.mean())
+        s_used = np.full_like(e_rel, s_bar)
+        v_deg = (1.0 - s_bar) * v_orig + s_bar * v_hat
+    else:
+        raise ValueError(f"Unknown strength_mode: {strength_mode}")
+
     h_tilde = h.astype(np.float32).copy()
-    h_tilde[g_idx] = v_hat.astype(np.float32)
+    h_tilde[g_idx] = v_deg.astype(np.float32)
+
+    # Feature perturbation norm D = ||V~_G - V_G||_F / (||V_G||_F + eps): the
+    # spec's single number for "how hard" the negative branch touches the
+    # semantic region. full -> ||v_hat-v_orig||_F/||v_orig||_F; matched ->
+    # s_bar * that; error_guided -> sqrt(sum_i s_i^2 ||v_hat-v_orig||_i^2)/||V_G||.
+    D = float(np.linalg.norm(v_deg - v_orig) / (np.linalg.norm(v_orig) + _EPS))
 
     diag = {
         "recon_M": int(M),
@@ -144,13 +179,17 @@ def reconstruct_groups(
         "recon_g_basis_disjoint": True,
         "recon_n_g_tokens": int(g_idx.size),
         "recon_n_c_tokens": int(c_idx.size),
-        "recon_finite": bool(np.isfinite(v_hat).all()),
+        "recon_finite": bool(np.isfinite(v_hat).all() and np.isfinite(v_deg).all()),
         "recon_e_rel": _pstats(e_rel),
         "recon_q_ratio": _pstats(q_ratio),
         "recon_cos": _pstats(cos),
+        "recon_strength_mode": strength_mode,
+        "recon_s": _pstats(s_used),
+        "recon_mean_s": float(s_used.mean()),
+        "recon_perturb_norm_D": D,
     }
     if return_raw:
-        return h_tilde, diag, {"e_rel": e_rel, "q_ratio": q_ratio, "cos": cos}
+        return h_tilde, diag, {"e_rel": e_rel, "q_ratio": q_ratio, "cos": cos, "s": s_used}
     return h_tilde, diag
 
 
@@ -197,9 +236,14 @@ class SemanticReconCDInference(AuditedEntityCDInference):
     ``recon_selection_mode`` is "semantic" (G = source/target groups) or
     "random_recon" (G = q random non-semantic groups, size-matched). Everything
     else — reconstruction operator, CD, guided prefix — is identical.
+
+    ``strength_mode`` selects how each selected token v_i is degraded toward its
+    context reconstruction (see ``reconstruct_groups``): "full" (Phase-1, s_i=1),
+    "error_guided" (s_i = clip(e_i,0,1)), or "matched_strength" (uniform s_bar).
     """
 
     recon_selection_mode: str = "semantic"
+    strength_mode: str = "full"
     M: int = M_BASIS
     rho_scale: float = RHO_SCALE
     _task_id: int = -1
@@ -239,7 +283,9 @@ class SemanticReconCDInference(AuditedEntityCDInference):
         if not selected:
             raise RuntimeError("Reconstruction selected an empty negative branch")
 
-        h_tilde, diag = reconstruct_groups(h, labels, selected_groups, self.M, self.rho_scale)
+        h_tilde, diag = reconstruct_groups(
+            h, labels, selected_groups, self.M, self.rho_scale, strength_mode=self.strength_mode
+        )
         if not diag["recon_finite"]:
             raise FloatingPointError("Reconstruction produced non-finite features")
 
