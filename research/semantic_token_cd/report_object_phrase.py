@@ -5,7 +5,7 @@ Reads selector_results.json / decision.json / task_breakdown.csv /
 phrase_extraction.json and writes REPORT_ZH.md + visualization/*.png.
 
 Run:
-  cd /data/docker/dev_zjt/data/code
+  cd /home/leju-suzhou/zjt_ws/token-cd
   task1/.venvs/openvla-ar/bin/python research/semantic_token_cd/report_object_phrase.py \
     --artifact artifacts/semantic_token_cd_phase1_5_object_grounding_v1
 """

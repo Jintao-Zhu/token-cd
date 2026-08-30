@@ -5,7 +5,7 @@ Reads selector_results.json / decision.json and writes REPORT_ZH.md +
 visualization/*.png.
 
 Run:
-  cd /data/docker/dev_zjt/data/code
+  cd /home/leju-suzhou/zjt_ws/token-cd
   task1/.venvs/openvla-ar/bin/python research/semantic_token_cd/report_multi_signal.py \
     --artifact artifacts/multi_signal_semantic_cd_phase0_v1
 """

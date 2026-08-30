@@ -12,7 +12,7 @@ SR, Rescue/Harm, task breakdown, and the four rollout gates:
 Arms: vanilla / entity_cd_025 / entity_cd_050 (primary) / random_mask (control).
 
 Run:
-  cd /data/docker/dev_zjt/data/code
+  cd /home/leju-suzhou/zjt_ws/token-cd
   task1/.venvs/openvla-ar/bin/python research/semantic_token_cd/analyze_libero_rollout.py \
     --artifact artifacts/libero_object_semantic_entity_cd_phase0_v1
 """

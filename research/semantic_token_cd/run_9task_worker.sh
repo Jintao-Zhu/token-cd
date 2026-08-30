@@ -10,7 +10,7 @@ TASK1="$2"
 TASK2="$3"
 GPU=0
 
-REPO_ROOT="/data/docker/dev_zjt/data/code"
+REPO_ROOT="/home/leju-suzhou/zjt_ws/token-cd"
 ART_REF="$REPO_ROOT/artifacts/uniform_vs_semantic_attention_cd_450_v1"
 ART_DUAL="$REPO_ROOT/artifacts/orthogonal_dual_attention_cd_50_v1"
 VANILLA_SRC="$REPO_ROOT/artifacts/simpler_distractor_semantic_entity_cd_phase0_v2"

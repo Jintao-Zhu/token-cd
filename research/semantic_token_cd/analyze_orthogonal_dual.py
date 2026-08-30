@@ -20,7 +20,7 @@ Produces:
         vanilla fail AND uniform fail AND semantic fail AND dual success.
 
 Run:
-  cd /data/docker/dev_zjt/data/code
+  cd /home/leju-suzhou/zjt_ws/token-cd
   task1/.venvs/openvla-ar/bin/python research/semantic_token_cd/analyze_orthogonal_dual.py
 """
 from __future__ import annotations

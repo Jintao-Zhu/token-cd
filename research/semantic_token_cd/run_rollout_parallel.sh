@@ -5,7 +5,7 @@
 # Slowest tasks are listed first so xargs -P 3 starts them immediately and the
 # fast tasks backfill behind them.
 set -u
-cd /data/docker/dev_zjt/data/code
+cd /home/leju-suzhou/zjt_ws/token-cd
 
 LOG_DIR="${CLAUDE_JOB_DIR:-/home/zjt/.claude/jobs/5090eadf}/tmp"
 mkdir -p "$LOG_DIR"

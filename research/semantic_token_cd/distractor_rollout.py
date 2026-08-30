@@ -12,9 +12,9 @@ import numpy as np
 import torch
 from PIL import Image
 
-REPO_ROOT = Path("/data/docker/dev_zjt/data/code")
-PCD_ROOT = REPO_ROOT / "official-reproductions/pcd_openvla_simpler_box_31b027e"
-PCD_SOURCE = PCD_ROOT / "source/PCD"
+REPO_ROOT = Path("/home/leju-suzhou/zjt_ws/token-cd")
+PCD_ROOT = Path("/home/leju-suzhou/zjt_ws/pcd_openvla_simpler_box_31b027e")
+PCD_SOURCE = PCD_ROOT / "source"
 MEAN_PATH = (
     REPO_ROOT
     / "artifacts/_archive/token_pcd/token_pcd_openvla_simpler_stage_a_v1_20260814"

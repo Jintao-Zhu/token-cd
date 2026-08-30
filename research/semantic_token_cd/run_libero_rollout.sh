@@ -3,7 +3,7 @@
 # Runs one process per task (4 arms x 20 episodes each), P tasks concurrently.
 set -euo pipefail
 
-cd /data/docker/dev_zjt/data/code
+cd /home/leju-suzhou/zjt_ws/token-cd
 
 P="${P:-4}"          # concurrent task processes
 EPISODES="$(seq -s, 0 19)"
@@ -26,7 +26,7 @@ TASKS=(
 )
 
 printf '%s\n' "${TASKS[@]}" | xargs -P "$P" -I {} bash -c '
-  cd /data/docker/dev_zjt/data/code
+  cd /home/leju-suzhou/zjt_ws/token-cd
   export HF_HUB_OFFLINE=1 TF_CPP_MIN_LOG_LEVEL=3 OMP_NUM_THREADS=1 TOKENIZERS_PARALLELISM=false PYTHONPATH="./LIBERO:$PWD"
   task="$1"; episodes="$2"
   task1/.venvs/openvla-ar/bin/python -u research/semantic_token_cd/libero_rollout.py \

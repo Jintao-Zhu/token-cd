@@ -10,7 +10,7 @@ Reads episodes/{task}/{arm}/episode_{seed}_summary.json, computes:
 Writes aggregate.json, decision.json, CSVs, REPORT_ZH.md.
 
 Run (after rollout completes):
-  cd /data/docker/dev_zjt/data/code
+  cd /home/leju-suzhou/zjt_ws/token-cd
   task1/.venvs/openvla-ar/bin/python research/semantic_token_cd/analyze_rollout.py \
     --artifact artifacts/semantic_entity_cd_rollout_pilot_v1
 """

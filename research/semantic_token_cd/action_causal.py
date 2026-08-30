@@ -16,7 +16,7 @@ Selectors: argmax_i mean_j D (l2 / kl / exp), combined α·l2+(1-α)·exp, and l
 No rollout, no training, no λ, no external VLM. object mask = evaluation only.
 
 Run (smoke):
-  cd /data/docker/dev_zjt/data/code
+  cd /home/leju-suzhou/zjt_ws/token-cd
   task1/.venvs/openvla-ar/bin/python research/semantic_token_cd/action_causal.py \
     --artifact artifacts/action_conditioned_semantic_cd_phase0_v1 \
     --split confirmation --limit 2

@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # SIMPLER_DISTRACTOR_SEMANTIC_ENTITY_CD_PHASE0_V2: 3 tasks x 50 seeds x 3 arms.
 set -euo pipefail
-cd /data/docker/dev_zjt/data/code
+cd /home/leju-suzhou/zjt_ws/token-cd
 
 export HF_HUB_OFFLINE=1 CUDA_VISIBLE_DEVICES=0 TF_CPP_MIN_LOG_LEVEL=3
 export TOKENIZERS_PARALLELISM=false

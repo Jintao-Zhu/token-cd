@@ -14,7 +14,7 @@ The CD logic mirrors the SIMPLER pilot (research/semantic_token_cd/rollout_polic
   final[:-1]     = (1+λ)·clean[:-1] - λ·negative[:-1]; argmax; decode (libero_object)
 
 Run (per task):
-  cd /data/docker/dev_zjt/data/code
+  cd /home/leju-suzhou/zjt_ws/token-cd
   HF_HUB_OFFLINE=1 CUDA_VISIBLE_DEVICES=0 TF_CPP_MIN_LOG_LEVEL=3 \
   PYTHONPATH="./LIBERO:$PWD" OMP_NUM_THREADS=1 \
     task1/.venvs/openvla-ar/bin/python research/semantic_token_cd/libero_rollout.py \
@@ -35,7 +35,7 @@ import torch
 torch.set_num_threads(1)
 torch.set_num_interop_threads(1)
 
-REPO = Path("/data/docker/dev_zjt/data/code")
+REPO = Path("/home/leju-suzhou/zjt_ws/token-cd")
 CHECKPOINT = REPO / "checkpoints/openvla-7b-finetuned-libero-object/287d6cfdf12d07b1449505f66d9bf3550257e9b3"
 CODE_DIR = REPO / "third_party/openvla/prismatic/extern/hf"
 

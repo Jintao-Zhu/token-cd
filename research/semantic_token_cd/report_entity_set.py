@@ -8,7 +8,7 @@ Historical single-group baselines (Phase-1.5/1.6/2A) are hardcoded; new numbers
 come from selector_results.json.
 
 Run:
-  cd /data/docker/dev_zjt/data/code
+  cd /home/leju-suzhou/zjt_ws/token-cd
   task1/.venvs/openvla-ar/bin/python research/semantic_token_cd/report_entity_set.py \
     --artifact artifacts/semantic_token_cd_phase2b_entity_set_v1
 """

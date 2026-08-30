@@ -13,7 +13,7 @@ Per Confirmation state:
 No rollout, no training, no λ. object mask used only for oracle definition.
 
 Run (smoke):
-  cd /data/docker/dev_zjt/data/code
+  cd /home/leju-suzhou/zjt_ws/token-cd
   HF_HUB_OFFLINE=1 CUDA_VISIBLE_DEVICES=0 PYTHONPATH="$PWD" TF_CPP_MIN_LOG_LEVEL=3 \
     task1/.venvs/openvla-ar/bin/python research/semantic_token_cd/relation_grouping.py \
       --artifact artifacts/semantic_token_cd_phase2a_relation_grouping_v1 \

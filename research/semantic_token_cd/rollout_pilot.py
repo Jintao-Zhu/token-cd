@@ -10,7 +10,7 @@ language-selected semantic entity negative branch (PCD alignment 0.586) is alrea
 above the minimum closed-loop effectiveness threshold.
 
 Run (per task):
-  cd /data/docker/dev_zjt/data/code
+  cd /home/leju-suzhou/zjt_ws/token-cd
   HF_HUB_OFFLINE=1 CUDA_VISIBLE_DEVICES=0 TF_CPP_MIN_LOG_LEVEL=3 \
   PYTHONPATH="task1/shim_site:$PWD:official-reproductions/pcd_openvla_simpler_box_31b027e/source/PCD" \
     task1/.venvs/openvla-ar/bin/python research/semantic_token_cd/rollout_pilot.py \
@@ -37,9 +37,9 @@ import torch
 torch.set_num_threads(1)
 torch.set_num_interop_threads(1)
 
-REPO_ROOT = Path("/data/docker/dev_zjt/data/code")
-PCD_ROOT = REPO_ROOT / "official-reproductions/pcd_openvla_simpler_box_31b027e"
-PCD_SOURCE = PCD_ROOT / "source/PCD"
+REPO_ROOT = Path("/home/leju-suzhou/zjt_ws/token-cd")
+PCD_ROOT = Path("/home/leju-suzhou/zjt_ws/pcd_openvla_simpler_box_31b027e")
+PCD_SOURCE = PCD_ROOT / "source"
 MEAN_PATH = (REPO_ROOT / "artifacts/_archive/token_pcd/token_pcd_openvla_simpler_stage_a_v1_20260814/"
              "position_conditioned_visual_mean.pt")
 

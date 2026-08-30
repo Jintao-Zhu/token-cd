@@ -9,7 +9,7 @@ selector_results.json; the language numbers are recomputed per-task from
 selector_results.csv for the action-vs-language complementarity table.
 
 Run:
-  cd /data/docker/dev_zjt/data/code
+  cd /home/leju-suzhou/zjt_ws/token-cd
   task1/.venvs/openvla-ar/bin/python research/semantic_token_cd/report_action_causal.py \
     --artifact artifacts/action_conditioned_semantic_cd_phase0_v1
 """

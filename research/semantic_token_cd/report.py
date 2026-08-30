@@ -5,7 +5,7 @@ Reads evaluation_results.json + phase0_decision.json and writes REPORT_ZH.md
 (answers the 4 core questions + verdict). Run after evaluate.py.
 
 Run:
-  cd /data/docker/dev_zjt/data/code
+  cd /home/leju-suzhou/zjt_ws/token-cd
   task1/.venvs/openvla-ar/bin/python research/semantic_token_cd/report.py \
     --artifact artifacts/semantic_token_cd_phase0_v1
 """

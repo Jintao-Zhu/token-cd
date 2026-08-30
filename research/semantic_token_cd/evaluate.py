@@ -6,7 +6,7 @@ cosines offline (log_softmax space, matching r_pixel), aggregates over the
 Confirmation split, writes decision JSON + CSVs + REPORT_ZH.md + group viz.
 
 Run:
-  cd /data/docker/dev_zjt/data/code
+  cd /home/leju-suzhou/zjt_ws/token-cd
   task1/.venvs/openvla-ar/bin/python research/semantic_token_cd/evaluate.py \
     --artifact artifacts/semantic_token_cd_phase0_v1 --split confirmation
 """

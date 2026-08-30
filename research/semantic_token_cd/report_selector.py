@@ -5,7 +5,7 @@ Reads selector_results.json / decision.json / oracle_vs_pred.csv / group_feature
 and writes REPORT_ZH.md + visualization/*.png.
 
 Run:
-  cd /data/docker/dev_zjt/data/code
+  cd /home/leju-suzhou/zjt_ws/token-cd
   task1/.venvs/openvla-ar/bin/python research/semantic_token_cd/report_selector.py \
     --artifact artifacts/semantic_token_cd_phase1_selector_v1
 """

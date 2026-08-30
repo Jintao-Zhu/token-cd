@@ -5,7 +5,7 @@ Reads selector_results.json / decision.json / task_breakdown.csv /
 goal_phrase.json and writes REPORT_ZH.md + visualization/*.png.
 
 Run:
-  cd /data/docker/dev_zjt/data/code
+  cd /home/leju-suzhou/zjt_ws/token-cd
   task1/.venvs/openvla-ar/bin/python research/semantic_token_cd/report_goal_selector.py \
     --artifact artifacts/semantic_token_cd_phase1_6_goal_selector_v1
 """

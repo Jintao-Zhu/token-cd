@@ -15,7 +15,7 @@ correctness (== g_obj_idx), to test whether the two signals are complementary.
 No rollout, no training, no λ, no external VLM. object mask = evaluation only.
 
 Run (smoke):
-  cd /data/docker/dev_zjt/data/code
+  cd /home/leju-suzhou/zjt_ws/token-cd
   HF_HUB_OFFLINE=1 CUDA_VISIBLE_DEVICES=0 PYTHONPATH="$PWD" TF_CPP_MIN_LOG_LEVEL=3 \
     task1/.venvs/openvla-ar/bin/python research/semantic_token_cd/multi_signal.py \
       --artifact artifacts/multi_signal_semantic_cd_phase0_v1 \

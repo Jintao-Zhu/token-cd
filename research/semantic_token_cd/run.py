@@ -7,7 +7,7 @@ spectral K=16), mask each group + matched baselines (attention/random/full-objec
 dump per-state npz. Reuses cat_cd_npz clean_ids / r_pixel / attention / object_ids.
 
 Run (smoke):
-  cd /data/docker/dev_zjt/data/code
+  cd /home/leju-suzhou/zjt_ws/token-cd
   HF_HUB_OFFLINE=1 CUDA_VISIBLE_DEVICES=0 PYTHONPATH="$PWD" TF_CPP_MIN_LOG_LEVEL=3 \
     task1/.venvs/openvla-ar/bin/python research/semantic_token_cd/run.py \
       --artifact artifacts/semantic_token_cd_phase0_v1 --split confirmation --limit 1

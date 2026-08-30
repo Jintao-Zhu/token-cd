@@ -7,7 +7,7 @@ task breakdown, gates A/B/C, STOP RULE verdict. Writes selector_results.json,
 CSVs, visualization, decision.json, REPORT_ZH.md.
 
 Run:
-  cd /data/docker/dev_zjt/data/code
+  cd /home/leju-suzhou/zjt_ws/token-cd
   task1/.venvs/openvla-ar/bin/python research/semantic_token_cd/evaluate_selector.py \
     --artifact artifacts/semantic_token_cd_phase1_selector_v1 --split confirmation
 """

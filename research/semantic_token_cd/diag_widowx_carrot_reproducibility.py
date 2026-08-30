@@ -13,7 +13,7 @@ import os
 import sys
 from pathlib import Path
 
-REPO_ROOT = Path("/data/docker/dev_zjt/data/code")
+REPO_ROOT = Path("/home/leju-suzhou/zjt_ws/token-cd")
 for p in (REPO_ROOT / "task1/shim_site", REPO_ROOT):
     if str(p) not in sys.path:
         sys.path.insert(0, str(p))

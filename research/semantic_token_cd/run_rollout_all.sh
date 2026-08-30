@@ -2,7 +2,7 @@
 # SEMANTIC_ENTITY_CD_ROLLOUT_PILOT_V1 — full run driver (9 tasks × 10 seeds × 3 arms).
 # Resumable: rollout_pilot.py skips existing *_summary.json files.
 set -u
-cd /data/docker/dev_zjt/data/code
+cd /home/leju-suzhou/zjt_ws/token-cd
 
 LOG_DIR="${CLAUDE_JOB_DIR:-/home/zjt/.claude/jobs/5090eadf}/tmp"
 mkdir -p "$LOG_DIR"

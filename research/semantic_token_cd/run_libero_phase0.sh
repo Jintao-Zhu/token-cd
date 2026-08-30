@@ -2,7 +2,7 @@
 # Driver for LIBERO_OBJECT_SEMANTIC_ENTITY_CD_PHASE0_V1 — offline alignment gate.
 set -euo pipefail
 
-cd /data/docker/dev_zjt/data/code
+cd /home/leju-suzhou/zjt_ws/token-cd
 
 GPU="${GPU:-0}"
 SMOKE="${SMOKE:-0}"

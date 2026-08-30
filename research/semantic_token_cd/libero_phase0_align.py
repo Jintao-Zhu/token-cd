@@ -12,7 +12,7 @@ method). Mirrors Phase-2B's SAM-as-ruler (align_entity_set_K8 = 0.586).
 Gate: mean alignment > 0.55 -> PASS_TO_ROLLOUT; < 0.40 -> STOP_..._NO_GO.
 
 Run (smoke):
-  cd /data/docker/dev_zjt/data/code
+  cd /home/leju-suzhou/zjt_ws/token-cd
   HF_HUB_OFFLINE=1 CUDA_VISIBLE_DEVICES=0 TF_CPP_MIN_LOG_LEVEL=3 \
   PYTHONPATH="./LIBERO:$PWD" \
     task1/.venvs/openvla-ar/bin/python research/semantic_token_cd/libero_phase0_align.py \
@@ -28,7 +28,7 @@ from pathlib import Path
 import numpy as np
 import torch
 
-REPO = Path("/data/docker/dev_zjt/data/code")
+REPO = Path("/home/leju-suzhou/zjt_ws/token-cd")
 CHECKPOINT = REPO / "checkpoints/openvla-7b-finetuned-libero-object/287d6cfdf12d07b1449505f66d9bf3550257e9b3"
 CODE_DIR = REPO / "third_party/openvla/prismatic/extern/hf"
 

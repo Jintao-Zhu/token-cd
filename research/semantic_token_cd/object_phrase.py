@@ -11,7 +11,7 @@ evaluates oracle recovery / alignment / task breakdown / gates.
 No rollout, no training, no λ. object mask used only for evaluation.
 
 Run:
-  cd /data/docker/dev_zjt/data/code
+  cd /home/leju-suzhou/zjt_ws/token-cd
   HF_HUB_OFFLINE=1 CUDA_VISIBLE_DEVICES=0 PYTHONPATH="$PWD" TF_CPP_MIN_LOG_LEVEL=3 \
     task1/.venvs/openvla-ar/bin/python research/semantic_token_cd/object_phrase.py \
       --artifact artifacts/semantic_token_cd_phase1_5_object_grounding_v1 --split confirmation

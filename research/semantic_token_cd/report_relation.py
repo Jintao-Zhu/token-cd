@@ -8,7 +8,7 @@ Historical baselines (K=8 single-group, Phase-1.5/1.6) are hardcoded for the
 cross-method alignment table; new K=16/32 numbers come from selector_results.json.
 
 Run:
-  cd /data/docker/dev_zjt/data/code
+  cd /home/leju-suzhou/zjt_ws/token-cd
   task1/.venvs/openvla-ar/bin/python research/semantic_token_cd/report_relation.py \
     --artifact artifacts/semantic_token_cd_phase2a_relation_grouping_v1
 """

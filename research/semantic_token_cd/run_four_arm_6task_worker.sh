@@ -7,7 +7,7 @@ TASK1="$2"
 TASK2="$3"
 GPU=0
 
-REPO_ROOT="/data/docker/dev_zjt/data/code"
+REPO_ROOT="/home/leju-suzhou/zjt_ws/token-cd"
 ARTIFACT="$REPO_ROOT/artifacts/orthogonal_dual_four_arm_6task_50_v1"
 VENV="$REPO_ROOT/task1/.venvs/openvla-ar/bin/python"
 PCD_SOURCE="$REPO_ROOT/official-reproductions/pcd_openvla_simpler_box_31b027e/source/PCD"
