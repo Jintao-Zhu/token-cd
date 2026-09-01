@@ -1,0 +1,29 @@
+{
+  "arms": [
+    "vanilla",
+    "semantic_attn_k8_l8_15"
+  ],
+  "attention": {
+    "layers": [
+      8,
+      16
+    ],
+    "mask_value": -10000.0
+  },
+  "cd_tokens": "action dims 0..5, gripper dim 6 clean",
+  "experiment": "SCR_CD_SEMANTIC_RECON_K8_M10_0_299_BASELINE_BACKFILL_V1",
+  "kmeans": {
+    "K": 8,
+    "n_init": 10,
+    "seed": 0
+  },
+  "lambda": 0.5,
+  "note": "attn arm == semantic_attn_k8_l8_15 (K8, L8-15, lambda0.5, semantic)",
+  "pairing": "capture-once-reuse; hash-verified fail-closed across 2 arms",
+  "phase": "4 gap-fill: 6 hard tasks 0-299 vanilla + attn",
+  "seeds": [
+    0,
+    299
+  ],
+  "task": "widowx_put_eggplant_in_basket"
+}

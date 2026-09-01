@@ -1,0 +1,29 @@
+{
+  "arms": [
+    "vanilla",
+    "semantic_attn_k8_l8_15"
+  ],
+  "attention": {
+    "layers": [
+      8,
+      16
+    ],
+    "mask_value": -10000.0
+  },
+  "cd_tokens": "action dims 0..5, gripper dim 6 clean",
+  "experiment": "RECON_INDEXED_VANILLA_SHR_0_299_V1",
+  "kmeans": {
+    "K": 8,
+    "n_init": 10,
+    "seed": 0
+  },
+  "lambda": 0.5,
+  "note": "Recon-indexed paired baseline; same task+seed reset protocol",
+  "pairing": "capture-once-reuse; hash-verified fail-closed across 2 arms",
+  "phase": "paired Vanilla + SHR indexed by Recon task+seed, 0-299",
+  "seeds": [
+    0,
+    299
+  ],
+  "task": "google_robot_pick_coke_can"
+}
