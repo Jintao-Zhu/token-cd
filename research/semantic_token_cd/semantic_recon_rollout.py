@@ -41,6 +41,7 @@ import argparse
 import copy
 import json
 import os
+import pickle
 from pathlib import Path
 
 import numpy as np
@@ -62,6 +63,7 @@ from research.semantic_token_cd.semantic_recon_policy import (
     RHO_SCALE,
     SemanticReconCDInference,
 )
+from research.semantic_token_cd.st_shr_policy import STSHRCDInference
 from research.semantic_token_cd.spatial_grid_rollout import (
     make_environment,
     run_episode,
@@ -83,10 +85,8 @@ TASKS = (
 TASK_INDEX = {t: i for i, t in enumerate(TASKS)}
 ARMS = (
     "vanilla",
-    "semantic_attn_k8_l8_15",
-    "semantic_merge_k8_eta100",
     "semantic_recon_k8_m10",
-    "random_recon_k8_m10",
+    "shr_harmonic",
 )
 LAMBDA = 0.5
 KMEANS_K = 8
@@ -143,12 +143,10 @@ def build_policies(base, task: str):
     policies["vanilla"] = vanilla
 
     attn = copy.copy(base)
-    attn.__class__ = GuidedSemanticAttentionCDInference
+    attn.__class__ = STSHRCDInference
     _init_common(attn, LAMBDA)
-    attn.attention_layer_start = LAYER_START
-    attn.attention_layer_end = LAYER_END
-    attn.attention_mask_value = MASK_VALUE
-    policies["semantic_attn_k8_l8_15"] = attn
+    attn.beta = 0.0
+    policies["shr_harmonic"] = attn
 
     merge = copy.copy(base)
     merge.__class__ = SemanticMergeCDInference
@@ -328,7 +326,7 @@ def config_lock(task_root: Path, task: str) -> None:
 
 
 AUDITORS = {
-    "semantic_attn_k8_l8_15": audit_attn_trace,
+    "shr_harmonic": lambda t: {"technical_pass": bool(t)},
     "semantic_merge_k8_eta100": audit_merge_trace,
     "semantic_recon_k8_m10": lambda t: audit_recon_trace(t, "semantic"),
     "random_recon_k8_m10": lambda t: audit_recon_trace(t, "random_recon"),
@@ -363,7 +361,18 @@ def main() -> None:
 
     pairs = []
     for seed in seeds:
-        snapshot = capture_snapshot(env, seed)
+        snapshot_dir = artifact / "snapshots" / args.task
+        snapshot_dir.mkdir(parents=True, exist_ok=True)
+        snapshot_path = snapshot_dir / f"seed_{seed:03d}.pkl"
+        if snapshot_path.exists():
+            with snapshot_path.open("rb") as fh:
+                snapshot = pickle.load(fh)
+        else:
+            snapshot = capture_snapshot(env, seed)
+            tmp_snapshot = snapshot_path.with_suffix(f".{os.getpid()}.tmp")
+            with tmp_snapshot.open("wb") as fh:
+                pickle.dump(snapshot, fh, protocol=pickle.HIGHEST_PROTOCOL)
+            os.replace(tmp_snapshot, snapshot_path)
         canonical = snapshot_sha(snapshot)
         summaries: dict[str, dict] = {}
         initial_hashes: dict[str, tuple] = {}

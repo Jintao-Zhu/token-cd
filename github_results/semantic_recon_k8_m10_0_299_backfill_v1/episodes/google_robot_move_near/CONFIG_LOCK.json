@@ -1,0 +1,32 @@
+{
+  "arms": [
+    "semantic_recon_k8_m10"
+  ],
+  "cd_tokens": "action dims 0..5, gripper dim 6 clean",
+  "experiment": "SCR_CD_SEMANTIC_RECON_K8_M10_0_299_BACKFILL_V1",
+  "guided_prefix": "shared clean greedy prefix; negative branch teacher-forced",
+  "kmeans": {
+    "K": 8,
+    "n_init": 10,
+    "seed": 0,
+    "selector": "entity_set KMeans top-1 cos match (source/target), deduped"
+  },
+  "lambda": 0.5,
+  "note": "frozen config == Phase 1 & Phase 2 semantic_recon_k8_m10 (K8 M10 lambda0.5)",
+  "pairing": "per-seed initial_state_sha256 + canonical_snapshot_sha256 recorded",
+  "phase": "3 backfill: single-arm semantic_recon over seeds 0-299, 9 tasks",
+  "reconstruction": {
+    "M": 10,
+    "basis": "M tokens FPS on cosine from C = V \\ G",
+    "operator": "v_i -> mu_B + B_c alpha_i; alpha=(B_c^T B_c + rho I)^{-1} B_c^T (v_i - mu_B)",
+    "rho": "1e-3 * tr(B_c^T B_c) / M (fixed)",
+    "rho_scale": 0.001,
+    "scope": "source AND target groups excluded from basis; once per control obs",
+    "token_count": "256 -> 256; positions unchanged; non-selected bit-identical"
+  },
+  "seeds": [
+    0,
+    299
+  ],
+  "task": "google_robot_move_near"
+}

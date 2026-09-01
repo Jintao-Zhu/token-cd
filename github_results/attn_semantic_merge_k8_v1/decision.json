@@ -1,0 +1,35 @@
+{
+  "comparisons_delta_sr_macro": {
+    "attn_vs_vanilla": -0.05154639175257734,
+    "merge_vs_attn": 0.03666666666666666,
+    "merge_vs_gsm100": -0.02553264604810999,
+    "merge_vs_vanilla": -0.019587628865979406
+  },
+  "comparisons_macro_net": {
+    "attn_vs_vanilla": -5.0,
+    "merge_vs_attn": 3.6666666666666665,
+    "merge_vs_gsm100": -2.6666666666666665,
+    "merge_vs_vanilla": -2.0
+  },
+  "experiment": "ATTN_SEMANTIC_MERGE_K8_V1",
+  "hash_pairing": {
+    "excluded_seeds": [
+      "move_near 209",
+      "move_near 211",
+      "move_near 270"
+    ],
+    "n_excluded_non_deterministic": 9,
+    "ok": false,
+    "reason": "Non-deterministic env.reset across the Phase 1A vs Phase 1B processes; the two new arms (same-process) always match each other. Excluded from cross-run (vs vanilla/gsm_100) comparisons only; within-run merge-vs-attn used all 100 seeds."
+  },
+  "key_findings": [
+    "Attention-blocking (L8-15) is net HARMFUL in aggregate (dSR_macro -5.15pp, Net -5): move_near -15.5pp (p=0.0035), pick_coke_can -6pp, only close_drawer +6pp.",
+    "Semantic-Merge (eta=1.0) is mildly negative in aggregate (dSR_macro -1.96pp, Net -2): move_near +4pp, close_drawer -4pp, pick_coke_can -6pp.",
+    "Merge >> Attention head-to-head overall (dSR_macro +3.67pp, Net +3.67), but the win is entirely move_near (+21pp, p=0.0002); close_drawer -10pp, pick_coke_can 0pp.",
+    "ANSWER to key question: local Semantic-Merge does NOT beat Global GSM100 in aggregate (dSR_macro -2.55pp, Net -2.67). It wins move_near (+11pp, p=0.0455) but loses close_drawer (-10pp) and pick_coke_can (-9pp). The 'GSM intervening too broadly' hypothesis is NOT supported in aggregate.",
+    "Clean mechanistic dissociation on move_near: access-path-blocking (attn) is catastrophic (-15.5pp) while prototype-collapse (merge) is neutral/slightly positive (+4pp) -> move_near is gated on ATTENDING to semantic tokens, not on within-group DETAIL."
+  ],
+  "phase": "1B mechanism study (Semantic-Merge vs Attention-K8, guided prefix, KMeans K=8 shared selector)",
+  "question": "Is Semantic-Merge (local, selected groups only) better than Global GSM100?",
+  "verdict": "NO universal improvement; task-dependent dissociation"
+}

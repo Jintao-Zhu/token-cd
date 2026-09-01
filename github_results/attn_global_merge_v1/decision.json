@@ -1,0 +1,66 @@
+{
+  "best_eta": null,
+  "best_eta_value": null,
+  "closest_arm": "gsm_100 (only macro-positive: dSR_macro=+0.0067, Net 2/3 tasks, close_drawer +6.0pp / pick_coke_can +3.0pp / move_near -7.0pp)",
+  "eta_results": {
+    "gsm_025": {
+      "delta_sr_macro": -0.0333,
+      "eta": 0.25,
+      "g1_tasks_net_gt0": 0,
+      "g2_macro_sr_ge_3pp": false,
+      "g3_min_delta_sr_gt_m10pp": true,
+      "pass": false,
+      "per_task_delta_sr": {
+        "google_robot_close_drawer": -0.09000000000000002,
+        "google_robot_move_near": 0.0,
+        "google_robot_pick_coke_can": -0.010000000000000009
+      },
+      "per_task_net": {
+        "google_robot_close_drawer": -9,
+        "google_robot_move_near": 0,
+        "google_robot_pick_coke_can": -1
+      }
+    },
+    "gsm_050": {
+      "delta_sr_macro": -0.0267,
+      "eta": 0.5,
+      "g1_tasks_net_gt0": 1,
+      "g2_macro_sr_ge_3pp": false,
+      "g3_min_delta_sr_gt_m10pp": true,
+      "pass": false,
+      "per_task_delta_sr": {
+        "google_robot_close_drawer": 0.030000000000000027,
+        "google_robot_move_near": -0.050000000000000044,
+        "google_robot_pick_coke_can": -0.06
+      },
+      "per_task_net": {
+        "google_robot_close_drawer": 3,
+        "google_robot_move_near": -5,
+        "google_robot_pick_coke_can": -6
+      }
+    },
+    "gsm_100": {
+      "delta_sr_macro": 0.0067,
+      "eta": 1.0,
+      "g1_tasks_net_gt0": 2,
+      "g2_macro_sr_ge_3pp": false,
+      "g3_min_delta_sr_gt_m10pp": true,
+      "pass": false,
+      "per_task_delta_sr": {
+        "google_robot_close_drawer": 0.05999999999999994,
+        "google_robot_move_near": -0.07000000000000006,
+        "google_robot_pick_coke_can": 0.030000000000000027
+      },
+      "per_task_net": {
+        "google_robot_close_drawer": 6,
+        "google_robot_move_near": -7,
+        "google_robot_pick_coke_can": 3
+      }
+    }
+  },
+  "follow_up": "Phase 1B Semantic-Merge vs Attention-K8 (ATTN_SEMANTIC_MERGE_K8_V1) tests whether local (selected-group-only) merge beats global GSM100.",
+  "gate_note": "No eta satisfies G1 (>=2 tasks Net>0) & G2 (dSR_macro >= +3pp) & G3 (min dSR > -10pp).",
+  "phase": "1A (Global Spatial Merge strength sweep)",
+  "protocol_id": "ATTN_GLOBAL_MERGE_CD_V1",
+  "verdict": "NO-GO"
+}

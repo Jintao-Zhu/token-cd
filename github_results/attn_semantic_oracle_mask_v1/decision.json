@@ -1,0 +1,68 @@
+{
+  "gate": {
+    "cond1_oracle_full_beats_kmeans_ge2of3": {
+      "n_tasks": 2,
+      "pass": true,
+      "tasks": [
+        "move_near",
+        "close_drawer"
+      ]
+    },
+    "cond2_pooled_net_oracle_full_gt0": {
+      "pass": true,
+      "value": 10
+    },
+    "cond3_unstable_tasks_oracle_gt_kmeans": {
+      "kmeans": -6,
+      "oracle": 4,
+      "pass": true
+    },
+    "cond4_budget_matched_beats_kmeans_ge2of3": {
+      "n_tasks": 1,
+      "pass": false,
+      "tasks": [
+        "close_drawer"
+      ]
+    }
+  },
+  "interpretation": "NO-GO: condition 4 fails \u2014 the budget-matched oracle (same token count as KMeans) does NOT beat KMeans on move_near (Net -4 == -4) or pick_coke_can (-2 == -2). The oracle full-mask advantage on move_near (+8) is therefore mask SIZE, not region QUALITY. Per pre-registered decision: STOP the selector line; pivot to Adaptive-Layer / Phase.",
+  "net": {
+    "close_drawer": {
+      "kmeans_cd": 3,
+      "oracle_budget_cd": 17,
+      "oracle_cd": 6
+    },
+    "move_near": {
+      "kmeans_cd": -4,
+      "oracle_budget_cd": -4,
+      "oracle_cd": 8
+    },
+    "pick_coke_can": {
+      "kmeans_cd": -2,
+      "oracle_budget_cd": -2,
+      "oracle_cd": -4
+    }
+  },
+  "protocol_id": "ATTN_SEMANTIC_ORACLE_MASK_V1",
+  "sr": {
+    "close_drawer": {
+      "kmeans_cd": 0.49,
+      "oracle_budget_cd": 0.63,
+      "oracle_cd": 0.52,
+      "vanilla": 0.46
+    },
+    "move_near": {
+      "kmeans_cd": 0.49,
+      "oracle_budget_cd": 0.49,
+      "oracle_cd": 0.61,
+      "vanilla": 0.53
+    },
+    "pick_coke_can": {
+      "kmeans_cd": 0.27,
+      "oracle_budget_cd": 0.27,
+      "oracle_cd": 0.25,
+      "vanilla": 0.29
+    }
+  },
+  "verdict": "NO-GO"
+}
