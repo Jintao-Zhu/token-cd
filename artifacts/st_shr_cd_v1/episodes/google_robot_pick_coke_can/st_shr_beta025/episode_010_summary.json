@@ -1,0 +1,7559 @@
+{
+  "action_jerk": 0.08148735016584396,
+  "action_jitter_index": 0.08148735016584396,
+  "all_beta_locked": true,
+  "all_feature_equal": true,
+  "all_guided_prefix": true,
+  "all_reconstruction_finite": true,
+  "arm": "st_shr_beta025",
+  "arrays_file": "episode_010_arrays.npz",
+  "beta": 0.25,
+  "canonical_snapshot_sha256": "de8403c3a433fd4d24927adf9256b44729336608066edffa1b4e0427d0a1c0fe",
+  "control_steps": 80,
+  "environment_id": "GraspSingleOpenedCokeCanDistractorInScene-v0",
+  "episode_id": 10,
+  "evaluation_seed": 10,
+  "failure_reason": "environment_time_limit",
+  "fallback_fraction": 0.65,
+  "first_step_fallback": true,
+  "gpu_id": 4,
+  "initial_rgb_sha256": "2b88119b2c8a907184142e669c79a2011f26b8e8101aa76f14cb749326e592e9",
+  "initial_state_sha256": "b5bbcbc43bd983bf396ea67df9453b47c1abef5b9c9753aed7a55f615ffe4697",
+  "instruction": "pick coke can",
+  "kmeans_K": 8,
+  "kmeans_seed": 0,
+  "lambda": 0.5,
+  "protocol_id": "ST_SHR_CD_V1",
+  "residual_jerk": 0.39592915658509636,
+  "residual_temporal_cos": 0.6129609810040286,
+  "result": {
+    "consecutive_grasp": false,
+    "final_consecutive_grasp": false,
+    "final_is_grasped": false,
+    "final_lifted_object": false,
+    "final_lifted_object_significantly": false,
+    "final_near_obj": false,
+    "final_success": false,
+    "first_consecutive_grasp": -1,
+    "first_is_grasped": -1,
+    "first_lifted_object": -1,
+    "first_lifted_object_significantly": -1,
+    "first_near_obj": -1,
+    "first_success": -1,
+    "is_grasped": false,
+    "lifted_object": false,
+    "lifted_object_significantly": false,
+    "near_obj": false,
+    "success": false
+  },
+  "runtime_seconds": 196.70747688703705,
+  "seed": 10,
+  "selector_trace": [
+    {
+      "beta": 0.25,
+      "entity_alignment": [
+        {
+          "entity": "coke can",
+          "fallback_reason": "no_history",
+          "group": 7,
+          "num_tokens": 28,
+          "temporal_prior_used": false
+        }
+      ],
+      "fallback_fraction": 1.0,
+      "feature_equal": true,
+      "final_token_ids": [
+        31861,
+        31835,
+        31859,
+        31891,
+        31858,
+        31865,
+        31744
+      ],
+      "guided_prefix": true,
+      "kmeans_K": 8,
+      "lambda": 0.5,
+      "negative_token_ids": [
+        31857,
+        31865,
+        31849,
+        31879,
+        31861,
+        31841,
+        31744
+      ],
+      "num_tokens": 28,
+      "per_entity_score": [
+        0.03269164863793575
+      ],
+      "positive_token_ids": [
+        31858,
+        31835,
+        31862,
+        31891,
+        31858,
+        31865,
+        31744
+      ],
+      "reconstruction_finite": true,
+      "residual_jerk": null,
+      "residual_norm": 209.099609375,
+      "residual_temporal_cos": null,
+      "selected_entities": [
+        "coke can"
+      ],
+      "selected_group_ids": [
+        7
+      ],
+      "selected_token_ids": [
+        99,
+        100,
+        115,
+        116,
+        120,
+        121,
+        130,
+        131,
+        132,
+        135,
+        136,
+        137,
+        138,
+        146,
+        147,
+        148,
+        151,
+        152,
+        153,
+        154,
+        163,
+        167,
+        168,
+        169,
+        170,
+        184,
+        185,
+        186
+      ],
+      "selection_mode": "semantic",
+      "temporal_prior_used_fraction": 0.0
+    },
+    {
+      "beta": 0.25,
+      "entity_alignment": [
+        {
+          "centroid_displacement": 0.0,
+          "centroid_shift": [
+            0,
+            0
+          ],
+          "entity": "coke can",
+          "fallback_reason": null,
+          "group": 4,
+          "num_tokens": 28,
+          "temporal_prior_used": true
+        }
+      ],
+      "fallback_fraction": 0.0,
+      "feature_equal": true,
+      "final_token_ids": [
+        31858,
+        31847,
+        31862,
+        31912,
+        31884,
+        31851,
+        31744
+      ],
+      "guided_prefix": true,
+      "kmeans_K": 8,
+      "lambda": 0.5,
+      "negative_token_ids": [
+        31844,
+        31865,
+        31864,
+        31849,
+        31875,
+        31868,
+        31744
+      ],
+      "num_tokens": 28,
+      "per_entity_score": [
+        0.02906382235753615
+      ],
+      "positive_token_ids": [
+        31858,
+        31847,
+        31862,
+        31912,
+        31875,
+        31851,
+        31744
+      ],
+      "reconstruction_finite": true,
+      "residual_jerk": 0.6023726967090633,
+      "residual_norm": 200.39109802246094,
+      "residual_temporal_cos": 0.2748709195209957,
+      "selected_entities": [
+        "coke can"
+      ],
+      "selected_group_ids": [
+        4
+      ],
+      "selected_token_ids": [
+        99,
+        100,
+        115,
+        116,
+        120,
+        121,
+        130,
+        131,
+        132,
+        135,
+        136,
+        137,
+        138,
+        146,
+        147,
+        148,
+        151,
+        152,
+        153,
+        154,
+        163,
+        167,
+        168,
+        169,
+        170,
+        184,
+        185,
+        186
+      ],
+      "selection_mode": "semantic",
+      "temporal_prior_used_fraction": 1.0
+    },
+    {
+      "beta": 0.25,
+      "entity_alignment": [
+        {
+          "centroid_displacement": 1.6323421260037774,
+          "centroid_shift": [
+            0,
+            -2
+          ],
+          "entity": "coke can",
+          "fallback_reason": "incomplete_overlap",
+          "group": 4,
+          "num_tokens": 28,
+          "temporal_prior_used": false
+        }
+      ],
+      "fallback_fraction": 1.0,
+      "feature_equal": true,
+      "final_token_ids": [
+        31879,
+        31867,
+        31858,
+        31897,
+        31896,
+        31892,
+        31744
+      ],
+      "guided_prefix": true,
+      "kmeans_K": 8,
+      "lambda": 0.5,
+      "negative_token_ids": [
+        31879,
+        31867,
+        31858,
+        31912,
+        31896,
+        31886,
+        31872
+      ],
+      "num_tokens": 28,
+      "per_entity_score": [
+        0.029834099543754603
+      ],
+      "positive_token_ids": [
+        31879,
+        31867,
+        31858,
+        31897,
+        31896,
+        31886,
+        31744
+      ],
+      "reconstruction_finite": true,
+      "residual_jerk": 0.9173940847456563,
+      "residual_norm": 17.314987182617188,
+      "residual_temporal_cos": 0.08176580994816063,
+      "selected_entities": [
+        "coke can"
+      ],
+      "selected_group_ids": [
+        4
+      ],
+      "selected_token_ids": [
+        24,
+        32,
+        40,
+        48,
+        64,
+        65,
+        81,
+        96,
+        97,
+        109,
+        112,
+        113,
+        128,
+        129,
+        144,
+        145,
+        160,
+        175,
+        176,
+        192,
+        193,
+        206,
+        207,
+        221,
+        222,
+        223,
+        224,
+        254
+      ],
+      "selection_mode": "semantic",
+      "temporal_prior_used_fraction": 0.0
+    },
+    {
+      "beta": 0.25,
+      "entity_alignment": [
+        {
+          "centroid_displacement": 4.363414689793081,
+          "centroid_shift": [
+            -4,
+            -1
+          ],
+          "entity": "coke can",
+          "fallback_reason": "displacement",
+          "group": 1,
+          "num_tokens": 60,
+          "temporal_prior_used": false
+        }
+      ],
+      "fallback_fraction": 1.0,
+      "feature_equal": true,
+      "final_token_ids": [
+        31858,
+        31847,
+        31868,
+        31917,
+        31859,
+        31877,
+        31744
+      ],
+      "guided_prefix": true,
+      "kmeans_K": 8,
+      "lambda": 0.5,
+      "negative_token_ids": [
+        31854,
+        31865,
+        31868,
+        31917,
+        31864,
+        31839,
+        31744
+      ],
+      "num_tokens": 60,
+      "per_entity_score": [
+        0.028632119709751755
+      ],
+      "positive_token_ids": [
+        31858,
+        31865,
+        31868,
+        31917,
+        31859,
+        31877,
+        31744
+      ],
+      "reconstruction_finite": true,
+      "residual_jerk": 0.8879688807540131,
+      "residual_norm": 102.5105972290039,
+      "residual_temporal_cos": -0.1445163670540155,
+      "selected_entities": [
+        "coke can"
+      ],
+      "selected_group_ids": [
+        1
+      ],
+      "selected_token_ids": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        25,
+        26,
+        27,
+        28,
+        32,
+        33,
+        34,
+        40,
+        41,
+        48,
+        49,
+        50,
+        60,
+        64,
+        65,
+        66,
+        80,
+        81,
+        82,
+        96,
+        97,
+        98,
+        112,
+        113,
+        128,
+        129,
+        144,
+        145,
+        160,
+        176,
+        192,
+        208,
+        209,
+        225,
+        241,
+        242,
+        253
+      ],
+      "selection_mode": "semantic",
+      "temporal_prior_used_fraction": 0.0
+    },
+    {
+      "beta": 0.25,
+      "entity_alignment": [
+        {
+          "centroid_displacement": 5.3235862676496755,
+          "centroid_shift": [
+            5,
+            3
+          ],
+          "entity": "coke can",
+          "fallback_reason": "displacement",
+          "group": 2,
+          "num_tokens": 29,
+          "temporal_prior_used": false
+        }
+      ],
+      "fallback_fraction": 1.0,
+      "feature_equal": true,
+      "final_token_ids": [
+        31879,
+        31850,
+        31853,
+        31908,
+        31877,
+        31845,
+        31744
+      ],
+      "guided_prefix": true,
+      "kmeans_K": 8,
+      "lambda": 0.5,
+      "negative_token_ids": [
+        31857,
+        31865,
+        31871,
+        31870,
+        31839,
+        31842,
+        31744
+      ],
+      "num_tokens": 29,
+      "per_entity_score": [
+        0.03143443594588171
+      ],
+      "positive_token_ids": [
+        31858,
+        31850,
+        31853,
+        31908,
+        31877,
+        31845,
+        31744
+      ],
+      "reconstruction_finite": true,
+      "residual_jerk": 0.7110420349287321,
+      "residual_norm": 238.16807556152344,
+      "residual_temporal_cos": 0.17517597303052163,
+      "selected_entities": [
+        "coke can"
+      ],
+      "selected_group_ids": [
+        2
+      ],
+      "selected_token_ids": [
+        99,
+        100,
+        115,
+        116,
+        120,
+        121,
+        130,
+        131,
+        132,
+        135,
+        136,
+        137,
+        138,
+        146,
+        147,
+        148,
+        151,
+        152,
+        153,
+        154,
+        156,
+        163,
+        167,
+        168,
+        169,
+        170,
+        184,
+        185,
+        186
+      ],
+      "selection_mode": "semantic",
+      "temporal_prior_used_fraction": 0.0
+    },
+    {
+      "beta": 0.25,
+      "entity_alignment": [
+        {
+          "centroid_displacement": 4.140107984190233,
+          "centroid_shift": [
+            -4,
+            0
+          ],
+          "entity": "coke can",
+          "fallback_reason": "displacement",
+          "group": 7,
+          "num_tokens": 15,
+          "temporal_prior_used": false
+        }
+      ],
+      "fallback_fraction": 1.0,
+      "feature_equal": true,
+      "final_token_ids": [
+        31857,
+        31873,
+        31868,
+        31904,
+        31861,
+        31874,
+        31872
+      ],
+      "guided_prefix": true,
+      "kmeans_K": 8,
+      "lambda": 0.5,
+      "negative_token_ids": [
+        31860,
+        31873,
+        31868,
+        31904,
+        31861,
+        31874,
+        31872
+      ],
+      "num_tokens": 15,
+      "per_entity_score": [
+        0.030253697566351014
+      ],
+      "positive_token_ids": [
+        31857,
+        31873,
+        31868,
+        31904,
+        31861,
+        31874,
+        31872
+      ],
+      "reconstruction_finite": true,
+      "residual_jerk": 0.8118990965401828,
+      "residual_norm": 85.18740844726562,
+      "residual_temporal_cos": -0.1217939467813023,
+      "selected_entities": [
+        "coke can"
+      ],
+      "selected_group_ids": [
+        7
+      ],
+      "selected_token_ids": [
+        53,
+        54,
+        68,
+        69,
+        70,
+        71,
+        72,
+        73,
+        85,
+        86,
+        87,
+        88,
+        101,
+        102,
+        103
+      ],
+      "selection_mode": "semantic",
+      "temporal_prior_used_fraction": 0.0
+    },
+    {
+      "beta": 0.25,
+      "entity_alignment": [
+        {
+          "centroid_displacement": 1.78222100997465,
+          "centroid_shift": [
+            1,
+            -1
+          ],
+          "entity": "coke can",
+          "fallback_reason": "warp_oob",
+          "group": 1,
+          "num_tokens": 72,
+          "temporal_prior_used": false
+        }
+      ],
+      "fallback_fraction": 1.0,
+      "feature_equal": true,
+      "final_token_ids": [
+        31857,
+        31873,
+        31868,
+        31904,
+        31861,
+        31874,
+        31744
+      ],
+      "guided_prefix": true,
+      "kmeans_K": 8,
+      "lambda": 0.5,
+      "negative_token_ids": [
+        31857,
+        31873,
+        31868,
+        31904,
+        31861,
+        31874,
+        31744
+      ],
+      "num_tokens": 72,
+      "per_entity_score": [
+        0.028122081661233058
+      ],
+      "positive_token_ids": [
+        31857,
+        31873,
+        31868,
+        31904,
+        31861,
+        31874,
+        31744
+      ],
+      "reconstruction_finite": true,
+      "residual_jerk": 0.56990275824064,
+      "residual_norm": 83.41413879394531,
+      "residual_temporal_cos": 0.3505712219732505,
+      "selected_entities": [
+        "coke can"
+      ],
+      "selected_group_ids": [
+        1
+      ],
+      "selected_token_ids": [
+        0,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        25,
+        26,
+        27,
+        28,
+        32,
+        33,
+        34,
+        35,
+        40,
+        41,
+        48,
+        49,
+        50,
+        60,
+        64,
+        65,
+        66,
+        77,
+        80,
+        81,
+        82,
+        96,
+        97,
+        98,
+        112,
+        113,
+        128,
+        129,
+        144,
+        145,
+        159,
+        160,
+        175,
+        176,
+        177,
+        192,
+        205,
+        208,
+        209,
+        224,
+        225,
+        226,
+        237,
+        238,
+        239,
+        241,
+        242,
+        243,
+        252,
+        253,
+        254
+      ],
+      "selection_mode": "semantic",
+      "temporal_prior_used_fraction": 0.0
+    },
+    {
+      "beta": 0.25,
+      "entity_alignment": [
+        {
+          "centroid_displacement": 1.869694138847182,
+          "centroid_shift": [
+            -2,
+            1
+          ],
+          "entity": "coke can",
+          "fallback_reason": "incomplete_overlap",
+          "group": 6,
+          "num_tokens": 6,
+          "temporal_prior_used": false
+        }
+      ],
+      "fallback_fraction": 1.0,
+      "feature_equal": true,
+      "final_token_ids": [
+        31857,
+        31873,
+        31868,
+        31904,
+        31861,
+        31874,
+        31744
+      ],
+      "guided_prefix": true,
+      "kmeans_K": 8,
+      "lambda": 0.5,
+      "negative_token_ids": [
+        31857,
+        31873,
+        31868,
+        31904,
+        31861,
+        31874,
+        31744
+      ],
+      "num_tokens": 6,
+      "per_entity_score": [
+        0.031902693897641984
+      ],
+      "positive_token_ids": [
+        31857,
+        31873,
+        31868,
+        31904,
+        31861,
+        31874,
+        31744
+      ],
+      "reconstruction_finite": true,
+      "residual_jerk": 0.6475372710480909,
+      "residual_norm": 55.08096694946289,
+      "residual_temporal_cos": 0.21212133087485116,
+      "selected_entities": [
+        "coke can"
+      ],
+      "selected_group_ids": [
+        6
+      ],
+      "selected_token_ids": [
+        53,
+        54,
+        69,
+        72,
+        86,
+        102
+      ],
+      "selection_mode": "semantic",
+      "temporal_prior_used_fraction": 0.0
+    },
+    {
+      "beta": 0.25,
+      "entity_alignment": [
+        {
+          "centroid_displacement": 1.6583503780312692,
+          "centroid_shift": [
+            0,
+            -2
+          ],
+          "entity": "coke can",
+          "fallback_reason": "incomplete_overlap",
+          "group": 5,
+          "num_tokens": 63,
+          "temporal_prior_used": false
+        }
+      ],
+      "fallback_fraction": 1.0,
+      "feature_equal": true,
+      "final_token_ids": [
+        31858,
+        31865,
+        31868,
+        31905,
+        31862,
+        31874,
+        31872
+      ],
+      "guided_prefix": true,
+      "kmeans_K": 8,
+      "lambda": 0.5,
+      "negative_token_ids": [
+        31860,
+        31872,
+        31868,
+        31905,
+        31861,
+        31874,
+        31744
+      ],
+      "num_tokens": 63,
+      "per_entity_score": [
+        0.029276150186889102
+      ],
+      "positive_token_ids": [
+        31858,
+        31872,
+        31868,
+        31905,
+        31862,
+        31874,
+        31872
+      ],
+      "reconstruction_finite": true,
+      "residual_jerk": 0.6896218260318646,
+      "residual_norm": 77.08207702636719,
+      "residual_temporal_cos": 0.07873748735956072,
+      "selected_entities": [
+        "coke can"
+      ],
+      "selected_group_ids": [
+        5
+      ],
+      "selected_token_ids": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        25,
+        26,
+        27,
+        28,
+        32,
+        33,
+        34,
+        35,
+        40,
+        41,
+        44,
+        48,
+        49,
+        50,
+        64,
+        65,
+        66,
+        80,
+        81,
+        82,
+        96,
+        97,
+        98,
+        112,
+        113,
+        128,
+        144,
+        145,
+        175,
+        176,
+        192,
+        200,
+        208,
+        209,
+        225,
+        237,
+        241,
+        242,
+        243,
+        253
+      ],
+      "selection_mode": "semantic",
+      "temporal_prior_used_fraction": 0.0
+    },
+    {
+      "beta": 0.25,
+      "entity_alignment": [
+        {
+          "centroid_displacement": 10.547098182763143,
+          "centroid_shift": [
+            -2,
+            10
+          ],
+          "entity": "coke can",
+          "fallback_reason": "displacement",
+          "group": 3,
+          "num_tokens": 8,
+          "temporal_prior_used": false
+        }
+      ],
+      "fallback_fraction": 1.0,
+      "feature_equal": true,
+      "final_token_ids": [
+        31860,
+        31856,
+        31868,
+        31917,
+        31864,
+        31860,
+        31744
+      ],
+      "guided_prefix": true,
+      "kmeans_K": 8,
+      "lambda": 0.5,
+      "negative_token_ids": [
+        31858,
+        31865,
+        31868,
+        31917,
+        31864,
+        31860,
+        31872
+      ],
+      "num_tokens": 8,
+      "per_entity_score": [
+        0.03582028313075007
+      ],
+      "positive_token_ids": [
+        31858,
+        31865,
+        31868,
+        31917,
+        31864,
+        31860,
+        31744
+      ],
+      "reconstruction_finite": true,
+      "residual_jerk": 0.6237808519373101,
+      "residual_norm": 137.93402099609375,
+      "residual_temporal_cos": 0.32817532903816005,
+      "selected_entities": [
+        "coke can"
+      ],
+      "selected_group_ids": [
+        3
+      ],
+      "selected_token_ids": [
+        15,
+        30,
+        31,
+        46,
+        47,
+        62,
+        63,
+        79
+      ],
+      "selection_mode": "semantic",
+      "temporal_prior_used_fraction": 0.0
+    },
+    {
+      "beta": 0.25,
+      "entity_alignment": [
+        {
+          "centroid_displacement": 10.54837546734093,
+          "centroid_shift": [
+            6,
+            -8
+          ],
+          "entity": "coke can",
+          "fallback_reason": "displacement",
+          "group": 2,
+          "num_tokens": 25,
+          "temporal_prior_used": false
+        }
+      ],
+      "fallback_fraction": 1.0,
+      "feature_equal": true,
+      "final_token_ids": [
+        31860,
+        31824,
+        31865,
+        31916,
+        31929,
+        31811,
+        31872
+      ],
+      "guided_prefix": true,
+      "kmeans_K": 8,
+      "lambda": 0.5,
+      "negative_token_ids": [
+        31857,
+        31881,
+        31879,
+        31776,
+        31878,
+        31810,
+        31872
+      ],
+      "num_tokens": 25,
+      "per_entity_score": [
+        0.031671984972530966
+      ],
+      "positive_token_ids": [
+        31860,
+        31824,
+        31865,
+        31916,
+        31878,
+        31811,
+        31872
+      ],
+      "reconstruction_finite": true,
+      "residual_jerk": 0.6858789787792752,
+      "residual_norm": 203.17098999023438,
+      "residual_temporal_cos": 0.09935133122289852,
+      "selected_entities": [
+        "coke can"
+      ],
+      "selected_group_ids": [
+        2
+      ],
+      "selected_token_ids": [
+        99,
+        100,
+        115,
+        116,
+        120,
+        121,
+        130,
+        131,
+        132,
+        135,
+        136,
+        137,
+        138,
+        146,
+        147,
+        148,
+        151,
+        152,
+        153,
+        154,
+        163,
+        168,
+        169,
+        170,
+        185
+      ],
+      "selection_mode": "semantic",
+      "temporal_prior_used_fraction": 0.0
+    },
+    {
+      "beta": 0.25,
+      "entity_alignment": [
+        {
+          "centroid_displacement": 0.33058081231279485,
+          "centroid_shift": [
+            0,
+            0
+          ],
+          "entity": "coke can",
+          "fallback_reason": "incomplete_overlap",
+          "group": 4,
+          "num_tokens": 28,
+          "temporal_prior_used": false
+        }
+      ],
+      "fallback_fraction": 1.0,
+      "feature_equal": true,
+      "final_token_ids": [
+        31858,
+        31854,
+        31884,
+        31890,
+        31861,
+        31835,
+        31744
+      ],
+      "guided_prefix": true,
+      "kmeans_K": 8,
+      "lambda": 0.5,
+      "negative_token_ids": [
+        31846,
+        31849,
+        31849,
+        31867,
+        31886,
+        31872,
+        31744
+      ],
+      "num_tokens": 28,
+      "per_entity_score": [
+        0.030188021211282605
+      ],
+      "positive_token_ids": [
+        31858,
+        31854,
+        31884,
+        31898,
+        31861,
+        31835,
+        31744
+      ],
+      "reconstruction_finite": true,
+      "residual_jerk": 0.5836212006379615,
+      "residual_norm": 220.3495635986328,
+      "residual_temporal_cos": 0.32094576613163583,
+      "selected_entities": [
+        "coke can"
+      ],
+      "selected_group_ids": [
+        4
+      ],
+      "selected_token_ids": [
+        99,
+        100,
+        115,
+        116,
+        120,
+        121,
+        130,
+        131,
+        132,
+        135,
+        136,
+        137,
+        138,
+        146,
+        147,
+        148,
+        151,
+        152,
+        153,
+        154,
+        163,
+        167,
+        168,
+        169,
+        170,
+        184,
+        185,
+        186
+      ],
+      "selection_mode": "semantic",
+      "temporal_prior_used_fraction": 0.0
+    },
+    {
+      "beta": 0.25,
+      "entity_alignment": [
+        {
+          "centroid_displacement": 5.053914292022385,
+          "centroid_shift": [
+            4,
+            2
+          ],
+          "entity": "coke can",
+          "fallback_reason": "displacement",
+          "group": 2,
+          "num_tokens": 22,
+          "temporal_prior_used": false
+        }
+      ],
+      "fallback_fraction": 1.0,
+      "feature_equal": true,
+      "final_token_ids": [
+        31890,
+        31849,
+        31911,
+        31848,
+        31857,
+        31890,
+        31744
+      ],
+      "guided_prefix": true,
+      "kmeans_K": 8,
+      "lambda": 0.5,
+      "negative_token_ids": [
+        31890,
+        31849,
+        31911,
+        31848,
+        31857,
+        31890,
+        31744
+      ],
+      "num_tokens": 22,
+      "per_entity_score": [
+        0.03159677624573007
+      ],
+      "positive_token_ids": [
+        31890,
+        31849,
+        31911,
+        31848,
+        31857,
+        31890,
+        31744
+      ],
+      "reconstruction_finite": true,
+      "residual_jerk": 0.9492365858876761,
+      "residual_norm": 18.571794509887695,
+      "residual_temporal_cos": -0.30987252898772794,
+      "selected_entities": [
+        "coke can"
+      ],
+      "selected_group_ids": [
+        2
+      ],
+      "selected_token_ids": [
+        142,
+        143,
+        193,
+        197,
+        205,
+        206,
+        207,
+        209,
+        221,
+        222,
+        223,
+        224,
+        225,
+        226,
+        237,
+        238,
+        241,
+        242,
+        243,
+        252,
+        253,
+        254
+      ],
+      "selection_mode": "semantic",
+      "temporal_prior_used_fraction": 0.0
+    },
+    {
+      "beta": 0.25,
+      "entity_alignment": [
+        {
+          "centroid_displacement": 5.306789312980351,
+          "centroid_shift": [
+            -5,
+            -3
+          ],
+          "entity": "coke can",
+          "fallback_reason": "displacement",
+          "group": 1,
+          "num_tokens": 26,
+          "temporal_prior_used": false
+        }
+      ],
+      "fallback_fraction": 1.0,
+      "feature_equal": true,
+      "final_token_ids": [
+        31858,
+        31872,
+        31867,
+        31904,
+        31863,
+        31874,
+        31744
+      ],
+      "guided_prefix": true,
+      "kmeans_K": 8,
+      "lambda": 0.5,
+      "negative_token_ids": [
+        31857,
+        31873,
+        31867,
+        31904,
+        31863,
+        31874,
+        31744
+      ],
+      "num_tokens": 26,
+      "per_entity_score": [
+        0.02966082716291212
+      ],
+      "positive_token_ids": [
+        31858,
+        31872,
+        31867,
+        31904,
+        31863,
+        31874,
+        31744
+      ],
+      "reconstruction_finite": true,
+      "residual_jerk": 0.9177083386543753,
+      "residual_norm": 193.5133056640625,
+      "residual_temporal_cos": -0.012438900552838606,
+      "selected_entities": [
+        "coke can"
+      ],
+      "selected_group_ids": [
+        1
+      ],
+      "selected_token_ids": [
+        99,
+        100,
+        115,
+        116,
+        120,
+        121,
+        130,
+        131,
+        132,
+        135,
+        136,
+        137,
+        138,
+        146,
+        147,
+        148,
+        151,
+        152,
+        153,
+        154,
+        163,
+        167,
+        168,
+        169,
+        170,
+        185
+      ],
+      "selection_mode": "semantic",
+      "temporal_prior_used_fraction": 0.0
+    },
+    {
+      "beta": 0.25,
+      "entity_alignment": [
+        {
+          "centroid_displacement": 0.180019022164087,
+          "centroid_shift": [
+            0,
+            0
+          ],
+          "entity": "coke can",
+          "fallback_reason": null,
+          "group": 6,
+          "num_tokens": 21,
+          "temporal_prior_used": true
+        }
+      ],
+      "fallback_fraction": 0.0,
+      "feature_equal": true,
+      "final_token_ids": [
+        31857,
+        31873,
+        31868,
+        31904,
+        31861,
+        31874,
+        31744
+      ],
+      "guided_prefix": true,
+      "kmeans_K": 8,
+      "lambda": 0.5,
+      "negative_token_ids": [
+        31857,
+        31873,
+        31868,
+        31904,
+        31861,
+        31874,
+        31872
+      ],
+      "num_tokens": 21,
+      "per_entity_score": [
+        0.0331287072169863
+      ],
+      "positive_token_ids": [
+        31857,
+        31873,
+        31868,
+        31904,
+        31861,
+        31874,
+        31744
+      ],
+      "reconstruction_finite": true,
+      "residual_jerk": 0.5961490765909986,
+      "residual_norm": 262.249755859375,
+      "residual_temporal_cos": 0.31921894037399423,
+      "selected_entities": [
+        "coke can"
+      ],
+      "selected_group_ids": [
+        6
+      ],
+      "selected_token_ids": [
+        99,
+        100,
+        115,
+        116,
+        120,
+        121,
+        130,
+        131,
+        132,
+        136,
+        137,
+        146,
+        147,
+        148,
+        152,
+        153,
+        154,
+        168,
+        169,
+        170,
+        185
+      ],
+      "selection_mode": "semantic",
+      "temporal_prior_used_fraction": 1.0
+    },
+    {
+      "beta": 0.25,
+      "entity_alignment": [
+        {
+          "centroid_displacement": 0.4222416154992426,
+          "centroid_shift": [
+            0,
+            0
+          ],
+          "entity": "coke can",
+          "fallback_reason": "incomplete_overlap",
+          "group": 7,
+          "num_tokens": 28,
+          "temporal_prior_used": false
+        }
+      ],
+      "fallback_fraction": 1.0,
+      "feature_equal": true,
+      "final_token_ids": [
+        31879,
+        31873,
+        31868,
+        31904,
+        31861,
+        31874,
+        31872
+      ],
+      "guided_prefix": true,
+      "kmeans_K": 8,
+      "lambda": 0.5,
+      "negative_token_ids": [
+        31857,
+        31873,
+        31868,
+        31904,
+        31861,
+        31874,
+        31872
+      ],
+      "num_tokens": 28,
+      "per_entity_score": [
+        0.03406352689586577
+      ],
+      "positive_token_ids": [
+        31857,
+        31873,
+        31868,
+        31904,
+        31861,
+        31874,
+        31872
+      ],
+      "reconstruction_finite": true,
+      "residual_jerk": 0.23420030307425296,
+      "residual_norm": 233.4840087890625,
+      "residual_temporal_cos": 0.8966867851113303,
+      "selected_entities": [
+        "coke can"
+      ],
+      "selected_group_ids": [
+        7
+      ],
+      "selected_token_ids": [
+        99,
+        100,
+        115,
+        116,
+        120,
+        121,
+        122,
+        130,
+        131,
+        132,
+        135,
+        136,
+        137,
+        146,
+        147,
+        148,
+        151,
+        152,
+        153,
+        154,
+        163,
+        167,
+        168,
+        169,
+        170,
+        184,
+        185,
+        186
+      ],
+      "selection_mode": "semantic",
+      "temporal_prior_used_fraction": 0.0
+    },
+    {
+      "beta": 0.25,
+      "entity_alignment": [
+        {
+          "centroid_displacement": 0.3670122057693361,
+          "centroid_shift": [
+            0,
+            0
+          ],
+          "entity": "coke can",
+          "fallback_reason": null,
+          "group": 4,
+          "num_tokens": 25,
+          "temporal_prior_used": true
+        }
+      ],
+      "fallback_fraction": 0.0,
+      "feature_equal": true,
+      "final_token_ids": [
+        31871,
+        31873,
+        31868,
+        31904,
+        31861,
+        31874,
+        31744
+      ],
+      "guided_prefix": true,
+      "kmeans_K": 8,
+      "lambda": 0.5,
+      "negative_token_ids": [
+        31857,
+        31873,
+        31868,
+        31904,
+        31861,
+        31874,
+        31744
+      ],
+      "num_tokens": 25,
+      "per_entity_score": [
+        0.033523441408835467
+      ],
+      "positive_token_ids": [
+        31857,
+        31873,
+        31868,
+        31904,
+        31861,
+        31874,
+        31744
+      ],
+      "reconstruction_finite": true,
+      "residual_jerk": 0.2629654794794564,
+      "residual_norm": 244.9451904296875,
+      "residual_temporal_cos": 0.8627673779122388,
+      "selected_entities": [
+        "coke can"
+      ],
+      "selected_group_ids": [
+        4
+      ],
+      "selected_token_ids": [
+        99,
+        100,
+        115,
+        116,
+        120,
+        121,
+        130,
+        131,
+        132,
+        135,
+        136,
+        137,
+        146,
+        147,
+        148,
+        151,
+        152,
+        153,
+        154,
+        163,
+        167,
+        168,
+        169,
+        170,
+        185
+      ],
+      "selection_mode": "semantic",
+      "temporal_prior_used_fraction": 1.0
+    },
+    {
+      "beta": 0.25,
+      "entity_alignment": [
+        {
+          "centroid_displacement": 0.16417980829503978,
+          "centroid_shift": [
+            0,
+            0
+          ],
+          "entity": "coke can",
+          "fallback_reason": null,
+          "group": 7,
+          "num_tokens": 23,
+          "temporal_prior_used": true
+        }
+      ],
+      "fallback_fraction": 0.0,
+      "feature_equal": true,
+      "final_token_ids": [
+        31857,
+        31873,
+        31868,
+        31904,
+        31861,
+        31874,
+        31744
+      ],
+      "guided_prefix": true,
+      "kmeans_K": 8,
+      "lambda": 0.5,
+      "negative_token_ids": [
+        31857,
+        31873,
+        31868,
+        31904,
+        31861,
+        31874,
+        31744
+      ],
+      "num_tokens": 23,
+      "per_entity_score": [
+        0.0320029953056111
+      ],
+      "positive_token_ids": [
+        31857,
+        31873,
+        31868,
+        31904,
+        31861,
+        31874,
+        31744
+      ],
+      "reconstruction_finite": true,
+      "residual_jerk": 0.28564199501374965,
+      "residual_norm": 246.80020141601562,
+      "residual_temporal_cos": 0.8368434914640531,
+      "selected_entities": [
+        "coke can"
+      ],
+      "selected_group_ids": [
+        7
+      ],
+      "selected_token_ids": [
+        99,
+        100,
+        115,
+        116,
+        120,
+        121,
+        130,
+        131,
+        132,
+        135,
+        136,
+        137,
+        146,
+        147,
+        148,
+        151,
+        152,
+        153,
+        154,
+        168,
+        169,
+        170,
+        185
+      ],
+      "selection_mode": "semantic",
+      "temporal_prior_used_fraction": 1.0
+    },
+    {
+      "beta": 0.25,
+      "entity_alignment": [
+        {
+          "centroid_displacement": 5.279521821304058,
+          "centroid_shift": [
+            5,
+            2
+          ],
+          "entity": "coke can",
+          "fallback_reason": "displacement",
+          "group": 2,
+          "num_tokens": 20,
+          "temporal_prior_used": false
+        }
+      ],
+      "fallback_fraction": 1.0,
+      "feature_equal": true,
+      "final_token_ids": [
+        31857,
+        31873,
+        31868,
+        31904,
+        31861,
+        31874,
+        31744
+      ],
+      "guided_prefix": true,
+      "kmeans_K": 8,
+      "lambda": 0.5,
+      "negative_token_ids": [
+        31857,
+        31873,
+        31868,
+        31904,
+        31861,
+        31874,
+        31744
+      ],
+      "num_tokens": 20,
+      "per_entity_score": [
+        0.03213642985305839
+      ],
+      "positive_token_ids": [
+        31857,
+        31873,
+        31868,
+        31904,
+        31861,
+        31874,
+        31744
+      ],
+      "reconstruction_finite": true,
+      "residual_jerk": 0.9310783136907845,
+      "residual_norm": 14.404074668884277,
+      "residual_temporal_cos": 0.27718917680511623,
+      "selected_entities": [
+        "coke can"
+      ],
+      "selected_group_ids": [
+        2
+      ],
+      "selected_token_ids": [
+        177,
+        193,
+        197,
+        205,
+        206,
+        207,
+        209,
+        221,
+        222,
+        223,
+        224,
+        225,
+        226,
+        237,
+        238,
+        241,
+        242,
+        243,
+        253,
+        254
+      ],
+      "selection_mode": "semantic",
+      "temporal_prior_used_fraction": 0.0
+    },
+    {
+      "beta": 0.25,
+      "entity_alignment": [
+        {
+          "centroid_displacement": 4.940788286183582,
+          "centroid_shift": [
+            -5,
+            -1
+          ],
+          "entity": "coke can",
+          "fallback_reason": "displacement",
+          "group": 0,
+          "num_tokens": 27,
+          "temporal_prior_used": false
+        }
+      ],
+      "fallback_fraction": 1.0,
+      "feature_equal": true,
+      "final_token_ids": [
+        31871,
+        31873,
+        31868,
+        31904,
+        31861,
+        31874,
+        31744
+      ],
+      "guided_prefix": true,
+      "kmeans_K": 8,
+      "lambda": 0.5,
+      "negative_token_ids": [
+        31857,
+        31873,
+        31868,
+        31904,
+        31861,
+        31874,
+        31744
+      ],
+      "num_tokens": 27,
+      "per_entity_score": [
+        0.0313213665624292
+      ],
+      "positive_token_ids": [
+        31857,
+        31873,
+        31868,
+        31904,
+        31861,
+        31874,
+        31744
+      ],
+      "reconstruction_finite": true,
+      "residual_jerk": 0.9442385447792322,
+      "residual_norm": 339.75750732421875,
+      "residual_temporal_cos": 0.3893203043653341,
+      "selected_entities": [
+        "coke can"
+      ],
+      "selected_group_ids": [
+        0
+      ],
+      "selected_token_ids": [
+        99,
+        100,
+        115,
+        116,
+        120,
+        121,
+        130,
+        131,
+        132,
+        135,
+        136,
+        137,
+        146,
+        147,
+        148,
+        151,
+        152,
+        153,
+        154,
+        163,
+        167,
+        168,
+        169,
+        170,
+        184,
+        185,
+        186
+      ],
+      "selection_mode": "semantic",
+      "temporal_prior_used_fraction": 0.0
+    },
+    {
+      "beta": 0.25,
+      "entity_alignment": [
+        {
+          "centroid_displacement": 0.0,
+          "centroid_shift": [
+            0,
+            0
+          ],
+          "entity": "coke can",
+          "fallback_reason": null,
+          "group": 0,
+          "num_tokens": 27,
+          "temporal_prior_used": true
+        }
+      ],
+      "fallback_fraction": 0.0,
+      "feature_equal": true,
+      "final_token_ids": [
+        31857,
+        31873,
+        31868,
+        31904,
+        31861,
+        31874,
+        31872
+      ],
+      "guided_prefix": true,
+      "kmeans_K": 8,
+      "lambda": 0.5,
+      "negative_token_ids": [
+        31857,
+        31873,
+        31868,
+        31904,
+        31861,
+        31874,
+        31872
+      ],
+      "num_tokens": 27,
+      "per_entity_score": [
+        0.03327217424807778
+      ],
+      "positive_token_ids": [
+        31857,
+        31873,
+        31868,
+        31904,
+        31861,
+        31874,
+        31872
+      ],
+      "reconstruction_finite": true,
+      "residual_jerk": 0.15109802158273358,
+      "residual_norm": 330.4695129394531,
+      "residual_temporal_cos": 0.9547141564132366,
+      "selected_entities": [
+        "coke can"
+      ],
+      "selected_group_ids": [
+        0
+      ],
+      "selected_token_ids": [
+        99,
+        100,
+        115,
+        116,
+        120,
+        121,
+        130,
+        131,
+        132,
+        135,
+        136,
+        137,
+        146,
+        147,
+        148,
+        151,
+        152,
+        153,
+        154,
+        163,
+        167,
+        168,
+        169,
+        170,
+        184,
+        185,
+        186
+      ],
+      "selection_mode": "semantic",
+      "temporal_prior_used_fraction": 1.0
+    },
+    {
+      "beta": 0.25,
+      "entity_alignment": [
+        {
+          "centroid_displacement": 1.6745796686216239,
+          "centroid_shift": [
+            -2,
+            0
+          ],
+          "entity": "coke can",
+          "fallback_reason": "incomplete_overlap",
+          "group": 6,
+          "num_tokens": 41,
+          "temporal_prior_used": false
+        }
+      ],
+      "fallback_fraction": 1.0,
+      "feature_equal": true,
+      "final_token_ids": [
+        31862,
+        31873,
+        31868,
+        31904,
+        31861,
+        31874,
+        31744
+      ],
+      "guided_prefix": true,
+      "kmeans_K": 8,
+      "lambda": 0.5,
+      "negative_token_ids": [
+        31857,
+        31873,
+        31868,
+        31904,
+        31861,
+        31874,
+        31872
+      ],
+      "num_tokens": 41,
+      "per_entity_score": [
+        0.03264424982514038
+      ],
+      "positive_token_ids": [
+        31857,
+        31873,
+        31868,
+        31904,
+        31861,
+        31874,
+        31744
+      ],
+      "reconstruction_finite": true,
+      "residual_jerk": 0.23110160760042278,
+      "residual_norm": 269.98016357421875,
+      "residual_temporal_cos": 0.9125942508647188,
+      "selected_entities": [
+        "coke can"
+      ],
+      "selected_group_ids": [
+        6
+      ],
+      "selected_token_ids": [
+        53,
+        54,
+        68,
+        69,
+        70,
+        71,
+        72,
+        73,
+        85,
+        86,
+        87,
+        88,
+        99,
+        100,
+        101,
+        102,
+        103,
+        115,
+        116,
+        118,
+        120,
+        121,
+        130,
+        131,
+        132,
+        135,
+        136,
+        137,
+        146,
+        147,
+        148,
+        151,
+        152,
+        153,
+        154,
+        163,
+        167,
+        168,
+        169,
+        170,
+        185
+      ],
+      "selection_mode": "semantic",
+      "temporal_prior_used_fraction": 0.0
+    },
+    {
+      "beta": 0.25,
+      "entity_alignment": [
+        {
+          "centroid_displacement": 1.4808692400503518,
+          "centroid_shift": [
+            1,
+            0
+          ],
+          "entity": "coke can",
+          "fallback_reason": "incomplete_overlap",
+          "group": 7,
+          "num_tokens": 25,
+          "temporal_prior_used": false
+        }
+      ],
+      "fallback_fraction": 1.0,
+      "feature_equal": true,
+      "final_token_ids": [
+        31862,
+        31873,
+        31868,
+        31904,
+        31861,
+        31874,
+        31744
+      ],
+      "guided_prefix": true,
+      "kmeans_K": 8,
+      "lambda": 0.5,
+      "negative_token_ids": [
+        31857,
+        31873,
+        31868,
+        31904,
+        31861,
+        31874,
+        31744
+      ],
+      "num_tokens": 25,
+      "per_entity_score": [
+        0.03327941675247247
+      ],
+      "positive_token_ids": [
+        31857,
+        31873,
+        31868,
+        31904,
+        31861,
+        31874,
+        31744
+      ],
+      "reconstruction_finite": true,
+      "residual_jerk": 0.1979808314457349,
+      "residual_norm": 287.229736328125,
+      "residual_temporal_cos": 0.9234505985837095,
+      "selected_entities": [
+        "coke can"
+      ],
+      "selected_group_ids": [
+        7
+      ],
+      "selected_token_ids": [
+        99,
+        100,
+        115,
+        116,
+        120,
+        121,
+        130,
+        131,
+        132,
+        135,
+        136,
+        137,
+        146,
+        147,
+        148,
+        151,
+        152,
+        153,
+        154,
+        163,
+        167,
+        168,
+        169,
+        170,
+        185
+      ],
+      "selection_mode": "semantic",
+      "temporal_prior_used_fraction": 0.0
+    },
+    {
+      "beta": 0.25,
+      "entity_alignment": [
+        {
+          "centroid_displacement": 0.0,
+          "centroid_shift": [
+            0,
+            0
+          ],
+          "entity": "coke can",
+          "fallback_reason": null,
+          "group": 6,
+          "num_tokens": 25,
+          "temporal_prior_used": true
+        }
+      ],
+      "fallback_fraction": 0.0,
+      "feature_equal": true,
+      "final_token_ids": [
+        31844,
+        31875,
+        31870,
+        31878,
+        31838,
+        31847,
+        31872
+      ],
+      "guided_prefix": true,
+      "kmeans_K": 8,
+      "lambda": 0.5,
+      "negative_token_ids": [
+        31857,
+        31876,
+        31861,
+        31863,
+        31845,
+        31847,
+        31744
+      ],
+      "num_tokens": 25,
+      "per_entity_score": [
+        0.034668161770597866
+      ],
+      "positive_token_ids": [
+        31844,
+        31875,
+        31870,
+        31878,
+        31838,
+        31847,
+        31872
+      ],
+      "reconstruction_finite": true,
+      "residual_jerk": 0.5860009211074373,
+      "residual_norm": 259.0407409667969,
+      "residual_temporal_cos": 0.31671209350782226,
+      "selected_entities": [
+        "coke can"
+      ],
+      "selected_group_ids": [
+        6
+      ],
+      "selected_token_ids": [
+        99,
+        100,
+        115,
+        116,
+        120,
+        121,
+        130,
+        131,
+        132,
+        135,
+        136,
+        137,
+        146,
+        147,
+        148,
+        151,
+        152,
+        153,
+        154,
+        163,
+        167,
+        168,
+        169,
+        170,
+        185
+      ],
+      "selection_mode": "semantic",
+      "temporal_prior_used_fraction": 1.0
+    },
+    {
+      "beta": 0.25,
+      "entity_alignment": [
+        {
+          "centroid_displacement": 0.1484370576732876,
+          "centroid_shift": [
+            0,
+            0
+          ],
+          "entity": "coke can",
+          "fallback_reason": null,
+          "group": 6,
+          "num_tokens": 21,
+          "temporal_prior_used": true
+        }
+      ],
+      "fallback_fraction": 0.0,
+      "feature_equal": true,
+      "final_token_ids": [
+        31861,
+        31858,
+        31901,
+        31894,
+        31952,
+        31806,
+        31872
+      ],
+      "guided_prefix": true,
+      "kmeans_K": 8,
+      "lambda": 0.5,
+      "negative_token_ids": [
+        31857,
+        31874,
+        31973,
+        31860,
+        31976,
+        31851,
+        31872
+      ],
+      "num_tokens": 21,
+      "per_entity_score": [
+        0.034949021459167215
+      ],
+      "positive_token_ids": [
+        31861,
+        31858,
+        31901,
+        31894,
+        31976,
+        31806,
+        31872
+      ],
+      "reconstruction_finite": true,
+      "residual_jerk": 0.5967036935865484,
+      "residual_norm": 213.97848510742188,
+      "residual_temporal_cos": 0.2996846480737197,
+      "selected_entities": [
+        "coke can"
+      ],
+      "selected_group_ids": [
+        6
+      ],
+      "selected_token_ids": [
+        99,
+        100,
+        115,
+        116,
+        120,
+        121,
+        130,
+        131,
+        132,
+        136,
+        137,
+        146,
+        147,
+        148,
+        152,
+        153,
+        154,
+        168,
+        169,
+        170,
+        185
+      ],
+      "selection_mode": "semantic",
+      "temporal_prior_used_fraction": 1.0
+    },
+    {
+      "beta": 0.25,
+      "entity_alignment": [
+        {
+          "centroid_displacement": 0.07593010691880803,
+          "centroid_shift": [
+            0,
+            0
+          ],
+          "entity": "coke can",
+          "fallback_reason": "incomplete_overlap",
+          "group": 7,
+          "num_tokens": 23,
+          "temporal_prior_used": false
+        }
+      ],
+      "fallback_fraction": 1.0,
+      "feature_equal": true,
+      "final_token_ids": [
+        31871,
+        31873,
+        31868,
+        31904,
+        31861,
+        31874,
+        31744
+      ],
+      "guided_prefix": true,
+      "kmeans_K": 8,
+      "lambda": 0.5,
+      "negative_token_ids": [
+        31857,
+        31873,
+        31868,
+        31904,
+        31861,
+        31874,
+        31872
+      ],
+      "num_tokens": 23,
+      "per_entity_score": [
+        0.032292228075675944
+      ],
+      "positive_token_ids": [
+        31857,
+        31873,
+        31868,
+        31904,
+        31861,
+        31874,
+        31744
+      ],
+      "reconstruction_finite": true,
+      "residual_jerk": 0.6442348283503156,
+      "residual_norm": 294.3725891113281,
+      "residual_temporal_cos": 0.1999338058293164,
+      "selected_entities": [
+        "coke can"
+      ],
+      "selected_group_ids": [
+        7
+      ],
+      "selected_token_ids": [
+        99,
+        100,
+        115,
+        116,
+        120,
+        121,
+        130,
+        131,
+        132,
+        135,
+        136,
+        137,
+        146,
+        147,
+        148,
+        151,
+        152,
+        153,
+        154,
+        168,
+        169,
+        170,
+        185
+      ],
+      "selection_mode": "semantic",
+      "temporal_prior_used_fraction": 0.0
+    },
+    {
+      "beta": 0.25,
+      "entity_alignment": [
+        {
+          "centroid_displacement": 1.348633485671923,
+          "centroid_shift": [
+            -1,
+            0
+          ],
+          "entity": "coke can",
+          "fallback_reason": "incomplete_overlap",
+          "group": 2,
+          "num_tokens": 41,
+          "temporal_prior_used": false
+        }
+      ],
+      "fallback_fraction": 1.0,
+      "feature_equal": true,
+      "final_token_ids": [
+        31871,
+        31873,
+        31868,
+        31904,
+        31861,
+        31874,
+        31744
+      ],
+      "guided_prefix": true,
+      "kmeans_K": 8,
+      "lambda": 0.5,
+      "negative_token_ids": [
+        31860,
+        31873,
+        31868,
+        31904,
+        31861,
+        31874,
+        31872
+      ],
+      "num_tokens": 41,
+      "per_entity_score": [
+        0.0300601761143141
+      ],
+      "positive_token_ids": [
+        31857,
+        31873,
+        31868,
+        31904,
+        31861,
+        31874,
+        31744
+      ],
+      "reconstruction_finite": true,
+      "residual_jerk": 0.273266066470062,
+      "residual_norm": 266.74993896484375,
+      "residual_temporal_cos": 0.8551470467528035,
+      "selected_entities": [
+        "coke can"
+      ],
+      "selected_group_ids": [
+        2
+      ],
+      "selected_token_ids": [
+        53,
+        54,
+        68,
+        69,
+        70,
+        71,
+        72,
+        73,
+        85,
+        86,
+        87,
+        88,
+        99,
+        100,
+        101,
+        102,
+        103,
+        115,
+        116,
+        118,
+        120,
+        121,
+        130,
+        131,
+        132,
+        135,
+        136,
+        137,
+        146,
+        147,
+        148,
+        151,
+        152,
+        153,
+        154,
+        163,
+        167,
+        168,
+        169,
+        170,
+        185
+      ],
+      "selection_mode": "semantic",
+      "temporal_prior_used_fraction": 0.0
+    },
+    {
+      "beta": 0.25,
+      "entity_alignment": [
+        {
+          "centroid_displacement": 1.3336246732576638,
+          "centroid_shift": [
+            1,
+            0
+          ],
+          "entity": "coke can",
+          "fallback_reason": "incomplete_overlap",
+          "group": 2,
+          "num_tokens": 21,
+          "temporal_prior_used": false
+        }
+      ],
+      "fallback_fraction": 1.0,
+      "feature_equal": true,
+      "final_token_ids": [
+        31857,
+        31873,
+        31868,
+        31904,
+        31861,
+        31874,
+        31744
+      ],
+      "guided_prefix": true,
+      "kmeans_K": 8,
+      "lambda": 0.5,
+      "negative_token_ids": [
+        31857,
+        31873,
+        31868,
+        31904,
+        31861,
+        31874,
+        31744
+      ],
+      "num_tokens": 21,
+      "per_entity_score": [
+        0.03386241668197702
+      ],
+      "positive_token_ids": [
+        31857,
+        31873,
+        31868,
+        31904,
+        31861,
+        31874,
+        31744
+      ],
+      "reconstruction_finite": true,
+      "residual_jerk": 0.20976020338439363,
+      "residual_norm": 273.6656799316406,
+      "residual_temporal_cos": 0.9123145783103003,
+      "selected_entities": [
+        "coke can"
+      ],
+      "selected_group_ids": [
+        2
+      ],
+      "selected_token_ids": [
+        99,
+        100,
+        115,
+        116,
+        120,
+        121,
+        130,
+        131,
+        132,
+        136,
+        137,
+        146,
+        147,
+        148,
+        152,
+        153,
+        154,
+        168,
+        169,
+        170,
+        185
+      ],
+      "selection_mode": "semantic",
+      "temporal_prior_used_fraction": 0.0
+    },
+    {
+      "beta": 0.25,
+      "entity_alignment": [
+        {
+          "centroid_displacement": 0.1484370576732876,
+          "centroid_shift": [
+            0,
+            0
+          ],
+          "entity": "coke can",
+          "fallback_reason": "incomplete_overlap",
+          "group": 4,
+          "num_tokens": 25,
+          "temporal_prior_used": false
+        }
+      ],
+      "fallback_fraction": 1.0,
+      "feature_equal": true,
+      "final_token_ids": [
+        31857,
+        31873,
+        31868,
+        31904,
+        31861,
+        31874,
+        31744
+      ],
+      "guided_prefix": true,
+      "kmeans_K": 8,
+      "lambda": 0.5,
+      "negative_token_ids": [
+        31857,
+        31873,
+        31868,
+        31904,
+        31861,
+        31874,
+        31744
+      ],
+      "num_tokens": 25,
+      "per_entity_score": [
+        0.034447978776727534
+      ],
+      "positive_token_ids": [
+        31857,
+        31873,
+        31868,
+        31904,
+        31861,
+        31874,
+        31744
+      ],
+      "reconstruction_finite": true,
+      "residual_jerk": 0.14966518904004567,
+      "residual_norm": 242.99240112304688,
+      "residual_temporal_cos": 0.9621164353474593,
+      "selected_entities": [
+        "coke can"
+      ],
+      "selected_group_ids": [
+        4
+      ],
+      "selected_token_ids": [
+        99,
+        100,
+        115,
+        116,
+        120,
+        121,
+        130,
+        131,
+        132,
+        135,
+        136,
+        137,
+        146,
+        147,
+        148,
+        151,
+        152,
+        153,
+        154,
+        163,
+        167,
+        168,
+        169,
+        170,
+        185
+      ],
+      "selection_mode": "semantic",
+      "temporal_prior_used_fraction": 0.0
+    },
+    {
+      "beta": 0.25,
+      "entity_alignment": [
+        {
+          "centroid_displacement": 0.0,
+          "centroid_shift": [
+            0,
+            0
+          ],
+          "entity": "coke can",
+          "fallback_reason": null,
+          "group": 4,
+          "num_tokens": 25,
+          "temporal_prior_used": true
+        }
+      ],
+      "fallback_fraction": 0.0,
+      "feature_equal": true,
+      "final_token_ids": [
+        31857,
+        31873,
+        31868,
+        31904,
+        31861,
+        31874,
+        31744
+      ],
+      "guided_prefix": true,
+      "kmeans_K": 8,
+      "lambda": 0.5,
+      "negative_token_ids": [
+        31857,
+        31873,
+        31868,
+        31904,
+        31861,
+        31874,
+        31744
+      ],
+      "num_tokens": 25,
+      "per_entity_score": [
+        0.03360600891647027
+      ],
+      "positive_token_ids": [
+        31857,
+        31873,
+        31868,
+        31904,
+        31861,
+        31874,
+        31744
+      ],
+      "reconstruction_finite": true,
+      "residual_jerk": 0.06922569227794383,
+      "residual_norm": 252.41827392578125,
+      "residual_temporal_cos": 0.9911364483826686,
+      "selected_entities": [
+        "coke can"
+      ],
+      "selected_group_ids": [
+        4
+      ],
+      "selected_token_ids": [
+        99,
+        100,
+        115,
+        116,
+        120,
+        121,
+        130,
+        131,
+        132,
+        135,
+        136,
+        137,
+        146,
+        147,
+        148,
+        151,
+        152,
+        153,
+        154,
+        163,
+        167,
+        168,
+        169,
+        170,
+        185
+      ],
+      "selection_mode": "semantic",
+      "temporal_prior_used_fraction": 1.0
+    },
+    {
+      "beta": 0.25,
+      "entity_alignment": [
+        {
+          "centroid_displacement": 0.1484370576732876,
+          "centroid_shift": [
+            0,
+            0
+          ],
+          "entity": "coke can",
+          "fallback_reason": null,
+          "group": 7,
+          "num_tokens": 21,
+          "temporal_prior_used": true
+        }
+      ],
+      "fallback_fraction": 0.0,
+      "feature_equal": true,
+      "final_token_ids": [
+        31857,
+        31873,
+        31868,
+        31904,
+        31861,
+        31874,
+        31744
+      ],
+      "guided_prefix": true,
+      "kmeans_K": 8,
+      "lambda": 0.5,
+      "negative_token_ids": [
+        31857,
+        31873,
+        31868,
+        31904,
+        31861,
+        31874,
+        31744
+      ],
+      "num_tokens": 21,
+      "per_entity_score": [
+        0.0356189673878798
+      ],
+      "positive_token_ids": [
+        31857,
+        31873,
+        31868,
+        31904,
+        31861,
+        31874,
+        31744
+      ],
+      "reconstruction_finite": true,
+      "residual_jerk": 0.09389655463129477,
+      "residual_norm": 263.40203857421875,
+      "residual_temporal_cos": 0.9832663525254636,
+      "selected_entities": [
+        "coke can"
+      ],
+      "selected_group_ids": [
+        7
+      ],
+      "selected_token_ids": [
+        99,
+        100,
+        115,
+        116,
+        120,
+        121,
+        130,
+        131,
+        132,
+        136,
+        137,
+        146,
+        147,
+        148,
+        152,
+        153,
+        154,
+        168,
+        169,
+        170,
+        185
+      ],
+      "selection_mode": "semantic",
+      "temporal_prior_used_fraction": 1.0
+    },
+    {
+      "beta": 0.25,
+      "entity_alignment": [
+        {
+          "centroid_displacement": 0.4222416154992426,
+          "centroid_shift": [
+            0,
+            0
+          ],
+          "entity": "coke can",
+          "fallback_reason": "incomplete_overlap",
+          "group": 0,
+          "num_tokens": 28,
+          "temporal_prior_used": false
+        }
+      ],
+      "fallback_fraction": 1.0,
+      "feature_equal": true,
+      "final_token_ids": [
+        31871,
+        31873,
+        31868,
+        31904,
+        31861,
+        31874,
+        31744
+      ],
+      "guided_prefix": true,
+      "kmeans_K": 8,
+      "lambda": 0.5,
+      "negative_token_ids": [
+        31857,
+        31873,
+        31868,
+        31904,
+        31861,
+        31874,
+        31872
+      ],
+      "num_tokens": 28,
+      "per_entity_score": [
+        0.032609636596721885
+      ],
+      "positive_token_ids": [
+        31857,
+        31873,
+        31868,
+        31904,
+        31861,
+        31874,
+        31744
+      ],
+      "reconstruction_finite": true,
+      "residual_jerk": 0.11104996412271183,
+      "residual_norm": 244.02932739257812,
+      "residual_temporal_cos": 0.9782192451554449,
+      "selected_entities": [
+        "coke can"
+      ],
+      "selected_group_ids": [
+        0
+      ],
+      "selected_token_ids": [
+        99,
+        100,
+        115,
+        116,
+        120,
+        121,
+        122,
+        130,
+        131,
+        132,
+        135,
+        136,
+        137,
+        146,
+        147,
+        148,
+        151,
+        152,
+        153,
+        154,
+        163,
+        167,
+        168,
+        169,
+        170,
+        184,
+        185,
+        186
+      ],
+      "selection_mode": "semantic",
+      "temporal_prior_used_fraction": 0.0
+    },
+    {
+      "beta": 0.25,
+      "entity_alignment": [
+        {
+          "centroid_displacement": 0.24327694808466382,
+          "centroid_shift": [
+            0,
+            0
+          ],
+          "entity": "coke can",
+          "fallback_reason": null,
+          "group": 7,
+          "num_tokens": 20,
+          "temporal_prior_used": true
+        }
+      ],
+      "fallback_fraction": 0.0,
+      "feature_equal": true,
+      "final_token_ids": [
+        31857,
+        31873,
+        31868,
+        31904,
+        31861,
+        31874,
+        31744
+      ],
+      "guided_prefix": true,
+      "kmeans_K": 8,
+      "lambda": 0.5,
+      "negative_token_ids": [
+        31857,
+        31873,
+        31868,
+        31904,
+        31861,
+        31874,
+        31872
+      ],
+      "num_tokens": 20,
+      "per_entity_score": [
+        0.033908368261307026
+      ],
+      "positive_token_ids": [
+        31857,
+        31873,
+        31868,
+        31904,
+        31861,
+        31874,
+        31744
+      ],
+      "reconstruction_finite": true,
+      "residual_jerk": 0.20720869915648474,
+      "residual_norm": 257.206298828125,
+      "residual_temporal_cos": 0.9154529808038491,
+      "selected_entities": [
+        "coke can"
+      ],
+      "selected_group_ids": [
+        7
+      ],
+      "selected_token_ids": [
+        99,
+        115,
+        116,
+        120,
+        121,
+        131,
+        132,
+        135,
+        136,
+        137,
+        146,
+        147,
+        151,
+        152,
+        153,
+        154,
+        168,
+        169,
+        170,
+        185
+      ],
+      "selection_mode": "semantic",
+      "temporal_prior_used_fraction": 1.0
+    },
+    {
+      "beta": 0.25,
+      "entity_alignment": [
+        {
+          "centroid_displacement": 0.38369548110737856,
+          "centroid_shift": [
+            0,
+            0
+          ],
+          "entity": "coke can",
+          "fallback_reason": "incomplete_overlap",
+          "group": 0,
+          "num_tokens": 27,
+          "temporal_prior_used": false
+        }
+      ],
+      "fallback_fraction": 1.0,
+      "feature_equal": true,
+      "final_token_ids": [
+        31857,
+        31873,
+        31868,
+        31904,
+        31861,
+        31874,
+        31744
+      ],
+      "guided_prefix": true,
+      "kmeans_K": 8,
+      "lambda": 0.5,
+      "negative_token_ids": [
+        31857,
+        31873,
+        31868,
+        31904,
+        31861,
+        31874,
+        31744
+      ],
+      "num_tokens": 27,
+      "per_entity_score": [
+        0.03570788688468195
+      ],
+      "positive_token_ids": [
+        31857,
+        31873,
+        31868,
+        31904,
+        31861,
+        31874,
+        31744
+      ],
+      "reconstruction_finite": true,
+      "residual_jerk": 0.12648621684448663,
+      "residual_norm": 274.82269287109375,
+      "residual_temporal_cos": 0.9701625495809821,
+      "selected_entities": [
+        "coke can"
+      ],
+      "selected_group_ids": [
+        0
+      ],
+      "selected_token_ids": [
+        99,
+        100,
+        115,
+        116,
+        120,
+        121,
+        130,
+        131,
+        132,
+        135,
+        136,
+        137,
+        146,
+        147,
+        148,
+        151,
+        152,
+        153,
+        154,
+        163,
+        167,
+        168,
+        169,
+        170,
+        184,
+        185,
+        186
+      ],
+      "selection_mode": "semantic",
+      "temporal_prior_used_fraction": 0.0
+    },
+    {
+      "beta": 0.25,
+      "entity_alignment": [
+        {
+          "centroid_displacement": 0.28347055500625634,
+          "centroid_shift": [
+            0,
+            0
+          ],
+          "entity": "coke can",
+          "fallback_reason": null,
+          "group": 4,
+          "num_tokens": 25,
+          "temporal_prior_used": true
+        }
+      ],
+      "fallback_fraction": 0.0,
+      "feature_equal": true,
+      "final_token_ids": [
+        31857,
+        31873,
+        31868,
+        31904,
+        31861,
+        31874,
+        31744
+      ],
+      "guided_prefix": true,
+      "kmeans_K": 8,
+      "lambda": 0.5,
+      "negative_token_ids": [
+        31857,
+        31873,
+        31868,
+        31904,
+        31861,
+        31874,
+        31744
+      ],
+      "num_tokens": 25,
+      "per_entity_score": [
+        0.0350729275227572
+      ],
+      "positive_token_ids": [
+        31857,
+        31873,
+        31868,
+        31904,
+        31861,
+        31874,
+        31744
+      ],
+      "reconstruction_finite": true,
+      "residual_jerk": 0.08108194350578818,
+      "residual_norm": 297.20770263671875,
+      "residual_temporal_cos": 0.9898986759019589,
+      "selected_entities": [
+        "coke can"
+      ],
+      "selected_group_ids": [
+        4
+      ],
+      "selected_token_ids": [
+        99,
+        100,
+        115,
+        116,
+        120,
+        121,
+        130,
+        131,
+        132,
+        135,
+        136,
+        137,
+        146,
+        147,
+        148,
+        151,
+        152,
+        153,
+        154,
+        163,
+        167,
+        168,
+        169,
+        170,
+        185
+      ],
+      "selection_mode": "semantic",
+      "temporal_prior_used_fraction": 1.0
+    },
+    {
+      "beta": 0.25,
+      "entity_alignment": [
+        {
+          "centroid_displacement": 0.28347055500625634,
+          "centroid_shift": [
+            0,
+            0
+          ],
+          "entity": "coke can",
+          "fallback_reason": "incomplete_overlap",
+          "group": 0,
+          "num_tokens": 27,
+          "temporal_prior_used": false
+        }
+      ],
+      "fallback_fraction": 1.0,
+      "feature_equal": true,
+      "final_token_ids": [
+        31857,
+        31873,
+        31868,
+        31904,
+        31861,
+        31874,
+        31744
+      ],
+      "guided_prefix": true,
+      "kmeans_K": 8,
+      "lambda": 0.5,
+      "negative_token_ids": [
+        31857,
+        31873,
+        31868,
+        31904,
+        31861,
+        31874,
+        31744
+      ],
+      "num_tokens": 27,
+      "per_entity_score": [
+        0.03593195793845311
+      ],
+      "positive_token_ids": [
+        31857,
+        31873,
+        31868,
+        31904,
+        31861,
+        31874,
+        31744
+      ],
+      "reconstruction_finite": true,
+      "residual_jerk": 0.11711887780062552,
+      "residual_norm": 295.8941955566406,
+      "residual_temporal_cos": 0.9725761288064403,
+      "selected_entities": [
+        "coke can"
+      ],
+      "selected_group_ids": [
+        0
+      ],
+      "selected_token_ids": [
+        99,
+        100,
+        115,
+        116,
+        120,
+        121,
+        130,
+        131,
+        132,
+        135,
+        136,
+        137,
+        146,
+        147,
+        148,
+        151,
+        152,
+        153,
+        154,
+        163,
+        167,
+        168,
+        169,
+        170,
+        184,
+        185,
+        186
+      ],
+      "selection_mode": "semantic",
+      "temporal_prior_used_fraction": 0.0
+    },
+    {
+      "beta": 0.25,
+      "entity_alignment": [
+        {
+          "centroid_displacement": 0.0,
+          "centroid_shift": [
+            0,
+            0
+          ],
+          "entity": "coke can",
+          "fallback_reason": null,
+          "group": 0,
+          "num_tokens": 27,
+          "temporal_prior_used": true
+        }
+      ],
+      "fallback_fraction": 0.0,
+      "feature_equal": true,
+      "final_token_ids": [
+        31857,
+        31873,
+        31868,
+        31904,
+        31861,
+        31874,
+        31744
+      ],
+      "guided_prefix": true,
+      "kmeans_K": 8,
+      "lambda": 0.5,
+      "negative_token_ids": [
+        31857,
+        31873,
+        31868,
+        31904,
+        31861,
+        31874,
+        31744
+      ],
+      "num_tokens": 27,
+      "per_entity_score": [
+        0.03578395904376157
+      ],
+      "positive_token_ids": [
+        31857,
+        31873,
+        31868,
+        31904,
+        31861,
+        31874,
+        31744
+      ],
+      "reconstruction_finite": true,
+      "residual_jerk": 0.13753895605975883,
+      "residual_norm": 279.8347473144531,
+      "residual_temporal_cos": 0.9636941294732724,
+      "selected_entities": [
+        "coke can"
+      ],
+      "selected_group_ids": [
+        0
+      ],
+      "selected_token_ids": [
+        99,
+        100,
+        115,
+        116,
+        120,
+        121,
+        130,
+        131,
+        132,
+        135,
+        136,
+        137,
+        146,
+        147,
+        148,
+        151,
+        152,
+        153,
+        154,
+        163,
+        167,
+        168,
+        169,
+        170,
+        184,
+        185,
+        186
+      ],
+      "selection_mode": "semantic",
+      "temporal_prior_used_fraction": 1.0
+    },
+    {
+      "beta": 0.25,
+      "entity_alignment": [
+        {
+          "centroid_displacement": 0.0,
+          "centroid_shift": [
+            0,
+            0
+          ],
+          "entity": "coke can",
+          "fallback_reason": null,
+          "group": 0,
+          "num_tokens": 27,
+          "temporal_prior_used": true
+        }
+      ],
+      "fallback_fraction": 0.0,
+      "feature_equal": true,
+      "final_token_ids": [
+        31857,
+        31873,
+        31868,
+        31904,
+        31861,
+        31874,
+        31744
+      ],
+      "guided_prefix": true,
+      "kmeans_K": 8,
+      "lambda": 0.5,
+      "negative_token_ids": [
+        31857,
+        31873,
+        31868,
+        31904,
+        31861,
+        31874,
+        31744
+      ],
+      "num_tokens": 27,
+      "per_entity_score": [
+        0.03710593932171495
+      ],
+      "positive_token_ids": [
+        31857,
+        31873,
+        31868,
+        31904,
+        31861,
+        31874,
+        31744
+      ],
+      "reconstruction_finite": true,
+      "residual_jerk": 0.09429826047440204,
+      "residual_norm": 296.6205749511719,
+      "residual_temporal_cos": 0.983897851468765,
+      "selected_entities": [
+        "coke can"
+      ],
+      "selected_group_ids": [
+        0
+      ],
+      "selected_token_ids": [
+        99,
+        100,
+        115,
+        116,
+        120,
+        121,
+        130,
+        131,
+        132,
+        135,
+        136,
+        137,
+        146,
+        147,
+        148,
+        151,
+        152,
+        153,
+        154,
+        163,
+        167,
+        168,
+        169,
+        170,
+        184,
+        185,
+        186
+      ],
+      "selection_mode": "semantic",
+      "temporal_prior_used_fraction": 1.0
+    },
+    {
+      "beta": 0.25,
+      "entity_alignment": [
+        {
+          "centroid_displacement": 0.28347055500625634,
+          "centroid_shift": [
+            0,
+            0
+          ],
+          "entity": "coke can",
+          "fallback_reason": null,
+          "group": 7,
+          "num_tokens": 25,
+          "temporal_prior_used": true
+        }
+      ],
+      "fallback_fraction": 0.0,
+      "feature_equal": true,
+      "final_token_ids": [
+        31857,
+        31873,
+        31868,
+        31904,
+        31861,
+        31874,
+        31744
+      ],
+      "guided_prefix": true,
+      "kmeans_K": 8,
+      "lambda": 0.5,
+      "negative_token_ids": [
+        31857,
+        31873,
+        31868,
+        31904,
+        31861,
+        31874,
+        31744
+      ],
+      "num_tokens": 25,
+      "per_entity_score": [
+        0.03651389087858976
+      ],
+      "positive_token_ids": [
+        31857,
+        31873,
+        31868,
+        31904,
+        31861,
+        31874,
+        31744
+      ],
+      "reconstruction_finite": true,
+      "residual_jerk": 0.07371389965165608,
+      "residual_norm": 282.5885925292969,
+      "residual_temporal_cos": 0.99030064224948,
+      "selected_entities": [
+        "coke can"
+      ],
+      "selected_group_ids": [
+        7
+      ],
+      "selected_token_ids": [
+        99,
+        100,
+        115,
+        116,
+        120,
+        121,
+        130,
+        131,
+        132,
+        135,
+        136,
+        137,
+        146,
+        147,
+        148,
+        151,
+        152,
+        153,
+        154,
+        163,
+        167,
+        168,
+        169,
+        170,
+        185
+      ],
+      "selection_mode": "semantic",
+      "temporal_prior_used_fraction": 1.0
+    },
+    {
+      "beta": 0.25,
+      "entity_alignment": [
+        {
+          "centroid_displacement": 0.6721545035001294,
+          "centroid_shift": [
+            0,
+            1
+          ],
+          "entity": "coke can",
+          "fallback_reason": "incomplete_overlap",
+          "group": 3,
+          "num_tokens": 29,
+          "temporal_prior_used": false
+        }
+      ],
+      "fallback_fraction": 1.0,
+      "feature_equal": true,
+      "final_token_ids": [
+        31857,
+        31873,
+        31868,
+        31904,
+        31861,
+        31874,
+        31744
+      ],
+      "guided_prefix": true,
+      "kmeans_K": 8,
+      "lambda": 0.5,
+      "negative_token_ids": [
+        31857,
+        31873,
+        31868,
+        31904,
+        31861,
+        31874,
+        31744
+      ],
+      "num_tokens": 29,
+      "per_entity_score": [
+        0.035076341663765345
+      ],
+      "positive_token_ids": [
+        31857,
+        31873,
+        31868,
+        31904,
+        31861,
+        31874,
+        31744
+      ],
+      "reconstruction_finite": true,
+      "residual_jerk": 0.08464245805482971,
+      "residual_norm": 295.2931823730469,
+      "residual_temporal_cos": 0.9866315892951601,
+      "selected_entities": [
+        "coke can"
+      ],
+      "selected_group_ids": [
+        3
+      ],
+      "selected_token_ids": [
+        99,
+        100,
+        115,
+        116,
+        120,
+        121,
+        130,
+        131,
+        132,
+        135,
+        136,
+        137,
+        146,
+        147,
+        148,
+        151,
+        152,
+        153,
+        154,
+        156,
+        157,
+        163,
+        167,
+        168,
+        169,
+        170,
+        184,
+        185,
+        186
+      ],
+      "selection_mode": "semantic",
+      "temporal_prior_used_fraction": 0.0
+    },
+    {
+      "beta": 0.25,
+      "entity_alignment": [
+        {
+          "centroid_displacement": 0.09753196981883434,
+          "centroid_shift": [
+            0,
+            0
+          ],
+          "entity": "coke can",
+          "fallback_reason": "incomplete_overlap",
+          "group": 6,
+          "num_tokens": 29,
+          "temporal_prior_used": false
+        }
+      ],
+      "fallback_fraction": 1.0,
+      "feature_equal": true,
+      "final_token_ids": [
+        31857,
+        31873,
+        31868,
+        31904,
+        31861,
+        31874,
+        31744
+      ],
+      "guided_prefix": true,
+      "kmeans_K": 8,
+      "lambda": 0.5,
+      "negative_token_ids": [
+        31857,
+        31873,
+        31868,
+        31904,
+        31861,
+        31874,
+        31872
+      ],
+      "num_tokens": 29,
+      "per_entity_score": [
+        0.03520062803249373
+      ],
+      "positive_token_ids": [
+        31857,
+        31873,
+        31868,
+        31904,
+        31861,
+        31874,
+        31744
+      ],
+      "reconstruction_finite": true,
+      "residual_jerk": 0.08424078252327626,
+      "residual_norm": 306.6570129394531,
+      "residual_temporal_cos": 0.9865149979591709,
+      "selected_entities": [
+        "coke can"
+      ],
+      "selected_group_ids": [
+        6
+      ],
+      "selected_token_ids": [
+        99,
+        100,
+        115,
+        116,
+        120,
+        121,
+        122,
+        130,
+        131,
+        132,
+        135,
+        136,
+        137,
+        146,
+        147,
+        148,
+        151,
+        152,
+        153,
+        154,
+        157,
+        163,
+        167,
+        168,
+        169,
+        170,
+        184,
+        185,
+        186
+      ],
+      "selection_mode": "semantic",
+      "temporal_prior_used_fraction": 0.0
+    },
+    {
+      "beta": 0.25,
+      "entity_alignment": [
+        {
+          "centroid_displacement": 6.165866094739942,
+          "centroid_shift": [
+            -3,
+            5
+          ],
+          "entity": "coke can",
+          "fallback_reason": "displacement",
+          "group": 2,
+          "num_tokens": 22,
+          "temporal_prior_used": false
+        }
+      ],
+      "fallback_fraction": 1.0,
+      "feature_equal": true,
+      "final_token_ids": [
+        31857,
+        31873,
+        31868,
+        31904,
+        31861,
+        31874,
+        31744
+      ],
+      "guided_prefix": true,
+      "kmeans_K": 8,
+      "lambda": 0.5,
+      "negative_token_ids": [
+        31857,
+        31873,
+        31868,
+        31904,
+        31861,
+        31874,
+        31872
+      ],
+      "num_tokens": 22,
+      "per_entity_score": [
+        0.03424098055295914
+      ],
+      "positive_token_ids": [
+        31857,
+        31873,
+        31868,
+        31904,
+        31861,
+        31874,
+        31744
+      ],
+      "reconstruction_finite": true,
+      "residual_jerk": 0.6105874132453087,
+      "residual_norm": 183.1588134765625,
+      "residual_temporal_cos": 0.3395198534502514,
+      "selected_entities": [
+        "coke can"
+      ],
+      "selected_group_ids": [
+        2
+      ],
+      "selected_token_ids": [
+        45,
+        60,
+        61,
+        75,
+        76,
+        77,
+        91,
+        92,
+        106,
+        107,
+        108,
+        109,
+        122,
+        123,
+        124,
+        125,
+        126,
+        127,
+        139,
+        140,
+        141,
+        142
+      ],
+      "selection_mode": "semantic",
+      "temporal_prior_used_fraction": 0.0
+    },
+    {
+      "beta": 0.25,
+      "entity_alignment": [
+        {
+          "centroid_displacement": 6.5052779306502035,
+          "centroid_shift": [
+            3,
+            -6
+          ],
+          "entity": "coke can",
+          "fallback_reason": "displacement",
+          "group": 7,
+          "num_tokens": 27,
+          "temporal_prior_used": false
+        }
+      ],
+      "fallback_fraction": 1.0,
+      "feature_equal": true,
+      "final_token_ids": [
+        31857,
+        31873,
+        31868,
+        31904,
+        31861,
+        31874,
+        31744
+      ],
+      "guided_prefix": true,
+      "kmeans_K": 8,
+      "lambda": 0.5,
+      "negative_token_ids": [
+        31857,
+        31873,
+        31868,
+        31904,
+        31861,
+        31874,
+        31744
+      ],
+      "num_tokens": 27,
+      "per_entity_score": [
+        0.03491134061537275
+      ],
+      "positive_token_ids": [
+        31857,
+        31873,
+        31868,
+        31904,
+        31861,
+        31874,
+        31744
+      ],
+      "reconstruction_finite": true,
+      "residual_jerk": 0.604945001678611,
+      "residual_norm": 306.3442077636719,
+      "residual_temporal_cos": 0.35381996242290137,
+      "selected_entities": [
+        "coke can"
+      ],
+      "selected_group_ids": [
+        7
+      ],
+      "selected_token_ids": [
+        99,
+        100,
+        115,
+        116,
+        120,
+        121,
+        130,
+        131,
+        132,
+        135,
+        136,
+        137,
+        146,
+        147,
+        148,
+        151,
+        152,
+        153,
+        154,
+        163,
+        167,
+        168,
+        169,
+        170,
+        184,
+        185,
+        186
+      ],
+      "selection_mode": "semantic",
+      "temporal_prior_used_fraction": 0.0
+    },
+    {
+      "beta": 0.25,
+      "entity_alignment": [
+        {
+          "centroid_displacement": 0.0,
+          "centroid_shift": [
+            0,
+            0
+          ],
+          "entity": "coke can",
+          "fallback_reason": null,
+          "group": 0,
+          "num_tokens": 27,
+          "temporal_prior_used": true
+        }
+      ],
+      "fallback_fraction": 0.0,
+      "feature_equal": true,
+      "final_token_ids": [
+        31857,
+        31873,
+        31868,
+        31904,
+        31861,
+        31874,
+        31744
+      ],
+      "guided_prefix": true,
+      "kmeans_K": 8,
+      "lambda": 0.5,
+      "negative_token_ids": [
+        31857,
+        31873,
+        31868,
+        31904,
+        31861,
+        31874,
+        31744
+      ],
+      "num_tokens": 27,
+      "per_entity_score": [
+        0.03570812198866635
+      ],
+      "positive_token_ids": [
+        31857,
+        31873,
+        31868,
+        31904,
+        31861,
+        31874,
+        31744
+      ],
+      "reconstruction_finite": true,
+      "residual_jerk": 0.07486385874672721,
+      "residual_norm": 286.9374694824219,
+      "residual_temporal_cos": 0.9909210481993855,
+      "selected_entities": [
+        "coke can"
+      ],
+      "selected_group_ids": [
+        0
+      ],
+      "selected_token_ids": [
+        99,
+        100,
+        115,
+        116,
+        120,
+        121,
+        130,
+        131,
+        132,
+        135,
+        136,
+        137,
+        146,
+        147,
+        148,
+        151,
+        152,
+        153,
+        154,
+        163,
+        167,
+        168,
+        169,
+        170,
+        184,
+        185,
+        186
+      ],
+      "selection_mode": "semantic",
+      "temporal_prior_used_fraction": 1.0
+    },
+    {
+      "beta": 0.25,
+      "entity_alignment": [
+        {
+          "centroid_displacement": 6.830577956877224,
+          "centroid_shift": [
+            -3,
+            6
+          ],
+          "entity": "coke can",
+          "fallback_reason": "displacement",
+          "group": 7,
+          "num_tokens": 22,
+          "temporal_prior_used": false
+        }
+      ],
+      "fallback_fraction": 1.0,
+      "feature_equal": true,
+      "final_token_ids": [
+        31857,
+        31873,
+        31868,
+        31904,
+        31861,
+        31874,
+        31744
+      ],
+      "guided_prefix": true,
+      "kmeans_K": 8,
+      "lambda": 0.5,
+      "negative_token_ids": [
+        31857,
+        31873,
+        31868,
+        31904,
+        31861,
+        31874,
+        31872
+      ],
+      "num_tokens": 22,
+      "per_entity_score": [
+        0.035057107540052444
+      ],
+      "positive_token_ids": [
+        31857,
+        31873,
+        31868,
+        31904,
+        31861,
+        31874,
+        31744
+      ],
+      "reconstruction_finite": true,
+      "residual_jerk": 0.5660886544699917,
+      "residual_norm": 176.9744873046875,
+      "residual_temporal_cos": 0.4399935168417881,
+      "selected_entities": [
+        "coke can"
+      ],
+      "selected_group_ids": [
+        7
+      ],
+      "selected_token_ids": [
+        31,
+        45,
+        60,
+        61,
+        75,
+        76,
+        77,
+        91,
+        92,
+        106,
+        107,
+        108,
+        109,
+        123,
+        124,
+        125,
+        126,
+        127,
+        139,
+        140,
+        141,
+        142
+      ],
+      "selection_mode": "semantic",
+      "temporal_prior_used_fraction": 0.0
+    },
+    {
+      "beta": 0.25,
+      "entity_alignment": [
+        {
+          "centroid_displacement": 0.453569152583401,
+          "centroid_shift": [
+            0,
+            0
+          ],
+          "entity": "coke can",
+          "fallback_reason": "incomplete_overlap",
+          "group": 4,
+          "num_tokens": 23,
+          "temporal_prior_used": false
+        }
+      ],
+      "fallback_fraction": 1.0,
+      "feature_equal": true,
+      "final_token_ids": [
+        31857,
+        31873,
+        31868,
+        31904,
+        31861,
+        31874,
+        31744
+      ],
+      "guided_prefix": true,
+      "kmeans_K": 8,
+      "lambda": 0.5,
+      "negative_token_ids": [
+        31857,
+        31873,
+        31868,
+        31904,
+        31861,
+        31874,
+        31872
+      ],
+      "num_tokens": 23,
+      "per_entity_score": [
+        0.03506808611580303
+      ],
+      "positive_token_ids": [
+        31857,
+        31873,
+        31868,
+        31904,
+        31861,
+        31874,
+        31744
+      ],
+      "reconstruction_finite": true,
+      "residual_jerk": 0.179075899798662,
+      "residual_norm": 178.74000549316406,
+      "residual_temporal_cos": 0.9359112199404303,
+      "selected_entities": [
+        "coke can"
+      ],
+      "selected_group_ids": [
+        4
+      ],
+      "selected_token_ids": [
+        45,
+        60,
+        61,
+        75,
+        76,
+        77,
+        91,
+        92,
+        106,
+        107,
+        108,
+        109,
+        122,
+        123,
+        124,
+        125,
+        126,
+        127,
+        139,
+        140,
+        141,
+        142,
+        157
+      ],
+      "selection_mode": "semantic",
+      "temporal_prior_used_fraction": 0.0
+    },
+    {
+      "beta": 0.25,
+      "entity_alignment": [
+        {
+          "centroid_displacement": 6.478196024705455,
+          "centroid_shift": [
+            3,
+            -6
+          ],
+          "entity": "coke can",
+          "fallback_reason": "displacement",
+          "group": 0,
+          "num_tokens": 27,
+          "temporal_prior_used": false
+        }
+      ],
+      "fallback_fraction": 1.0,
+      "feature_equal": true,
+      "final_token_ids": [
+        31857,
+        31873,
+        31868,
+        31904,
+        31861,
+        31874,
+        31744
+      ],
+      "guided_prefix": true,
+      "kmeans_K": 8,
+      "lambda": 0.5,
+      "negative_token_ids": [
+        31857,
+        31873,
+        31868,
+        31904,
+        31861,
+        31874,
+        31744
+      ],
+      "num_tokens": 27,
+      "per_entity_score": [
+        0.03434746899017055
+      ],
+      "positive_token_ids": [
+        31857,
+        31873,
+        31868,
+        31904,
+        31861,
+        31874,
+        31744
+      ],
+      "reconstruction_finite": true,
+      "residual_jerk": 0.5428920874393348,
+      "residual_norm": 336.2655029296875,
+      "residual_temporal_cos": 0.5561231038675153,
+      "selected_entities": [
+        "coke can"
+      ],
+      "selected_group_ids": [
+        0
+      ],
+      "selected_token_ids": [
+        99,
+        100,
+        115,
+        116,
+        120,
+        121,
+        130,
+        131,
+        132,
+        135,
+        136,
+        137,
+        146,
+        147,
+        148,
+        151,
+        152,
+        153,
+        154,
+        163,
+        167,
+        168,
+        169,
+        170,
+        184,
+        185,
+        186
+      ],
+      "selection_mode": "semantic",
+      "temporal_prior_used_fraction": 0.0
+    },
+    {
+      "beta": 0.25,
+      "entity_alignment": [
+        {
+          "centroid_displacement": 0.0,
+          "centroid_shift": [
+            0,
+            0
+          ],
+          "entity": "coke can",
+          "fallback_reason": null,
+          "group": 4,
+          "num_tokens": 27,
+          "temporal_prior_used": true
+        }
+      ],
+      "fallback_fraction": 0.0,
+      "feature_equal": true,
+      "final_token_ids": [
+        31857,
+        31873,
+        31868,
+        31904,
+        31861,
+        31874,
+        31744
+      ],
+      "guided_prefix": true,
+      "kmeans_K": 8,
+      "lambda": 0.5,
+      "negative_token_ids": [
+        31857,
+        31873,
+        31868,
+        31904,
+        31861,
+        31874,
+        31744
+      ],
+      "num_tokens": 27,
+      "per_entity_score": [
+        0.03449182897591792
+      ],
+      "positive_token_ids": [
+        31857,
+        31873,
+        31868,
+        31904,
+        31861,
+        31874,
+        31744
+      ],
+      "reconstruction_finite": true,
+      "residual_jerk": 0.06549600617968813,
+      "residual_norm": 324.36968994140625,
+      "residual_temporal_cos": 0.992066548651776,
+      "selected_entities": [
+        "coke can"
+      ],
+      "selected_group_ids": [
+        4
+      ],
+      "selected_token_ids": [
+        99,
+        100,
+        115,
+        116,
+        120,
+        121,
+        130,
+        131,
+        132,
+        135,
+        136,
+        137,
+        146,
+        147,
+        148,
+        151,
+        152,
+        153,
+        154,
+        163,
+        167,
+        168,
+        169,
+        170,
+        184,
+        185,
+        186
+      ],
+      "selection_mode": "semantic",
+      "temporal_prior_used_fraction": 1.0
+    },
+    {
+      "beta": 0.25,
+      "entity_alignment": [
+        {
+          "centroid_displacement": 0.0,
+          "centroid_shift": [
+            0,
+            0
+          ],
+          "entity": "coke can",
+          "fallback_reason": null,
+          "group": 0,
+          "num_tokens": 27,
+          "temporal_prior_used": true
+        }
+      ],
+      "fallback_fraction": 0.0,
+      "feature_equal": true,
+      "final_token_ids": [
+        31857,
+        31873,
+        31868,
+        31904,
+        31861,
+        31874,
+        31744
+      ],
+      "guided_prefix": true,
+      "kmeans_K": 8,
+      "lambda": 0.5,
+      "negative_token_ids": [
+        31857,
+        31873,
+        31868,
+        31904,
+        31861,
+        31874,
+        31744
+      ],
+      "num_tokens": 27,
+      "per_entity_score": [
+        0.033753432460217565
+      ],
+      "positive_token_ids": [
+        31857,
+        31873,
+        31868,
+        31904,
+        31861,
+        31874,
+        31744
+      ],
+      "reconstruction_finite": true,
+      "residual_jerk": 0.09805902625631575,
+      "residual_norm": 347.0182800292969,
+      "residual_temporal_cos": 0.9830255671811484,
+      "selected_entities": [
+        "coke can"
+      ],
+      "selected_group_ids": [
+        0
+      ],
+      "selected_token_ids": [
+        99,
+        100,
+        115,
+        116,
+        120,
+        121,
+        130,
+        131,
+        132,
+        135,
+        136,
+        137,
+        146,
+        147,
+        148,
+        151,
+        152,
+        153,
+        154,
+        163,
+        167,
+        168,
+        169,
+        170,
+        184,
+        185,
+        186
+      ],
+      "selection_mode": "semantic",
+      "temporal_prior_used_fraction": 1.0
+    },
+    {
+      "beta": 0.25,
+      "entity_alignment": [
+        {
+          "centroid_displacement": 0.16715903603083654,
+          "centroid_shift": [
+            0,
+            0
+          ],
+          "entity": "coke can",
+          "fallback_reason": null,
+          "group": 4,
+          "num_tokens": 26,
+          "temporal_prior_used": true
+        }
+      ],
+      "fallback_fraction": 0.0,
+      "feature_equal": true,
+      "final_token_ids": [
+        31857,
+        31873,
+        31868,
+        31904,
+        31861,
+        31874,
+        31744
+      ],
+      "guided_prefix": true,
+      "kmeans_K": 8,
+      "lambda": 0.5,
+      "negative_token_ids": [
+        31857,
+        31873,
+        31868,
+        31904,
+        31861,
+        31874,
+        31744
+      ],
+      "num_tokens": 26,
+      "per_entity_score": [
+        0.03466599670292812
+      ],
+      "positive_token_ids": [
+        31857,
+        31873,
+        31868,
+        31904,
+        31861,
+        31874,
+        31744
+      ],
+      "reconstruction_finite": true,
+      "residual_jerk": 0.0840082414400895,
+      "residual_norm": 313.8902893066406,
+      "residual_temporal_cos": 0.9908873496448194,
+      "selected_entities": [
+        "coke can"
+      ],
+      "selected_group_ids": [
+        4
+      ],
+      "selected_token_ids": [
+        99,
+        100,
+        115,
+        116,
+        120,
+        121,
+        130,
+        131,
+        132,
+        135,
+        136,
+        137,
+        146,
+        147,
+        148,
+        151,
+        152,
+        153,
+        154,
+        163,
+        167,
+        168,
+        169,
+        170,
+        184,
+        185
+      ],
+      "selection_mode": "semantic",
+      "temporal_prior_used_fraction": 1.0
+    },
+    {
+      "beta": 0.25,
+      "entity_alignment": [
+        {
+          "centroid_displacement": 0.16715903603083654,
+          "centroid_shift": [
+            0,
+            0
+          ],
+          "entity": "coke can",
+          "fallback_reason": "incomplete_overlap",
+          "group": 4,
+          "num_tokens": 27,
+          "temporal_prior_used": false
+        }
+      ],
+      "fallback_fraction": 1.0,
+      "feature_equal": true,
+      "final_token_ids": [
+        31857,
+        31873,
+        31868,
+        31904,
+        31861,
+        31874,
+        31744
+      ],
+      "guided_prefix": true,
+      "kmeans_K": 8,
+      "lambda": 0.5,
+      "negative_token_ids": [
+        31857,
+        31873,
+        31868,
+        31904,
+        31861,
+        31874,
+        31872
+      ],
+      "num_tokens": 27,
+      "per_entity_score": [
+        0.03381848714038549
+      ],
+      "positive_token_ids": [
+        31857,
+        31873,
+        31868,
+        31904,
+        31861,
+        31874,
+        31744
+      ],
+      "reconstruction_finite": true,
+      "residual_jerk": 0.08585577420564218,
+      "residual_norm": 285.8597412109375,
+      "residual_temporal_cos": 0.9896036310888914,
+      "selected_entities": [
+        "coke can"
+      ],
+      "selected_group_ids": [
+        4
+      ],
+      "selected_token_ids": [
+        99,
+        100,
+        115,
+        116,
+        120,
+        121,
+        130,
+        131,
+        132,
+        135,
+        136,
+        137,
+        146,
+        147,
+        148,
+        151,
+        152,
+        153,
+        154,
+        163,
+        167,
+        168,
+        169,
+        170,
+        184,
+        185,
+        186
+      ],
+      "selection_mode": "semantic",
+      "temporal_prior_used_fraction": 0.0
+    },
+    {
+      "beta": 0.25,
+      "entity_alignment": [
+        {
+          "centroid_displacement": 0.26352313834736485,
+          "centroid_shift": [
+            0,
+            0
+          ],
+          "entity": "coke can",
+          "fallback_reason": null,
+          "group": 4,
+          "num_tokens": 24,
+          "temporal_prior_used": true
+        }
+      ],
+      "fallback_fraction": 0.0,
+      "feature_equal": true,
+      "final_token_ids": [
+        31857,
+        31873,
+        31868,
+        31904,
+        31861,
+        31874,
+        31744
+      ],
+      "guided_prefix": true,
+      "kmeans_K": 8,
+      "lambda": 0.5,
+      "negative_token_ids": [
+        31857,
+        31873,
+        31868,
+        31904,
+        31861,
+        31874,
+        31872
+      ],
+      "num_tokens": 24,
+      "per_entity_score": [
+        0.03481514384428648
+      ],
+      "positive_token_ids": [
+        31857,
+        31873,
+        31868,
+        31904,
+        31861,
+        31874,
+        31744
+      ],
+      "reconstruction_finite": true,
+      "residual_jerk": 0.10172360176682003,
+      "residual_norm": 270.12451171875,
+      "residual_temporal_cos": 0.9808912886239184,
+      "selected_entities": [
+        "coke can"
+      ],
+      "selected_group_ids": [
+        4
+      ],
+      "selected_token_ids": [
+        99,
+        100,
+        115,
+        116,
+        120,
+        121,
+        130,
+        131,
+        132,
+        135,
+        136,
+        137,
+        146,
+        147,
+        148,
+        151,
+        152,
+        153,
+        154,
+        167,
+        168,
+        169,
+        170,
+        185
+      ],
+      "selection_mode": "semantic",
+      "temporal_prior_used_fraction": 1.0
+    },
+    {
+      "beta": 0.25,
+      "entity_alignment": [
+        {
+          "centroid_displacement": 0.0,
+          "centroid_shift": [
+            0,
+            0
+          ],
+          "entity": "coke can",
+          "fallback_reason": null,
+          "group": 4,
+          "num_tokens": 24,
+          "temporal_prior_used": true
+        }
+      ],
+      "fallback_fraction": 0.0,
+      "feature_equal": true,
+      "final_token_ids": [
+        31857,
+        31873,
+        31868,
+        31904,
+        31861,
+        31874,
+        31744
+      ],
+      "guided_prefix": true,
+      "kmeans_K": 8,
+      "lambda": 0.5,
+      "negative_token_ids": [
+        31857,
+        31873,
+        31868,
+        31904,
+        31861,
+        31874,
+        31872
+      ],
+      "num_tokens": 24,
+      "per_entity_score": [
+        0.03450701451016465
+      ],
+      "positive_token_ids": [
+        31857,
+        31873,
+        31868,
+        31904,
+        31861,
+        31874,
+        31744
+      ],
+      "reconstruction_finite": true,
+      "residual_jerk": 0.09547914501632704,
+      "residual_norm": 304.7434387207031,
+      "residual_temporal_cos": 0.9889805149386104,
+      "selected_entities": [
+        "coke can"
+      ],
+      "selected_group_ids": [
+        4
+      ],
+      "selected_token_ids": [
+        99,
+        100,
+        115,
+        116,
+        120,
+        121,
+        130,
+        131,
+        132,
+        135,
+        136,
+        137,
+        146,
+        147,
+        148,
+        151,
+        152,
+        153,
+        154,
+        167,
+        168,
+        169,
+        170,
+        185
+      ],
+      "selection_mode": "semantic",
+      "temporal_prior_used_fraction": 1.0
+    },
+    {
+      "beta": 0.25,
+      "entity_alignment": [
+        {
+          "centroid_displacement": 0.1446067464232261,
+          "centroid_shift": [
+            0,
+            0
+          ],
+          "entity": "coke can",
+          "fallback_reason": "incomplete_overlap",
+          "group": 7,
+          "num_tokens": 25,
+          "temporal_prior_used": false
+        }
+      ],
+      "fallback_fraction": 1.0,
+      "feature_equal": true,
+      "final_token_ids": [
+        31857,
+        31873,
+        31868,
+        31904,
+        31861,
+        31874,
+        31744
+      ],
+      "guided_prefix": true,
+      "kmeans_K": 8,
+      "lambda": 0.5,
+      "negative_token_ids": [
+        31857,
+        31873,
+        31868,
+        31904,
+        31861,
+        31874,
+        31872
+      ],
+      "num_tokens": 25,
+      "per_entity_score": [
+        0.03468547009493787
+      ],
+      "positive_token_ids": [
+        31857,
+        31873,
+        31868,
+        31904,
+        31861,
+        31874,
+        31744
+      ],
+      "reconstruction_finite": true,
+      "residual_jerk": 0.11733115117415452,
+      "residual_norm": 284.55804443359375,
+      "residual_temporal_cos": 0.9747837821596982,
+      "selected_entities": [
+        "coke can"
+      ],
+      "selected_group_ids": [
+        7
+      ],
+      "selected_token_ids": [
+        99,
+        100,
+        115,
+        116,
+        120,
+        121,
+        130,
+        131,
+        132,
+        135,
+        136,
+        137,
+        146,
+        147,
+        148,
+        151,
+        152,
+        153,
+        154,
+        163,
+        167,
+        168,
+        169,
+        170,
+        185
+      ],
+      "selection_mode": "semantic",
+      "temporal_prior_used_fraction": 0.0
+    },
+    {
+      "beta": 0.25,
+      "entity_alignment": [
+        {
+          "centroid_displacement": 0.28347055500625634,
+          "centroid_shift": [
+            0,
+            0
+          ],
+          "entity": "coke can",
+          "fallback_reason": "incomplete_overlap",
+          "group": 4,
+          "num_tokens": 27,
+          "temporal_prior_used": false
+        }
+      ],
+      "fallback_fraction": 1.0,
+      "feature_equal": true,
+      "final_token_ids": [
+        31857,
+        31873,
+        31868,
+        31904,
+        31861,
+        31874,
+        31744
+      ],
+      "guided_prefix": true,
+      "kmeans_K": 8,
+      "lambda": 0.5,
+      "negative_token_ids": [
+        31857,
+        31873,
+        31868,
+        31904,
+        31861,
+        31874,
+        31872
+      ],
+      "num_tokens": 27,
+      "per_entity_score": [
+        0.03400955462610591
+      ],
+      "positive_token_ids": [
+        31857,
+        31873,
+        31868,
+        31904,
+        31861,
+        31874,
+        31744
+      ],
+      "reconstruction_finite": true,
+      "residual_jerk": 0.17272857326966456,
+      "residual_norm": 261.9693908691406,
+      "residual_temporal_cos": 0.9436499771951359,
+      "selected_entities": [
+        "coke can"
+      ],
+      "selected_group_ids": [
+        4
+      ],
+      "selected_token_ids": [
+        99,
+        100,
+        115,
+        116,
+        120,
+        121,
+        130,
+        131,
+        132,
+        135,
+        136,
+        137,
+        146,
+        147,
+        148,
+        151,
+        152,
+        153,
+        154,
+        163,
+        167,
+        168,
+        169,
+        170,
+        184,
+        185,
+        186
+      ],
+      "selection_mode": "semantic",
+      "temporal_prior_used_fraction": 0.0
+    },
+    {
+      "beta": 0.25,
+      "entity_alignment": [
+        {
+          "centroid_displacement": 0.0,
+          "centroid_shift": [
+            0,
+            0
+          ],
+          "entity": "coke can",
+          "fallback_reason": null,
+          "group": 0,
+          "num_tokens": 27,
+          "temporal_prior_used": true
+        }
+      ],
+      "fallback_fraction": 0.0,
+      "feature_equal": true,
+      "final_token_ids": [
+        31857,
+        31873,
+        31868,
+        31904,
+        31861,
+        31874,
+        31744
+      ],
+      "guided_prefix": true,
+      "kmeans_K": 8,
+      "lambda": 0.5,
+      "negative_token_ids": [
+        31857,
+        31873,
+        31868,
+        31904,
+        31861,
+        31874,
+        31872
+      ],
+      "num_tokens": 27,
+      "per_entity_score": [
+        0.03376752075865713
+      ],
+      "positive_token_ids": [
+        31857,
+        31873,
+        31868,
+        31904,
+        31861,
+        31874,
+        31744
+      ],
+      "reconstruction_finite": true,
+      "residual_jerk": 0.0953431951784806,
+      "residual_norm": 256.3672180175781,
+      "residual_temporal_cos": 0.982051007342849,
+      "selected_entities": [
+        "coke can"
+      ],
+      "selected_group_ids": [
+        0
+      ],
+      "selected_token_ids": [
+        99,
+        100,
+        115,
+        116,
+        120,
+        121,
+        130,
+        131,
+        132,
+        135,
+        136,
+        137,
+        146,
+        147,
+        148,
+        151,
+        152,
+        153,
+        154,
+        163,
+        167,
+        168,
+        169,
+        170,
+        184,
+        185,
+        186
+      ],
+      "selection_mode": "semantic",
+      "temporal_prior_used_fraction": 1.0
+    },
+    {
+      "beta": 0.25,
+      "entity_alignment": [
+        {
+          "centroid_displacement": 0.0,
+          "centroid_shift": [
+            0,
+            0
+          ],
+          "entity": "coke can",
+          "fallback_reason": null,
+          "group": 4,
+          "num_tokens": 27,
+          "temporal_prior_used": true
+        }
+      ],
+      "fallback_fraction": 0.0,
+      "feature_equal": true,
+      "final_token_ids": [
+        31857,
+        31873,
+        31868,
+        31904,
+        31861,
+        31874,
+        31744
+      ],
+      "guided_prefix": true,
+      "kmeans_K": 8,
+      "lambda": 0.5,
+      "negative_token_ids": [
+        31857,
+        31873,
+        31868,
+        31904,
+        31861,
+        31874,
+        31872
+      ],
+      "num_tokens": 27,
+      "per_entity_score": [
+        0.03350397988252602
+      ],
+      "positive_token_ids": [
+        31857,
+        31873,
+        31868,
+        31904,
+        31861,
+        31874,
+        31744
+      ],
+      "reconstruction_finite": true,
+      "residual_jerk": 0.06311317028594991,
+      "residual_norm": 250.1871795654297,
+      "residual_temporal_cos": 0.9923300466686931,
+      "selected_entities": [
+        "coke can"
+      ],
+      "selected_group_ids": [
+        4
+      ],
+      "selected_token_ids": [
+        99,
+        100,
+        115,
+        116,
+        120,
+        121,
+        130,
+        131,
+        132,
+        135,
+        136,
+        137,
+        146,
+        147,
+        148,
+        151,
+        152,
+        153,
+        154,
+        163,
+        167,
+        168,
+        169,
+        170,
+        184,
+        185,
+        186
+      ],
+      "selection_mode": "semantic",
+      "temporal_prior_used_fraction": 1.0
+    },
+    {
+      "beta": 0.25,
+      "entity_alignment": [
+        {
+          "centroid_displacement": 0.0,
+          "centroid_shift": [
+            0,
+            0
+          ],
+          "entity": "coke can",
+          "fallback_reason": null,
+          "group": 7,
+          "num_tokens": 27,
+          "temporal_prior_used": true
+        }
+      ],
+      "fallback_fraction": 0.0,
+      "feature_equal": true,
+      "final_token_ids": [
+        31857,
+        31873,
+        31868,
+        31904,
+        31861,
+        31874,
+        31744
+      ],
+      "guided_prefix": true,
+      "kmeans_K": 8,
+      "lambda": 0.5,
+      "negative_token_ids": [
+        31857,
+        31873,
+        31868,
+        31904,
+        31861,
+        31874,
+        31872
+      ],
+      "num_tokens": 27,
+      "per_entity_score": [
+        0.03378558542062844
+      ],
+      "positive_token_ids": [
+        31857,
+        31873,
+        31868,
+        31904,
+        31861,
+        31874,
+        31744
+      ],
+      "reconstruction_finite": true,
+      "residual_jerk": 0.08851468125938035,
+      "residual_norm": 242.3810272216797,
+      "residual_temporal_cos": 0.984828781241948,
+      "selected_entities": [
+        "coke can"
+      ],
+      "selected_group_ids": [
+        7
+      ],
+      "selected_token_ids": [
+        99,
+        100,
+        115,
+        116,
+        120,
+        121,
+        130,
+        131,
+        132,
+        135,
+        136,
+        137,
+        146,
+        147,
+        148,
+        151,
+        152,
+        153,
+        154,
+        163,
+        167,
+        168,
+        169,
+        170,
+        184,
+        185,
+        186
+      ],
+      "selection_mode": "semantic",
+      "temporal_prior_used_fraction": 1.0
+    },
+    {
+      "beta": 0.25,
+      "entity_alignment": [
+        {
+          "centroid_displacement": 0.0,
+          "centroid_shift": [
+            0,
+            0
+          ],
+          "entity": "coke can",
+          "fallback_reason": null,
+          "group": 7,
+          "num_tokens": 27,
+          "temporal_prior_used": true
+        }
+      ],
+      "fallback_fraction": 0.0,
+      "feature_equal": true,
+      "final_token_ids": [
+        31857,
+        31873,
+        31868,
+        31904,
+        31861,
+        31874,
+        31744
+      ],
+      "guided_prefix": true,
+      "kmeans_K": 8,
+      "lambda": 0.5,
+      "negative_token_ids": [
+        31857,
+        31873,
+        31868,
+        31904,
+        31861,
+        31874,
+        31872
+      ],
+      "num_tokens": 27,
+      "per_entity_score": [
+        0.0330558937802309
+      ],
+      "positive_token_ids": [
+        31857,
+        31873,
+        31868,
+        31904,
+        31861,
+        31874,
+        31744
+      ],
+      "reconstruction_finite": true,
+      "residual_jerk": 0.12974912413918338,
+      "residual_norm": 287.5628662109375,
+      "residual_temporal_cos": 0.9807281721203394,
+      "selected_entities": [
+        "coke can"
+      ],
+      "selected_group_ids": [
+        7
+      ],
+      "selected_token_ids": [
+        99,
+        100,
+        115,
+        116,
+        120,
+        121,
+        130,
+        131,
+        132,
+        135,
+        136,
+        137,
+        146,
+        147,
+        148,
+        151,
+        152,
+        153,
+        154,
+        163,
+        167,
+        168,
+        169,
+        170,
+        184,
+        185,
+        186
+      ],
+      "selection_mode": "semantic",
+      "temporal_prior_used_fraction": 1.0
+    },
+    {
+      "beta": 0.25,
+      "entity_alignment": [
+        {
+          "centroid_displacement": 0.3392666640788292,
+          "centroid_shift": [
+            0,
+            0
+          ],
+          "entity": "coke can",
+          "fallback_reason": null,
+          "group": 7,
+          "num_tokens": 23,
+          "temporal_prior_used": true
+        }
+      ],
+      "fallback_fraction": 0.0,
+      "feature_equal": true,
+      "final_token_ids": [
+        31857,
+        31873,
+        31868,
+        31904,
+        31861,
+        31874,
+        31744
+      ],
+      "guided_prefix": true,
+      "kmeans_K": 8,
+      "lambda": 0.5,
+      "negative_token_ids": [
+        31857,
+        31873,
+        31868,
+        31904,
+        31861,
+        31874,
+        31744
+      ],
+      "num_tokens": 23,
+      "per_entity_score": [
+        0.03408352389368143
+      ],
+      "positive_token_ids": [
+        31857,
+        31873,
+        31868,
+        31904,
+        31861,
+        31874,
+        31744
+      ],
+      "reconstruction_finite": true,
+      "residual_jerk": 0.13343594082483823,
+      "residual_norm": 265.738525390625,
+      "residual_temporal_cos": 0.9674509033344797,
+      "selected_entities": [
+        "coke can"
+      ],
+      "selected_group_ids": [
+        7
+      ],
+      "selected_token_ids": [
+        99,
+        100,
+        115,
+        116,
+        120,
+        121,
+        130,
+        131,
+        132,
+        135,
+        136,
+        137,
+        146,
+        147,
+        148,
+        151,
+        152,
+        153,
+        154,
+        168,
+        169,
+        170,
+        185
+      ],
+      "selection_mode": "semantic",
+      "temporal_prior_used_fraction": 1.0
+    },
+    {
+      "beta": 0.25,
+      "entity_alignment": [
+        {
+          "centroid_displacement": 0.3392666640788292,
+          "centroid_shift": [
+            0,
+            0
+          ],
+          "entity": "coke can",
+          "fallback_reason": "incomplete_overlap",
+          "group": 6,
+          "num_tokens": 27,
+          "temporal_prior_used": false
+        }
+      ],
+      "fallback_fraction": 1.0,
+      "feature_equal": true,
+      "final_token_ids": [
+        31857,
+        31873,
+        31868,
+        31904,
+        31861,
+        31874,
+        31744
+      ],
+      "guided_prefix": true,
+      "kmeans_K": 8,
+      "lambda": 0.5,
+      "negative_token_ids": [
+        31857,
+        31873,
+        31868,
+        31904,
+        31861,
+        31874,
+        31744
+      ],
+      "num_tokens": 27,
+      "per_entity_score": [
+        0.03265785418215464
+      ],
+      "positive_token_ids": [
+        31857,
+        31873,
+        31868,
+        31904,
+        31861,
+        31874,
+        31744
+      ],
+      "reconstruction_finite": true,
+      "residual_jerk": 0.1251686641553732,
+      "residual_norm": 257.07879638671875,
+      "residual_temporal_cos": 0.9692059445943496,
+      "selected_entities": [
+        "coke can"
+      ],
+      "selected_group_ids": [
+        6
+      ],
+      "selected_token_ids": [
+        99,
+        100,
+        115,
+        116,
+        120,
+        121,
+        130,
+        131,
+        132,
+        135,
+        136,
+        137,
+        146,
+        147,
+        148,
+        151,
+        152,
+        153,
+        154,
+        163,
+        167,
+        168,
+        169,
+        170,
+        184,
+        185,
+        186
+      ],
+      "selection_mode": "semantic",
+      "temporal_prior_used_fraction": 0.0
+    },
+    {
+      "beta": 0.25,
+      "entity_alignment": [
+        {
+          "centroid_displacement": 1.4809448079476983,
+          "centroid_shift": [
+            -1,
+            0
+          ],
+          "entity": "coke can",
+          "fallback_reason": "incomplete_overlap",
+          "group": 7,
+          "num_tokens": 43,
+          "temporal_prior_used": false
+        }
+      ],
+      "fallback_fraction": 1.0,
+      "feature_equal": true,
+      "final_token_ids": [
+        31844,
+        31873,
+        31868,
+        31904,
+        31861,
+        31874,
+        31744
+      ],
+      "guided_prefix": true,
+      "kmeans_K": 8,
+      "lambda": 0.5,
+      "negative_token_ids": [
+        31857,
+        31873,
+        31868,
+        31904,
+        31861,
+        31874,
+        31872
+      ],
+      "num_tokens": 43,
+      "per_entity_score": [
+        0.03363181733135242
+      ],
+      "positive_token_ids": [
+        31857,
+        31873,
+        31868,
+        31904,
+        31861,
+        31874,
+        31744
+      ],
+      "reconstruction_finite": true,
+      "residual_jerk": 0.419602920697,
+      "residual_norm": 184.7520751953125,
+      "residual_temporal_cos": 0.6932404852892132,
+      "selected_entities": [
+        "coke can"
+      ],
+      "selected_group_ids": [
+        7
+      ],
+      "selected_token_ids": [
+        53,
+        54,
+        68,
+        69,
+        70,
+        71,
+        72,
+        73,
+        85,
+        86,
+        87,
+        88,
+        99,
+        100,
+        101,
+        102,
+        103,
+        115,
+        116,
+        118,
+        120,
+        121,
+        130,
+        131,
+        132,
+        135,
+        136,
+        137,
+        146,
+        147,
+        148,
+        151,
+        152,
+        153,
+        154,
+        163,
+        167,
+        168,
+        169,
+        170,
+        184,
+        185,
+        186
+      ],
+      "selection_mode": "semantic",
+      "temporal_prior_used_fraction": 0.0
+    },
+    {
+      "beta": 0.25,
+      "entity_alignment": [
+        {
+          "centroid_displacement": 1.465785898386387,
+          "centroid_shift": [
+            1,
+            0
+          ],
+          "entity": "coke can",
+          "fallback_reason": "incomplete_overlap",
+          "group": 6,
+          "num_tokens": 28,
+          "temporal_prior_used": false
+        }
+      ],
+      "fallback_fraction": 1.0,
+      "feature_equal": true,
+      "final_token_ids": [
+        31857,
+        31873,
+        31868,
+        31904,
+        31861,
+        31874,
+        31744
+      ],
+      "guided_prefix": true,
+      "kmeans_K": 8,
+      "lambda": 0.5,
+      "negative_token_ids": [
+        31857,
+        31873,
+        31868,
+        31904,
+        31861,
+        31874,
+        31744
+      ],
+      "num_tokens": 28,
+      "per_entity_score": [
+        0.028429735073252554
+      ],
+      "positive_token_ids": [
+        31857,
+        31873,
+        31868,
+        31904,
+        31861,
+        31874,
+        31744
+      ],
+      "reconstruction_finite": true,
+      "residual_jerk": 0.3849763630798845,
+      "residual_norm": 228.14749145507812,
+      "residual_temporal_cos": 0.7226142048832385,
+      "selected_entities": [
+        "coke can"
+      ],
+      "selected_group_ids": [
+        6
+      ],
+      "selected_token_ids": [
+        99,
+        100,
+        115,
+        116,
+        120,
+        121,
+        130,
+        131,
+        132,
+        135,
+        136,
+        137,
+        138,
+        146,
+        147,
+        148,
+        151,
+        152,
+        153,
+        154,
+        163,
+        167,
+        168,
+        169,
+        170,
+        184,
+        185,
+        186
+      ],
+      "selection_mode": "semantic",
+      "temporal_prior_used_fraction": 0.0
+    },
+    {
+      "beta": 0.25,
+      "entity_alignment": [
+        {
+          "centroid_displacement": 5.161740574616008,
+          "centroid_shift": [
+            5,
+            2
+          ],
+          "entity": "coke can",
+          "fallback_reason": "displacement",
+          "group": 3,
+          "num_tokens": 21,
+          "temporal_prior_used": false
+        }
+      ],
+      "fallback_fraction": 1.0,
+      "feature_equal": true,
+      "final_token_ids": [
+        31857,
+        31873,
+        31868,
+        31904,
+        31861,
+        31874,
+        31744
+      ],
+      "guided_prefix": true,
+      "kmeans_K": 8,
+      "lambda": 0.5,
+      "negative_token_ids": [
+        31857,
+        31873,
+        31868,
+        31904,
+        31861,
+        31874,
+        31744
+      ],
+      "num_tokens": 21,
+      "per_entity_score": [
+        0.030482380135373844
+      ],
+      "positive_token_ids": [
+        31857,
+        31873,
+        31868,
+        31904,
+        31861,
+        31874,
+        31744
+      ],
+      "reconstruction_finite": true,
+      "residual_jerk": 0.9244873298928736,
+      "residual_norm": 15.55571174621582,
+      "residual_temporal_cos": 0.2159664442180441,
+      "selected_entities": [
+        "coke can"
+      ],
+      "selected_group_ids": [
+        3
+      ],
+      "selected_token_ids": [
+        143,
+        193,
+        197,
+        205,
+        206,
+        207,
+        209,
+        221,
+        222,
+        223,
+        224,
+        225,
+        226,
+        237,
+        238,
+        241,
+        242,
+        243,
+        252,
+        253,
+        254
+      ],
+      "selection_mode": "semantic",
+      "temporal_prior_used_fraction": 0.0
+    },
+    {
+      "beta": 0.25,
+      "entity_alignment": [
+        {
+          "centroid_displacement": 11.063778206770813,
+          "centroid_shift": [
+            -9,
+            6
+          ],
+          "entity": "coke can",
+          "fallback_reason": "displacement",
+          "group": 4,
+          "num_tokens": 10,
+          "temporal_prior_used": false
+        }
+      ],
+      "fallback_fraction": 1.0,
+      "feature_equal": true,
+      "final_token_ids": [
+        31857,
+        31873,
+        31868,
+        31904,
+        31861,
+        31874,
+        31744
+      ],
+      "guided_prefix": true,
+      "kmeans_K": 8,
+      "lambda": 0.5,
+      "negative_token_ids": [
+        31857,
+        31873,
+        31868,
+        31904,
+        31861,
+        31874,
+        31744
+      ],
+      "num_tokens": 10,
+      "per_entity_score": [
+        0.03105713760110427
+      ],
+      "positive_token_ids": [
+        31857,
+        31873,
+        31868,
+        31904,
+        31861,
+        31874,
+        31744
+      ],
+      "reconstruction_finite": true,
+      "residual_jerk": 0.9008906109880164,
+      "residual_norm": 98.22589111328125,
+      "residual_temporal_cos": -0.20187586481278488,
+      "selected_entities": [
+        "coke can"
+      ],
+      "selected_group_ids": [
+        4
+      ],
+      "selected_token_ids": [
+        46,
+        47,
+        62,
+        63,
+        78,
+        79,
+        93,
+        94,
+        95,
+        111
+      ],
+      "selection_mode": "semantic",
+      "temporal_prior_used_fraction": 0.0
+    },
+    {
+      "beta": 0.25,
+      "entity_alignment": [
+        {
+          "centroid_displacement": 11.458621208504974,
+          "centroid_shift": [
+            10,
+            -6
+          ],
+          "entity": "coke can",
+          "fallback_reason": "displacement",
+          "group": 3,
+          "num_tokens": 20,
+          "temporal_prior_used": false
+        }
+      ],
+      "fallback_fraction": 1.0,
+      "feature_equal": true,
+      "final_token_ids": [
+        31857,
+        31873,
+        31868,
+        31904,
+        31861,
+        31874,
+        31744
+      ],
+      "guided_prefix": true,
+      "kmeans_K": 8,
+      "lambda": 0.5,
+      "negative_token_ids": [
+        31857,
+        31873,
+        31868,
+        31904,
+        31861,
+        31874,
+        31744
+      ],
+      "num_tokens": 20,
+      "per_entity_score": [
+        0.03230284615668768
+      ],
+      "positive_token_ids": [
+        31857,
+        31873,
+        31868,
+        31904,
+        31861,
+        31874,
+        31744
+      ],
+      "reconstruction_finite": true,
+      "residual_jerk": 0.8932869831380088,
+      "residual_norm": 17.667991638183594,
+      "residual_temporal_cos": -0.2181707595942023,
+      "selected_entities": [
+        "coke can"
+      ],
+      "selected_group_ids": [
+        3
+      ],
+      "selected_token_ids": [
+        193,
+        197,
+        205,
+        206,
+        207,
+        209,
+        221,
+        222,
+        223,
+        224,
+        225,
+        226,
+        237,
+        238,
+        241,
+        242,
+        243,
+        252,
+        253,
+        254
+      ],
+      "selection_mode": "semantic",
+      "temporal_prior_used_fraction": 0.0
+    },
+    {
+      "beta": 0.25,
+      "entity_alignment": [
+        {
+          "centroid_displacement": 10.233430245141921,
+          "centroid_shift": [
+            -9,
+            5
+          ],
+          "entity": "coke can",
+          "fallback_reason": "displacement",
+          "group": 0,
+          "num_tokens": 33,
+          "temporal_prior_used": false
+        }
+      ],
+      "fallback_fraction": 1.0,
+      "feature_equal": true,
+      "final_token_ids": [
+        31857,
+        31853,
+        31868,
+        31904,
+        31861,
+        31874,
+        31744
+      ],
+      "guided_prefix": true,
+      "kmeans_K": 8,
+      "lambda": 0.5,
+      "negative_token_ids": [
+        31860,
+        31873,
+        31868,
+        31904,
+        31861,
+        31874,
+        31872
+      ],
+      "num_tokens": 33,
+      "per_entity_score": [
+        0.030890264516189272
+      ],
+      "positive_token_ids": [
+        31857,
+        31873,
+        31868,
+        31904,
+        31861,
+        31874,
+        31744
+      ],
+      "reconstruction_finite": true,
+      "residual_jerk": 0.9694519912583721,
+      "residual_norm": 363.1652526855469,
+      "residual_temporal_cos": -0.3200506834102579,
+      "selected_entities": [
+        "coke can"
+      ],
+      "selected_group_ids": [
+        0
+      ],
+      "selected_token_ids": [
+        15,
+        30,
+        31,
+        45,
+        46,
+        47,
+        60,
+        61,
+        62,
+        63,
+        75,
+        76,
+        77,
+        78,
+        79,
+        91,
+        92,
+        93,
+        94,
+        95,
+        106,
+        107,
+        108,
+        109,
+        110,
+        111,
+        123,
+        124,
+        125,
+        126,
+        127,
+        140,
+        141
+      ],
+      "selection_mode": "semantic",
+      "temporal_prior_used_fraction": 0.0
+    },
+    {
+      "beta": 0.25,
+      "entity_alignment": [
+        {
+          "centroid_displacement": 7.961800443326697,
+          "centroid_shift": [
+            4,
+            -7
+          ],
+          "entity": "coke can",
+          "fallback_reason": "displacement",
+          "group": 7,
+          "num_tokens": 27,
+          "temporal_prior_used": false
+        }
+      ],
+      "fallback_fraction": 1.0,
+      "feature_equal": true,
+      "final_token_ids": [
+        31871,
+        31879,
+        31884,
+        31873,
+        31866,
+        31829,
+        31744
+      ],
+      "guided_prefix": true,
+      "kmeans_K": 8,
+      "lambda": 0.5,
+      "negative_token_ids": [
+        31857,
+        31861,
+        31838,
+        31898,
+        31878,
+        31793,
+        31744
+      ],
+      "num_tokens": 27,
+      "per_entity_score": [
+        0.029618868870664027
+      ],
+      "positive_token_ids": [
+        31871,
+        31879,
+        31884,
+        31873,
+        31866,
+        31829,
+        31744
+      ],
+      "reconstruction_finite": true,
+      "residual_jerk": 0.7376076670830161,
+      "residual_norm": 234.9934844970703,
+      "residual_temporal_cos": -0.04424719781506426,
+      "selected_entities": [
+        "coke can"
+      ],
+      "selected_group_ids": [
+        7
+      ],
+      "selected_token_ids": [
+        99,
+        100,
+        115,
+        116,
+        120,
+        121,
+        130,
+        131,
+        132,
+        135,
+        136,
+        137,
+        146,
+        147,
+        148,
+        151,
+        152,
+        153,
+        154,
+        163,
+        167,
+        168,
+        169,
+        170,
+        184,
+        185,
+        186
+      ],
+      "selection_mode": "semantic",
+      "temporal_prior_used_fraction": 0.0
+    },
+    {
+      "beta": 0.25,
+      "entity_alignment": [
+        {
+          "centroid_displacement": 0.3839170356332629,
+          "centroid_shift": [
+            0,
+            0
+          ],
+          "entity": "coke can",
+          "fallback_reason": null,
+          "group": 3,
+          "num_tokens": 21,
+          "temporal_prior_used": true
+        }
+      ],
+      "fallback_fraction": 0.0,
+      "feature_equal": true,
+      "final_token_ids": [
+        31857,
+        31873,
+        31868,
+        31904,
+        31861,
+        31874,
+        31744
+      ],
+      "guided_prefix": true,
+      "kmeans_K": 8,
+      "lambda": 0.5,
+      "negative_token_ids": [
+        31857,
+        31873,
+        31868,
+        31904,
+        31861,
+        31874,
+        31744
+      ],
+      "num_tokens": 21,
+      "per_entity_score": [
+        0.0337112042131638
+      ],
+      "positive_token_ids": [
+        31857,
+        31873,
+        31868,
+        31904,
+        31861,
+        31874,
+        31744
+      ],
+      "reconstruction_finite": true,
+      "residual_jerk": 0.6868782080049785,
+      "residual_norm": 257.61065673828125,
+      "residual_temporal_cos": 0.05862848636099399,
+      "selected_entities": [
+        "coke can"
+      ],
+      "selected_group_ids": [
+        3
+      ],
+      "selected_token_ids": [
+        99,
+        100,
+        115,
+        116,
+        120,
+        121,
+        130,
+        131,
+        132,
+        136,
+        137,
+        146,
+        147,
+        148,
+        152,
+        153,
+        154,
+        168,
+        169,
+        170,
+        185
+      ],
+      "selection_mode": "semantic",
+      "temporal_prior_used_fraction": 1.0
+    },
+    {
+      "beta": 0.25,
+      "entity_alignment": [
+        {
+          "centroid_displacement": 0.48125612494588904,
+          "centroid_shift": [
+            0,
+            0
+          ],
+          "entity": "coke can",
+          "fallback_reason": null,
+          "group": 6,
+          "num_tokens": 18,
+          "temporal_prior_used": true
+        }
+      ],
+      "fallback_fraction": 0.0,
+      "feature_equal": true,
+      "final_token_ids": [
+        31871,
+        31873,
+        31868,
+        31904,
+        31861,
+        31874,
+        31744
+      ],
+      "guided_prefix": true,
+      "kmeans_K": 8,
+      "lambda": 0.5,
+      "negative_token_ids": [
+        31857,
+        31873,
+        31868,
+        31904,
+        31861,
+        31874,
+        31744
+      ],
+      "num_tokens": 18,
+      "per_entity_score": [
+        0.03284458065281342
+      ],
+      "positive_token_ids": [
+        31857,
+        31873,
+        31868,
+        31904,
+        31861,
+        31874,
+        31744
+      ],
+      "reconstruction_finite": true,
+      "residual_jerk": 0.22526433138791613,
+      "residual_norm": 212.68292236328125,
+      "residual_temporal_cos": 0.9159977878357058,
+      "selected_entities": [
+        "coke can"
+      ],
+      "selected_group_ids": [
+        6
+      ],
+      "selected_token_ids": [
+        99,
+        115,
+        116,
+        120,
+        121,
+        131,
+        132,
+        136,
+        137,
+        146,
+        147,
+        152,
+        153,
+        154,
+        168,
+        169,
+        170,
+        185
+      ],
+      "selection_mode": "semantic",
+      "temporal_prior_used_fraction": 1.0
+    },
+    {
+      "beta": 0.25,
+      "entity_alignment": [
+        {
+          "centroid_displacement": 0.40540152101513166,
+          "centroid_shift": [
+            0,
+            0
+          ],
+          "entity": "coke can",
+          "fallback_reason": "incomplete_overlap",
+          "group": 6,
+          "num_tokens": 23,
+          "temporal_prior_used": false
+        }
+      ],
+      "fallback_fraction": 1.0,
+      "feature_equal": true,
+      "final_token_ids": [
+        31871,
+        31873,
+        31868,
+        31904,
+        31861,
+        31874,
+        31744
+      ],
+      "guided_prefix": true,
+      "kmeans_K": 8,
+      "lambda": 0.5,
+      "negative_token_ids": [
+        31857,
+        31873,
+        31868,
+        31904,
+        31861,
+        31874,
+        31744
+      ],
+      "num_tokens": 23,
+      "per_entity_score": [
+        0.033620473862652094
+      ],
+      "positive_token_ids": [
+        31857,
+        31873,
+        31868,
+        31904,
+        31861,
+        31874,
+        31744
+      ],
+      "reconstruction_finite": true,
+      "residual_jerk": 0.24244374419029358,
+      "residual_norm": 221.40037536621094,
+      "residual_temporal_cos": 0.8832015932907646,
+      "selected_entities": [
+        "coke can"
+      ],
+      "selected_group_ids": [
+        6
+      ],
+      "selected_token_ids": [
+        99,
+        100,
+        115,
+        116,
+        120,
+        121,
+        130,
+        131,
+        132,
+        135,
+        136,
+        137,
+        146,
+        147,
+        148,
+        151,
+        152,
+        153,
+        154,
+        168,
+        169,
+        170,
+        185
+      ],
+      "selection_mode": "semantic",
+      "temporal_prior_used_fraction": 0.0
+    },
+    {
+      "beta": 0.25,
+      "entity_alignment": [
+        {
+          "centroid_displacement": 0.35248995655532833,
+          "centroid_shift": [
+            0,
+            0
+          ],
+          "entity": "coke can",
+          "fallback_reason": "incomplete_overlap",
+          "group": 5,
+          "num_tokens": 26,
+          "temporal_prior_used": false
+        }
+      ],
+      "fallback_fraction": 1.0,
+      "feature_equal": true,
+      "final_token_ids": [
+        31860,
+        31857,
+        31903,
+        31889,
+        31831,
+        31829,
+        31744
+      ],
+      "guided_prefix": true,
+      "kmeans_K": 8,
+      "lambda": 0.5,
+      "negative_token_ids": [
+        31864,
+        31846,
+        31912,
+        31873,
+        31864,
+        31817,
+        31744
+      ],
+      "num_tokens": 26,
+      "per_entity_score": [
+        0.035264181691045365
+      ],
+      "positive_token_ids": [
+        31860,
+        31858,
+        31903,
+        31889,
+        31864,
+        31829,
+        31744
+      ],
+      "reconstruction_finite": true,
+      "residual_jerk": 0.6891031867242309,
+      "residual_norm": 297.652099609375,
+      "residual_temporal_cos": 0.073439897124408,
+      "selected_entities": [
+        "coke can"
+      ],
+      "selected_group_ids": [
+        5
+      ],
+      "selected_token_ids": [
+        1,
+        99,
+        100,
+        115,
+        116,
+        120,
+        121,
+        130,
+        131,
+        132,
+        135,
+        136,
+        137,
+        146,
+        147,
+        148,
+        151,
+        152,
+        153,
+        154,
+        163,
+        167,
+        168,
+        169,
+        170,
+        185
+      ],
+      "selection_mode": "semantic",
+      "temporal_prior_used_fraction": 0.0
+    },
+    {
+      "beta": 0.25,
+      "entity_alignment": [
+        {
+          "centroid_displacement": 0.7294098320253068,
+          "centroid_shift": [
+            0,
+            1
+          ],
+          "entity": "coke can",
+          "fallback_reason": "incomplete_overlap",
+          "group": 0,
+          "num_tokens": 28,
+          "temporal_prior_used": false
+        }
+      ],
+      "fallback_fraction": 1.0,
+      "feature_equal": true,
+      "final_token_ids": [
+        31857,
+        31873,
+        31868,
+        31904,
+        31861,
+        31874,
+        31872
+      ],
+      "guided_prefix": true,
+      "kmeans_K": 8,
+      "lambda": 0.5,
+      "negative_token_ids": [
+        31857,
+        31873,
+        31868,
+        31904,
+        31861,
+        31874,
+        31872
+      ],
+      "num_tokens": 28,
+      "per_entity_score": [
+        0.03423889225475718
+      ],
+      "positive_token_ids": [
+        31857,
+        31873,
+        31868,
+        31904,
+        31861,
+        31874,
+        31872
+      ],
+      "reconstruction_finite": true,
+      "residual_jerk": 0.5906689280213707,
+      "residual_norm": 279.1894226074219,
+      "residual_temporal_cos": 0.3035558578764308,
+      "selected_entities": [
+        "coke can"
+      ],
+      "selected_group_ids": [
+        0
+      ],
+      "selected_token_ids": [
+        99,
+        100,
+        115,
+        116,
+        120,
+        121,
+        130,
+        131,
+        132,
+        135,
+        136,
+        137,
+        138,
+        146,
+        147,
+        148,
+        151,
+        152,
+        153,
+        154,
+        163,
+        167,
+        168,
+        169,
+        170,
+        184,
+        185,
+        186
+      ],
+      "selection_mode": "semantic",
+      "temporal_prior_used_fraction": 0.0
+    },
+    {
+      "beta": 0.25,
+      "entity_alignment": [
+        {
+          "centroid_displacement": 0.2369855918629924,
+          "centroid_shift": [
+            0,
+            0
+          ],
+          "entity": "coke can",
+          "fallback_reason": null,
+          "group": 7,
+          "num_tokens": 17,
+          "temporal_prior_used": true
+        }
+      ],
+      "fallback_fraction": 0.0,
+      "feature_equal": true,
+      "final_token_ids": [
+        31857,
+        31873,
+        31868,
+        31904,
+        31861,
+        31874,
+        31872
+      ],
+      "guided_prefix": true,
+      "kmeans_K": 8,
+      "lambda": 0.5,
+      "negative_token_ids": [
+        31837,
+        31873,
+        31868,
+        31904,
+        31861,
+        31874,
+        31872
+      ],
+      "num_tokens": 17,
+      "per_entity_score": [
+        0.03394707431775036
+      ],
+      "positive_token_ids": [
+        31857,
+        31873,
+        31868,
+        31904,
+        31861,
+        31874,
+        31872
+      ],
+      "reconstruction_finite": true,
+      "residual_jerk": 0.2646746174038879,
+      "residual_norm": 282.9267578125,
+      "residual_temporal_cos": 0.8599770145409733,
+      "selected_entities": [
+        "coke can"
+      ],
+      "selected_group_ids": [
+        7
+      ],
+      "selected_token_ids": [
+        99,
+        115,
+        116,
+        120,
+        121,
+        131,
+        132,
+        136,
+        137,
+        146,
+        147,
+        152,
+        153,
+        168,
+        169,
+        170,
+        185
+      ],
+      "selection_mode": "semantic",
+      "temporal_prior_used_fraction": 1.0
+    },
+    {
+      "beta": 0.25,
+      "entity_alignment": [
+        {
+          "centroid_displacement": 0.45581646160966655,
+          "centroid_shift": [
+            0,
+            0
+          ],
+          "entity": "coke can",
+          "fallback_reason": "incomplete_overlap",
+          "group": 7,
+          "num_tokens": 24,
+          "temporal_prior_used": false
+        }
+      ],
+      "fallback_fraction": 1.0,
+      "feature_equal": true,
+      "final_token_ids": [
+        31857,
+        31873,
+        31868,
+        31904,
+        31861,
+        31874,
+        31872
+      ],
+      "guided_prefix": true,
+      "kmeans_K": 8,
+      "lambda": 0.5,
+      "negative_token_ids": [
+        31857,
+        31873,
+        31868,
+        31904,
+        31861,
+        31874,
+        31872
+      ],
+      "num_tokens": 24,
+      "per_entity_score": [
+        0.035032360442853794
+      ],
+      "positive_token_ids": [
+        31857,
+        31873,
+        31868,
+        31904,
+        31861,
+        31874,
+        31872
+      ],
+      "reconstruction_finite": true,
+      "residual_jerk": 0.18384702609806694,
+      "residual_norm": 319.3360900878906,
+      "residual_temporal_cos": 0.9394888053987341,
+      "selected_entities": [
+        "coke can"
+      ],
+      "selected_group_ids": [
+        7
+      ],
+      "selected_token_ids": [
+        99,
+        100,
+        115,
+        116,
+        120,
+        121,
+        130,
+        131,
+        132,
+        135,
+        136,
+        137,
+        146,
+        147,
+        148,
+        151,
+        152,
+        153,
+        163,
+        167,
+        168,
+        169,
+        170,
+        185
+      ],
+      "selection_mode": "semantic",
+      "temporal_prior_used_fraction": 0.0
+    },
+    {
+      "beta": 0.25,
+      "entity_alignment": [
+        {
+          "centroid_displacement": 1.6689302495613452,
+          "centroid_shift": [
+            -2,
+            0
+          ],
+          "entity": "coke can",
+          "fallback_reason": "incomplete_overlap",
+          "group": 3,
+          "num_tokens": 38,
+          "temporal_prior_used": false
+        }
+      ],
+      "fallback_fraction": 1.0,
+      "feature_equal": true,
+      "final_token_ids": [
+        31857,
+        31873,
+        31868,
+        31904,
+        31861,
+        31874,
+        31872
+      ],
+      "guided_prefix": true,
+      "kmeans_K": 8,
+      "lambda": 0.5,
+      "negative_token_ids": [
+        31857,
+        31873,
+        31868,
+        31904,
+        31861,
+        31874,
+        31872
+      ],
+      "num_tokens": 38,
+      "per_entity_score": [
+        0.03535117218428928
+      ],
+      "positive_token_ids": [
+        31857,
+        31873,
+        31868,
+        31904,
+        31861,
+        31874,
+        31872
+      ],
+      "reconstruction_finite": true,
+      "residual_jerk": 0.18088593199135647,
+      "residual_norm": 338.0995178222656,
+      "residual_temporal_cos": 0.9361376092778027,
+      "selected_entities": [
+        "coke can"
+      ],
+      "selected_group_ids": [
+        3
+      ],
+      "selected_token_ids": [
+        53,
+        54,
+        68,
+        69,
+        70,
+        71,
+        72,
+        73,
+        85,
+        86,
+        87,
+        88,
+        99,
+        100,
+        101,
+        102,
+        103,
+        115,
+        116,
+        117,
+        118,
+        120,
+        121,
+        130,
+        131,
+        132,
+        136,
+        137,
+        146,
+        147,
+        148,
+        152,
+        153,
+        163,
+        168,
+        169,
+        170,
+        185
+      ],
+      "selection_mode": "semantic",
+      "temporal_prior_used_fraction": 0.0
+    },
+    {
+      "beta": 0.25,
+      "entity_alignment": [
+        {
+          "centroid_displacement": 3.0377358896355773,
+          "centroid_shift": [
+            1,
+            3
+          ],
+          "entity": "coke can",
+          "fallback_reason": "incomplete_overlap",
+          "group": 1,
+          "num_tokens": 38,
+          "temporal_prior_used": false
+        }
+      ],
+      "fallback_fraction": 1.0,
+      "feature_equal": true,
+      "final_token_ids": [
+        31857,
+        31873,
+        31868,
+        31904,
+        31861,
+        31874,
+        31872
+      ],
+      "guided_prefix": true,
+      "kmeans_K": 8,
+      "lambda": 0.5,
+      "negative_token_ids": [
+        31857,
+        31873,
+        31868,
+        31904,
+        31861,
+        31874,
+        31872
+      ],
+      "num_tokens": 38,
+      "per_entity_score": [
+        0.03836520326781974
+      ],
+      "positive_token_ids": [
+        31857,
+        31873,
+        31868,
+        31904,
+        31861,
+        31874,
+        31872
+      ],
+      "reconstruction_finite": true,
+      "residual_jerk": 0.2278555065468238,
+      "residual_norm": 320.1739807128906,
+      "residual_temporal_cos": 0.8975707858626166,
+      "selected_entities": [
+        "coke can"
+      ],
+      "selected_group_ids": [
+        1
+      ],
+      "selected_token_ids": [
+        46,
+        76,
+        91,
+        92,
+        99,
+        106,
+        107,
+        108,
+        115,
+        116,
+        120,
+        121,
+        122,
+        123,
+        124,
+        131,
+        132,
+        135,
+        136,
+        137,
+        138,
+        139,
+        140,
+        141,
+        146,
+        147,
+        151,
+        152,
+        153,
+        154,
+        155,
+        156,
+        157,
+        167,
+        168,
+        169,
+        170,
+        185
+      ],
+      "selection_mode": "semantic",
+      "temporal_prior_used_fraction": 0.0
+    },
+    {
+      "beta": 0.25,
+      "entity_alignment": [
+        {
+          "centroid_displacement": 2.1509411132729497,
+          "centroid_shift": [
+            1,
+            -2
+          ],
+          "entity": "coke can",
+          "fallback_reason": "warp_oob",
+          "group": 1,
+          "num_tokens": 29,
+          "temporal_prior_used": false
+        }
+      ],
+      "fallback_fraction": 1.0,
+      "feature_equal": true,
+      "final_token_ids": [
+        31857,
+        31873,
+        31868,
+        31904,
+        31861,
+        31874,
+        31872
+      ],
+      "guided_prefix": true,
+      "kmeans_K": 8,
+      "lambda": 0.5,
+      "negative_token_ids": [
+        31837,
+        31873,
+        31868,
+        31904,
+        31861,
+        31874,
+        31872
+      ],
+      "num_tokens": 29,
+      "per_entity_score": [
+        0.037387980281538793
+      ],
+      "positive_token_ids": [
+        31857,
+        31873,
+        31868,
+        31904,
+        31861,
+        31874,
+        31872
+      ],
+      "reconstruction_finite": true,
+      "residual_jerk": 0.19246227805158317,
+      "residual_norm": 325.85595703125,
+      "residual_temporal_cos": 0.9260654812971716,
+      "selected_entities": [
+        "coke can"
+      ],
+      "selected_group_ids": [
+        1
+      ],
+      "selected_token_ids": [
+        46,
+        76,
+        99,
+        100,
+        115,
+        116,
+        120,
+        121,
+        130,
+        131,
+        132,
+        135,
+        136,
+        137,
+        146,
+        147,
+        148,
+        151,
+        152,
+        153,
+        154,
+        163,
+        167,
+        168,
+        169,
+        170,
+        184,
+        185,
+        186
+      ],
+      "selection_mode": "semantic",
+      "temporal_prior_used_fraction": 0.0
+    },
+    {
+      "beta": 0.25,
+      "entity_alignment": [
+        {
+          "centroid_displacement": 4.816455475626452,
+          "centroid_shift": [
+            -1,
+            5
+          ],
+          "entity": "coke can",
+          "fallback_reason": "displacement",
+          "group": 4,
+          "num_tokens": 16,
+          "temporal_prior_used": false
+        }
+      ],
+      "fallback_fraction": 1.0,
+      "feature_equal": true,
+      "final_token_ids": [
+        31857,
+        31873,
+        31868,
+        31904,
+        31861,
+        31874,
+        31872
+      ],
+      "guided_prefix": true,
+      "kmeans_K": 8,
+      "lambda": 0.5,
+      "negative_token_ids": [
+        31857,
+        31873,
+        31868,
+        31904,
+        31861,
+        31874,
+        31872
+      ],
+      "num_tokens": 16,
+      "per_entity_score": [
+        0.03528898327431352
+      ],
+      "positive_token_ids": [
+        31857,
+        31873,
+        31868,
+        31904,
+        31861,
+        31874,
+        31872
+      ],
+      "reconstruction_finite": true,
+      "residual_jerk": 0.6843301788290375,
+      "residual_norm": 148.3388671875,
+      "residual_temporal_cos": 0.2366970444143947,
+      "selected_entities": [
+        "coke can"
+      ],
+      "selected_group_ids": [
+        4
+      ],
+      "selected_token_ids": [
+        76,
+        91,
+        92,
+        106,
+        107,
+        108,
+        122,
+        123,
+        124,
+        138,
+        139,
+        140,
+        141,
+        155,
+        156,
+        157
+      ],
+      "selection_mode": "semantic",
+      "temporal_prior_used_fraction": 0.0
+    },
+    {
+      "beta": 0.25,
+      "entity_alignment": [
+        {
+          "centroid_displacement": 5.197249873731299,
+          "centroid_shift": [
+            2,
+            -5
+          ],
+          "entity": "coke can",
+          "fallback_reason": "displacement",
+          "group": 1,
+          "num_tokens": 30,
+          "temporal_prior_used": false
+        }
+      ],
+      "fallback_fraction": 1.0,
+      "feature_equal": true,
+      "final_token_ids": [
+        31857,
+        31873,
+        31868,
+        31904,
+        31861,
+        31874,
+        31872
+      ],
+      "guided_prefix": true,
+      "kmeans_K": 8,
+      "lambda": 0.5,
+      "negative_token_ids": [
+        31837,
+        31873,
+        31868,
+        31904,
+        31861,
+        31874,
+        31872
+      ],
+      "num_tokens": 30,
+      "per_entity_score": [
+        0.034240490158254054
+      ],
+      "positive_token_ids": [
+        31857,
+        31873,
+        31868,
+        31904,
+        31861,
+        31874,
+        31872
+      ],
+      "reconstruction_finite": true,
+      "residual_jerk": 0.6726743711110906,
+      "residual_norm": 306.3114318847656,
+      "residual_temporal_cos": 0.24536958072918905,
+      "selected_entities": [
+        "coke can"
+      ],
+      "selected_group_ids": [
+        1
+      ],
+      "selected_token_ids": [
+        60,
+        99,
+        100,
+        115,
+        116,
+        120,
+        121,
+        130,
+        131,
+        132,
+        135,
+        136,
+        137,
+        146,
+        147,
+        148,
+        151,
+        152,
+        153,
+        154,
+        163,
+        167,
+        168,
+        169,
+        170,
+        184,
+        185,
+        186,
+        240,
+        255
+      ],
+      "selection_mode": "semantic",
+      "temporal_prior_used_fraction": 0.0
+    }
+  ],
+  "semantic_centroid_displacement": 2.1496092083723566,
+  "success": false,
+  "task": "google_robot_pick_coke_can",
+  "technical_pass": true,
+  "temporal_prior_used_fraction": 0.35,
+  "trajectory_length": 80,
+  "worker_id": "gpu4_slot0"
+}
