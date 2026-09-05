@@ -1,0 +1,175 @@
+{
+  "arms": [
+    "boundary_shr",
+    "partial_shr50"
+  ],
+  "by_task": {
+    "google_robot_close_drawer": {
+      "arms": {
+        "boundary_shr": {
+          "episodes": 100,
+          "success": 48,
+          "success_rate": 0.48
+        },
+        "partial_shr50": {
+          "episodes": 100,
+          "success": 60,
+          "success_rate": 0.6
+        }
+      },
+      "paired_vs_canonical_shr": {
+        "boundary_shr": {
+          "arm_success": 48,
+          "harm": 38,
+          "net": -30,
+          "pairs": 100,
+          "reference_success": 78,
+          "rescue": 8
+        },
+        "partial_shr50": {
+          "arm_success": 60,
+          "harm": 24,
+          "net": -18,
+          "pairs": 100,
+          "reference_success": 78,
+          "rescue": 6
+        }
+      },
+      "within_experiment_pairs": {
+        "partial_shr50_vs_boundary_shr": {
+          "harm": 10,
+          "net": 12,
+          "pairs": 100,
+          "rescue": 22
+        }
+      }
+    },
+    "google_robot_move_near": {
+      "arms": {
+        "boundary_shr": {
+          "episodes": 100,
+          "success": 49,
+          "success_rate": 0.49
+        },
+        "partial_shr50": {
+          "episodes": 100,
+          "success": 63,
+          "success_rate": 0.63
+        }
+      },
+      "paired_vs_canonical_shr": {
+        "boundary_shr": {
+          "arm_success": 49,
+          "harm": 22,
+          "net": -18,
+          "pairs": 100,
+          "reference_success": 67,
+          "rescue": 4
+        },
+        "partial_shr50": {
+          "arm_success": 63,
+          "harm": 14,
+          "net": -4,
+          "pairs": 100,
+          "reference_success": 67,
+          "rescue": 10
+        }
+      },
+      "within_experiment_pairs": {
+        "partial_shr50_vs_boundary_shr": {
+          "harm": 5,
+          "net": 14,
+          "pairs": 100,
+          "rescue": 19
+        }
+      }
+    },
+    "google_robot_pick_coke_can": {
+      "arms": {
+        "boundary_shr": {
+          "episodes": 100,
+          "success": 37,
+          "success_rate": 0.37
+        },
+        "partial_shr50": {
+          "episodes": 100,
+          "success": 38,
+          "success_rate": 0.38
+        }
+      },
+      "paired_vs_canonical_shr": {
+        "boundary_shr": {
+          "arm_success": 37,
+          "harm": 13,
+          "net": -4,
+          "pairs": 100,
+          "reference_success": 41,
+          "rescue": 9
+        },
+        "partial_shr50": {
+          "arm_success": 38,
+          "harm": 20,
+          "net": -3,
+          "pairs": 100,
+          "reference_success": 41,
+          "rescue": 17
+        }
+      },
+      "within_experiment_pairs": {
+        "partial_shr50_vs_boundary_shr": {
+          "harm": 13,
+          "net": 1,
+          "pairs": 100,
+          "rescue": 14
+        }
+      }
+    }
+  },
+  "episodes": 600,
+  "overall": {
+    "arms": {
+      "boundary_shr": {
+        "episodes": 300,
+        "success": 134,
+        "success_rate": 0.44666666666666666
+      },
+      "partial_shr50": {
+        "episodes": 300,
+        "success": 161,
+        "success_rate": 0.5366666666666666
+      }
+    },
+    "paired_vs_canonical_shr": {
+      "boundary_shr": {
+        "arm_success": 134,
+        "harm": 73,
+        "net": -52,
+        "pairs": 300,
+        "reference_success": 186,
+        "rescue": 21
+      },
+      "partial_shr50": {
+        "arm_success": 161,
+        "harm": 58,
+        "net": -25,
+        "pairs": 300,
+        "reference_success": 186,
+        "rescue": 33
+      }
+    },
+    "within_experiment_pairs": {
+      "partial_shr50_vs_boundary_shr": {
+        "harm": 28,
+        "net": 27,
+        "pairs": 300,
+        "rescue": 55
+      }
+    }
+  },
+  "tasks": [
+    "google_robot_close_drawer",
+    "google_robot_move_near",
+    "google_robot_pick_coke_can"
+  ],
+  "technical_pass": 600
+}

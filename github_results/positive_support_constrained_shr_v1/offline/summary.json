@@ -1,0 +1,845 @@
+{
+  "action_vocab_start": 31744,
+  "by_task": {
+    "google_robot_close_drawer": {
+      "baseline_fp16_mismatch": 0,
+      "baseline_fp16_mismatch_rate": 0.0,
+      "dimensions": 237300,
+      "episodes": 300,
+      "guided_dimensions": 203400,
+      "methods": {
+        "k10": {
+          "allowed_candidates_sum": 2034000,
+          "changed_by_dimension": [
+            248,
+            143,
+            79,
+            59,
+            71,
+            62,
+            0
+          ],
+          "dimension_change_rate": 0.002789717656974294,
+          "dimensions_changed": 662,
+          "edge10_delta": -3,
+          "episode_change_rate": 0.74,
+          "episodes_changed": 222,
+          "guided_dimension_change_rate": 0.003254670599803343,
+          "guided_dimensions_changed": 662,
+          "mean_allowed_candidates": 10.0,
+          "selected_edge10": 20663,
+          "shr_edge10": 20666
+        },
+        "k20": {
+          "allowed_candidates_sum": 4068000,
+          "changed_by_dimension": [
+            20,
+            1,
+            4,
+            2,
+            12,
+            11,
+            0
+          ],
+          "dimension_change_rate": 0.00021070375052675939,
+          "dimensions_changed": 50,
+          "edge10_delta": -2,
+          "episode_change_rate": 0.15666666666666668,
+          "episodes_changed": 47,
+          "guided_dimension_change_rate": 0.0002458210422812193,
+          "guided_dimensions_changed": 50,
+          "mean_allowed_candidates": 20.0,
+          "selected_edge10": 20664,
+          "shr_edge10": 20666
+        },
+        "k50": {
+          "allowed_candidates_sum": 10170000,
+          "changed_by_dimension": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "dimension_change_rate": 0.0,
+          "dimensions_changed": 0,
+          "edge10_delta": 0,
+          "episode_change_rate": 0.0,
+          "episodes_changed": 0,
+          "guided_dimension_change_rate": 0.0,
+          "guided_dimensions_changed": 0,
+          "mean_allowed_candidates": 50.0,
+          "selected_edge10": 20666,
+          "shr_edge10": 20666
+        },
+        "rel010": {
+          "allowed_candidates_sum": 436029,
+          "changed_by_dimension": [
+            3198,
+            2338,
+            1862,
+            1378,
+            1361,
+            1256,
+            0
+          ],
+          "dimension_change_rate": 0.04801095659502739,
+          "dimensions_changed": 11393,
+          "edge10_delta": 48,
+          "episode_change_rate": 1.0,
+          "episodes_changed": 300,
+          "guided_dimension_change_rate": 0.056012782694198626,
+          "guided_dimensions_changed": 11393,
+          "mean_allowed_candidates": 2.1437020648967553,
+          "selected_edge10": 20714,
+          "shr_edge10": 20666
+        }
+      },
+      "outcome_strata": {
+        "k10": {
+          "both_fail": {
+            "dimensions": 55370,
+            "dimensions_changed": 286,
+            "episodes": 70,
+            "episodes_changed": 65
+          },
+          "both_success": {
+            "dimensions": 105203,
+            "dimensions_changed": 157,
+            "episodes": 133,
+            "episodes_changed": 87
+          },
+          "shr_harm": {
+            "dimensions": 16611,
+            "dimensions_changed": 89,
+            "episodes": 21,
+            "episodes_changed": 21
+          },
+          "shr_rescue": {
+            "dimensions": 60116,
+            "dimensions_changed": 130,
+            "episodes": 76,
+            "episodes_changed": 49
+          }
+        },
+        "k20": {
+          "both_fail": {
+            "dimensions": 55370,
+            "dimensions_changed": 14,
+            "episodes": 70,
+            "episodes_changed": 14
+          },
+          "both_success": {
+            "dimensions": 105203,
+            "dimensions_changed": 9,
+            "episodes": 133,
+            "episodes_changed": 9
+          },
+          "shr_harm": {
+            "dimensions": 16611,
+            "dimensions_changed": 4,
+            "episodes": 21,
+            "episodes_changed": 3
+          },
+          "shr_rescue": {
+            "dimensions": 60116,
+            "dimensions_changed": 23,
+            "episodes": 76,
+            "episodes_changed": 21
+          }
+        },
+        "k50": {
+          "both_fail": {
+            "dimensions": 55370,
+            "dimensions_changed": 0,
+            "episodes": 70,
+            "episodes_changed": 0
+          },
+          "both_success": {
+            "dimensions": 105203,
+            "dimensions_changed": 0,
+            "episodes": 133,
+            "episodes_changed": 0
+          },
+          "shr_harm": {
+            "dimensions": 16611,
+            "dimensions_changed": 0,
+            "episodes": 21,
+            "episodes_changed": 0
+          },
+          "shr_rescue": {
+            "dimensions": 60116,
+            "dimensions_changed": 0,
+            "episodes": 76,
+            "episodes_changed": 0
+          }
+        },
+        "rel010": {
+          "both_fail": {
+            "dimensions": 55370,
+            "dimensions_changed": 3789,
+            "episodes": 70,
+            "episodes_changed": 70
+          },
+          "both_success": {
+            "dimensions": 105203,
+            "dimensions_changed": 3528,
+            "episodes": 133,
+            "episodes_changed": 133
+          },
+          "shr_harm": {
+            "dimensions": 16611,
+            "dimensions_changed": 1266,
+            "episodes": 21,
+            "episodes_changed": 21
+          },
+          "shr_rescue": {
+            "dimensions": 60116,
+            "dimensions_changed": 2810,
+            "episodes": 76,
+            "episodes_changed": 76
+          }
+        }
+      },
+      "technical_pass": 300
+    },
+    "google_robot_move_near": {
+      "baseline_fp16_mismatch": 0,
+      "baseline_fp16_mismatch_rate": 0.0,
+      "dimensions": 168000,
+      "episodes": 300,
+      "guided_dimensions": 144000,
+      "methods": {
+        "k10": {
+          "allowed_candidates_sum": 1440000,
+          "changed_by_dimension": [
+            222,
+            183,
+            50,
+            70,
+            59,
+            103,
+            0
+          ],
+          "dimension_change_rate": 0.004089285714285715,
+          "dimensions_changed": 687,
+          "edge10_delta": -12,
+          "episode_change_rate": 0.86,
+          "episodes_changed": 258,
+          "guided_dimension_change_rate": 0.0047708333333333335,
+          "guided_dimensions_changed": 687,
+          "mean_allowed_candidates": 10.0,
+          "selected_edge10": 15987,
+          "shr_edge10": 15999
+        },
+        "k20": {
+          "allowed_candidates_sum": 2880000,
+          "changed_by_dimension": [
+            12,
+            9,
+            0,
+            0,
+            1,
+            0,
+            0
+          ],
+          "dimension_change_rate": 0.00013095238095238096,
+          "dimensions_changed": 22,
+          "edge10_delta": 0,
+          "episode_change_rate": 0.07333333333333333,
+          "episodes_changed": 22,
+          "guided_dimension_change_rate": 0.00015277777777777777,
+          "guided_dimensions_changed": 22,
+          "mean_allowed_candidates": 20.0,
+          "selected_edge10": 15999,
+          "shr_edge10": 15999
+        },
+        "k50": {
+          "allowed_candidates_sum": 7200000,
+          "changed_by_dimension": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "dimension_change_rate": 0.0,
+          "dimensions_changed": 0,
+          "edge10_delta": 0,
+          "episode_change_rate": 0.0,
+          "episodes_changed": 0,
+          "guided_dimension_change_rate": 0.0,
+          "guided_dimensions_changed": 0,
+          "mean_allowed_candidates": 50.0,
+          "selected_edge10": 15999,
+          "shr_edge10": 15999
+        },
+        "rel010": {
+          "allowed_candidates_sum": 371011,
+          "changed_by_dimension": [
+            1683,
+            2225,
+            1445,
+            1451,
+            1494,
+            1645,
+            0
+          ],
+          "dimension_change_rate": 0.05918452380952381,
+          "dimensions_changed": 9943,
+          "edge10_delta": -54,
+          "episode_change_rate": 1.0,
+          "episodes_changed": 300,
+          "guided_dimension_change_rate": 0.06904861111111112,
+          "guided_dimensions_changed": 9943,
+          "mean_allowed_candidates": 2.576465277777778,
+          "selected_edge10": 15945,
+          "shr_edge10": 15999
+        }
+      },
+      "outcome_strata": {
+        "k10": {
+          "both_fail": {
+            "dimensions": 39200,
+            "dimensions_changed": 197,
+            "episodes": 70,
+            "episodes_changed": 58
+          },
+          "both_success": {
+            "dimensions": 84560,
+            "dimensions_changed": 271,
+            "episodes": 151,
+            "episodes_changed": 128
+          },
+          "shr_harm": {
+            "dimensions": 18480,
+            "dimensions_changed": 112,
+            "episodes": 33,
+            "episodes_changed": 32
+          },
+          "shr_rescue": {
+            "dimensions": 25760,
+            "dimensions_changed": 107,
+            "episodes": 46,
+            "episodes_changed": 40
+          }
+        },
+        "k20": {
+          "both_fail": {
+            "dimensions": 39200,
+            "dimensions_changed": 9,
+            "episodes": 70,
+            "episodes_changed": 9
+          },
+          "both_success": {
+            "dimensions": 84560,
+            "dimensions_changed": 5,
+            "episodes": 151,
+            "episodes_changed": 5
+          },
+          "shr_harm": {
+            "dimensions": 18480,
+            "dimensions_changed": 8,
+            "episodes": 33,
+            "episodes_changed": 8
+          },
+          "shr_rescue": {
+            "dimensions": 25760,
+            "dimensions_changed": 0,
+            "episodes": 46,
+            "episodes_changed": 0
+          }
+        },
+        "k50": {
+          "both_fail": {
+            "dimensions": 39200,
+            "dimensions_changed": 0,
+            "episodes": 70,
+            "episodes_changed": 0
+          },
+          "both_success": {
+            "dimensions": 84560,
+            "dimensions_changed": 0,
+            "episodes": 151,
+            "episodes_changed": 0
+          },
+          "shr_harm": {
+            "dimensions": 18480,
+            "dimensions_changed": 0,
+            "episodes": 33,
+            "episodes_changed": 0
+          },
+          "shr_rescue": {
+            "dimensions": 25760,
+            "dimensions_changed": 0,
+            "episodes": 46,
+            "episodes_changed": 0
+          }
+        },
+        "rel010": {
+          "both_fail": {
+            "dimensions": 39200,
+            "dimensions_changed": 2582,
+            "episodes": 70,
+            "episodes_changed": 70
+          },
+          "both_success": {
+            "dimensions": 84560,
+            "dimensions_changed": 4633,
+            "episodes": 151,
+            "episodes_changed": 151
+          },
+          "shr_harm": {
+            "dimensions": 18480,
+            "dimensions_changed": 1059,
+            "episodes": 33,
+            "episodes_changed": 33
+          },
+          "shr_rescue": {
+            "dimensions": 25760,
+            "dimensions_changed": 1669,
+            "episodes": 46,
+            "episodes_changed": 46
+          }
+        }
+      },
+      "technical_pass": 300
+    },
+    "google_robot_open_drawer": {
+      "baseline_fp16_mismatch": 0,
+      "baseline_fp16_mismatch_rate": 0.0,
+      "dimensions": 237300,
+      "episodes": 300,
+      "guided_dimensions": 203400,
+      "methods": {
+        "k10": {
+          "allowed_candidates_sum": 2034000,
+          "changed_by_dimension": [
+            222,
+            124,
+            74,
+            67,
+            95,
+            62,
+            0
+          ],
+          "dimension_change_rate": 0.002713864306784661,
+          "dimensions_changed": 644,
+          "edge10_delta": 4,
+          "episode_change_rate": 0.8166666666666667,
+          "episodes_changed": 245,
+          "guided_dimension_change_rate": 0.0031661750245821044,
+          "guided_dimensions_changed": 644,
+          "mean_allowed_candidates": 10.0,
+          "selected_edge10": 27580,
+          "shr_edge10": 27576
+        },
+        "k20": {
+          "allowed_candidates_sum": 4068000,
+          "changed_by_dimension": [
+            39,
+            13,
+            6,
+            1,
+            0,
+            7,
+            0
+          ],
+          "dimension_change_rate": 0.00027812895069532237,
+          "dimensions_changed": 66,
+          "edge10_delta": 0,
+          "episode_change_rate": 0.21333333333333335,
+          "episodes_changed": 64,
+          "guided_dimension_change_rate": 0.0003244837758112094,
+          "guided_dimensions_changed": 66,
+          "mean_allowed_candidates": 20.0,
+          "selected_edge10": 27576,
+          "shr_edge10": 27576
+        },
+        "k50": {
+          "allowed_candidates_sum": 10170000,
+          "changed_by_dimension": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "dimension_change_rate": 0.0,
+          "dimensions_changed": 0,
+          "edge10_delta": 0,
+          "episode_change_rate": 0.0,
+          "episodes_changed": 0,
+          "guided_dimension_change_rate": 0.0,
+          "guided_dimensions_changed": 0,
+          "mean_allowed_candidates": 50.0,
+          "selected_edge10": 27576,
+          "shr_edge10": 27576
+        },
+        "rel010": {
+          "allowed_candidates_sum": 463030,
+          "changed_by_dimension": [
+            2766,
+            2450,
+            1996,
+            2040,
+            1761,
+            1619,
+            0
+          ],
+          "dimension_change_rate": 0.053232195533080486,
+          "dimensions_changed": 12632,
+          "edge10_delta": 23,
+          "episode_change_rate": 1.0,
+          "episodes_changed": 300,
+          "guided_dimension_change_rate": 0.06210422812192724,
+          "guided_dimensions_changed": 12632,
+          "mean_allowed_candidates": 2.2764503441494592,
+          "selected_edge10": 27599,
+          "shr_edge10": 27576
+        }
+      },
+      "outcome_strata": {
+        "k10": {
+          "both_fail": {
+            "dimensions": 111531,
+            "dimensions_changed": 270,
+            "episodes": 141,
+            "episodes_changed": 110
+          },
+          "both_success": {
+            "dimensions": 39550,
+            "dimensions_changed": 110,
+            "episodes": 50,
+            "episodes_changed": 43
+          },
+          "shr_harm": {
+            "dimensions": 16611,
+            "dimensions_changed": 76,
+            "episodes": 21,
+            "episodes_changed": 19
+          },
+          "shr_rescue": {
+            "dimensions": 69608,
+            "dimensions_changed": 188,
+            "episodes": 88,
+            "episodes_changed": 73
+          }
+        },
+        "k20": {
+          "both_fail": {
+            "dimensions": 111531,
+            "dimensions_changed": 38,
+            "episodes": 141,
+            "episodes_changed": 38
+          },
+          "both_success": {
+            "dimensions": 39550,
+            "dimensions_changed": 6,
+            "episodes": 50,
+            "episodes_changed": 6
+          },
+          "shr_harm": {
+            "dimensions": 16611,
+            "dimensions_changed": 4,
+            "episodes": 21,
+            "episodes_changed": 4
+          },
+          "shr_rescue": {
+            "dimensions": 69608,
+            "dimensions_changed": 18,
+            "episodes": 88,
+            "episodes_changed": 16
+          }
+        },
+        "k50": {
+          "both_fail": {
+            "dimensions": 111531,
+            "dimensions_changed": 0,
+            "episodes": 141,
+            "episodes_changed": 0
+          },
+          "both_success": {
+            "dimensions": 39550,
+            "dimensions_changed": 0,
+            "episodes": 50,
+            "episodes_changed": 0
+          },
+          "shr_harm": {
+            "dimensions": 16611,
+            "dimensions_changed": 0,
+            "episodes": 21,
+            "episodes_changed": 0
+          },
+          "shr_rescue": {
+            "dimensions": 69608,
+            "dimensions_changed": 0,
+            "episodes": 88,
+            "episodes_changed": 0
+          }
+        },
+        "rel010": {
+          "both_fail": {
+            "dimensions": 111531,
+            "dimensions_changed": 6205,
+            "episodes": 141,
+            "episodes_changed": 141
+          },
+          "both_success": {
+            "dimensions": 39550,
+            "dimensions_changed": 2041,
+            "episodes": 50,
+            "episodes_changed": 50
+          },
+          "shr_harm": {
+            "dimensions": 16611,
+            "dimensions_changed": 1150,
+            "episodes": 21,
+            "episodes_changed": 21
+          },
+          "shr_rescue": {
+            "dimensions": 69608,
+            "dimensions_changed": 3236,
+            "episodes": 88,
+            "episodes_changed": 88
+          }
+        }
+      },
+      "technical_pass": 300
+    },
+    "google_robot_pick_coke_can": {
+      "baseline_fp16_mismatch": 0,
+      "baseline_fp16_mismatch_rate": 0.0,
+      "dimensions": 168000,
+      "episodes": 300,
+      "guided_dimensions": 144000,
+      "methods": {
+        "k10": {
+          "allowed_candidates_sum": 1440000,
+          "changed_by_dimension": [
+            67,
+            37,
+            25,
+            25,
+            23,
+            27,
+            0
+          ],
+          "dimension_change_rate": 0.0012142857142857142,
+          "dimensions_changed": 204,
+          "edge10_delta": 0,
+          "episode_change_rate": 0.42,
+          "episodes_changed": 126,
+          "guided_dimension_change_rate": 0.0014166666666666668,
+          "guided_dimensions_changed": 204,
+          "mean_allowed_candidates": 10.0,
+          "selected_edge10": 12468,
+          "shr_edge10": 12468
+        },
+        "k20": {
+          "allowed_candidates_sum": 2880000,
+          "changed_by_dimension": [
+            3,
+            1,
+            0,
+            0,
+            1,
+            2,
+            0
+          ],
+          "dimension_change_rate": 4.1666666666666665e-05,
+          "dimensions_changed": 7,
+          "edge10_delta": 0,
+          "episode_change_rate": 0.023333333333333334,
+          "episodes_changed": 7,
+          "guided_dimension_change_rate": 4.861111111111111e-05,
+          "guided_dimensions_changed": 7,
+          "mean_allowed_candidates": 20.0,
+          "selected_edge10": 12468,
+          "shr_edge10": 12468
+        },
+        "k50": {
+          "allowed_candidates_sum": 7200000,
+          "changed_by_dimension": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "dimension_change_rate": 0.0,
+          "dimensions_changed": 0,
+          "edge10_delta": 0,
+          "episode_change_rate": 0.0,
+          "episodes_changed": 0,
+          "guided_dimension_change_rate": 0.0,
+          "guided_dimensions_changed": 0,
+          "mean_allowed_candidates": 50.0,
+          "selected_edge10": 12468,
+          "shr_edge10": 12468
+        },
+        "rel010": {
+          "allowed_candidates_sum": 253581,
+          "changed_by_dimension": [
+            1615,
+            898,
+            516,
+            425,
+            383,
+            356,
+            0
+          ],
+          "dimension_change_rate": 0.024958333333333332,
+          "dimensions_changed": 4193,
+          "edge10_delta": -2,
+          "episode_change_rate": 0.9933333333333333,
+          "episodes_changed": 298,
+          "guided_dimension_change_rate": 0.029118055555555557,
+          "guided_dimensions_changed": 4193,
+          "mean_allowed_candidates": 1.7609791666666668,
+          "selected_edge10": 12466,
+          "shr_edge10": 12468
+        }
+      },
+      "outcome_strata": {
+        "k10": {
+          "both_fail": {
+            "dimensions": 90720,
+            "dimensions_changed": 119,
+            "episodes": 162,
+            "episodes_changed": 75
+          },
+          "both_success": {
+            "dimensions": 23520,
+            "dimensions_changed": 25,
+            "episodes": 42,
+            "episodes_changed": 16
+          },
+          "shr_harm": {
+            "dimensions": 22960,
+            "dimensions_changed": 23,
+            "episodes": 41,
+            "episodes_changed": 14
+          },
+          "shr_rescue": {
+            "dimensions": 30800,
+            "dimensions_changed": 37,
+            "episodes": 55,
+            "episodes_changed": 21
+          }
+        },
+        "k20": {
+          "both_fail": {
+            "dimensions": 90720,
+            "dimensions_changed": 5,
+            "episodes": 162,
+            "episodes_changed": 5
+          },
+          "both_success": {
+            "dimensions": 23520,
+            "dimensions_changed": 1,
+            "episodes": 42,
+            "episodes_changed": 1
+          },
+          "shr_harm": {
+            "dimensions": 22960,
+            "dimensions_changed": 0,
+            "episodes": 41,
+            "episodes_changed": 0
+          },
+          "shr_rescue": {
+            "dimensions": 30800,
+            "dimensions_changed": 1,
+            "episodes": 55,
+            "episodes_changed": 1
+          }
+        },
+        "k50": {
+          "both_fail": {
+            "dimensions": 90720,
+            "dimensions_changed": 0,
+            "episodes": 162,
+            "episodes_changed": 0
+          },
+          "both_success": {
+            "dimensions": 23520,
+            "dimensions_changed": 0,
+            "episodes": 42,
+            "episodes_changed": 0
+          },
+          "shr_harm": {
+            "dimensions": 22960,
+            "dimensions_changed": 0,
+            "episodes": 41,
+            "episodes_changed": 0
+          },
+          "shr_rescue": {
+            "dimensions": 30800,
+            "dimensions_changed": 0,
+            "episodes": 55,
+            "episodes_changed": 0
+          }
+        },
+        "rel010": {
+          "both_fail": {
+            "dimensions": 90720,
+            "dimensions_changed": 2389,
+            "episodes": 162,
+            "episodes_changed": 161
+          },
+          "both_success": {
+            "dimensions": 23520,
+            "dimensions_changed": 465,
+            "episodes": 42,
+            "episodes_changed": 42
+          },
+          "shr_harm": {
+            "dimensions": 22960,
+            "dimensions_changed": 528,
+            "episodes": 41,
+            "episodes_changed": 40
+          },
+          "shr_rescue": {
+            "dimensions": 30800,
+            "dimensions_changed": 811,
+            "episodes": 55,
+            "episodes_changed": 55
+          }
+        }
+      },
+      "technical_pass": 300
+    }
+  },
+  "complete": true,
+  "episodes": 1200,
+  "lambda": 0.5,
+  "limitation": "Offline token changes are not closed-loop PSC success outcomes; changed actions require rollout.",
+  "protocol": "PSC_SHR_OFFLINE_V1",
+  "psc_dimensions": "0..5; dimension 6/gripper is exact positive passthrough",
+  "relative_probability_threshold": 0.1,
+  "storage": {
+    "filtered_relative": "packbits mask over fused logits; false entries are -inf",
+    "filtered_topk": "sparse indices+fused logits; all unlisted logits are -inf",
+    "fused": "full float16 array in each derived episode NPZ",
+    "positive_negative": "referenced from canonical SHR arrays (float16 [step,7,256])"
+  },
+  "tasks": [
+    "google_robot_close_drawer",
+    "google_robot_open_drawer",
+    "google_robot_pick_coke_can",
+    "google_robot_move_near"
+  ],
+  "top_k": [
+    10,
+    20,
+    50
+  ]
+}

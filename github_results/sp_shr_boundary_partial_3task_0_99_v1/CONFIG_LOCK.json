@@ -1,0 +1,23 @@
+{
+  "arms": [
+    "boundary_shr",
+    "partial_shr50"
+  ],
+  "boundary_shr": "reconstruct mask minus one-token 4-neighbor morphological boundary",
+  "common": {
+    "kmeans_K": 8,
+    "kmeans_seed": 0,
+    "lambda": 0.5
+  },
+  "pairing": "canonical snapshot, initial state, and initial RGB hashes must match SHR",
+  "partial_shr50": "reconstruct ceil(0.5 * entity-region tokens), uniformly sampled without replacement; SeedSequence(task_id, episode_seed, replan_step, entity_index, 0x50534852)",
+  "protocol_id": "SP_SHR_BOUNDARY_PARTIAL50_3TASK_0_99_V1",
+  "seeds": "0-99",
+  "snapshot_artifact": "/home/leju-suzhou/zjt_ws/token-cd/artifacts/vanilla_recon_shr_canonical_0_299_v2",
+  "snapshot_policy": "read-only; missing snapshot/reference is fatal",
+  "tasks": [
+    "google_robot_close_drawer",
+    "google_robot_move_near",
+    "google_robot_pick_coke_can"
+  ]
+}

@@ -119,6 +119,17 @@ def translated_prior(
 class STSHRCDInference(AuditedEntityCDInference):
     beta: float = 1.0
 
+    def _combine_action_scores(
+        self, clean_scores: torch.Tensor, negative_scores: torch.Tensor
+    ) -> tuple[torch.Tensor, dict]:
+        """Apply the locked SHR CD rule; subclasses may only control its strength."""
+        final_scores = clean_scores.clone()
+        final_scores[:-1] = (
+            (1 + self.lambd) * clean_scores[:-1]
+            - self.lambd * negative_scores[:-1]
+        )
+        return final_scores, {}
+
     def reset(self, task_description: str, seed=None) -> None:
         super().reset(task_description, seed)
         self._st_history: dict[str, EntityHistory] = {}
@@ -173,8 +184,7 @@ class STSHRCDInference(AuditedEntityCDInference):
             negative_scores = guided_forward_scores(self.vla, inputs, clean_token_ids, V.shape[1])
         if negative_trace["before"] is None or not torch.equal(V, negative_trace["before"]):
             raise RuntimeError("negative projector input differs from clean features")
-        final_scores = clean_scores.clone()
-        final_scores[:-1] = (1 + self.lambd) * clean_scores[:-1] - self.lambd * negative_scores[:-1]
+        final_scores, guidance_meta = self._combine_action_scores(clean_scores, negative_scores)
         if not torch.isfinite(final_scores).all():
             raise FloatingPointError("non-finite ST-SHR logits")
         token_ids = final_scores.argmax(dim=-1)
@@ -206,6 +216,7 @@ class STSHRCDInference(AuditedEntityCDInference):
             "positive_token_ids": clean_scores.argmax(-1).detach().cpu().tolist(),
             "negative_token_ids": negative_scores.argmax(-1).detach().cpu().tolist(),
             "final_token_ids": token_ids.detach().cpu().tolist(),
+            **guidance_meta,
         }
         self._episode_logits.append({"positive": positive, "negative": negative})
         self._episode_trace.append(meta)

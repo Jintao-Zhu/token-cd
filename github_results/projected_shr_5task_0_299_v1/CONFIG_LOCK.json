@@ -1,0 +1,32 @@
+{
+  "action_projection": "independent centered projection over each dimension's 256 executable action logits",
+  "arms": [
+    "proj_shr_eta000",
+    "proj_shr_eta025"
+  ],
+  "autoregressive_prefix": "clean greedy prefix, unchanged from canonical SHR implementation",
+  "common": {
+    "kmeans_K": 8,
+    "kmeans_seed": 0,
+    "lambda": 0.5,
+    "projection_eps": 1e-08
+  },
+  "etas": {
+    "proj_shr_eta000": 0.0,
+    "proj_shr_eta025": 0.25
+  },
+  "gripper": "dimension 6 remains positive",
+  "negative_branch": "unchanged beta=0 KMeans-K8 entity SHR with 4-neighbor harmonic reconstruction",
+  "pairing": "canonical snapshot, initial state, and initial RGB hashes match existing SHR",
+  "protocol_id": "PROJECTED_SHR_5TASK_0_299_V1",
+  "seeds": "0-299",
+  "snapshot_artifact": "/home/leju-suzhou/zjt_ws/token-cd/artifacts/vanilla_recon_shr_canonical_0_299_v2",
+  "snapshot_policy": "read-only; missing snapshot/reference is fatal",
+  "tasks": [
+    "google_robot_close_drawer",
+    "google_robot_open_drawer",
+    "google_robot_move_near",
+    "google_robot_pick_coke_can",
+    "widowx_carrot_on_plate"
+  ]
+}

@@ -1,0 +1,23 @@
+{
+  "arms": [
+    "pi0_vanilla",
+    "pi0_shr_harmonic"
+  ],
+  "flow_steps": 10,
+  "gripper": "positive velocity unchanged at every flow step",
+  "guidance": "v_pos + 0.5*(v_pos-v_neg), first six dimensions at every flow step",
+  "model": "open-pi-zero Fractal-Beta for Google Robot and Bridge-Beta for WidowX",
+  "negative_branch": "KMeans K=8 semantic entity regions; beta=0 four-neighbor harmonic reconstruction",
+  "pairing": "same simulator snapshot; deterministic shared initial action noise per replan",
+  "positive_branch": "unmodified Pi0 flow velocity",
+  "protocol_id": "PI0_SHR_5TASK_0_299_V1",
+  "seeds": "0-299",
+  "tasks": [
+    "google_robot_close_drawer",
+    "google_robot_open_drawer",
+    "google_robot_move_near",
+    "google_robot_pick_coke_can",
+    "widowx_carrot_on_plate"
+  ],
+  "torch_compile": false
+}

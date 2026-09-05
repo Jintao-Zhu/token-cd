@@ -15,3 +15,11 @@ OpenVLA token-level contrastive-decoding (CD) research.
 The package imports as `research.<subpackage>...`. Add this repository's root
 to `PYTHONPATH` (the environment must provide `simpler_env`, `properties`, and
 the OpenVLA-7B checkpoint under `PCD_SOURCE/pretrained/openvla-7b`).
+
+## SHR experiment status
+
+- [Comprehensive SHR methods and results report](docs/SHR_COMPREHENSIVE_REPORT_2026-09-05.md)
+- [Compact follow-up experiment data release](github_results/SHR_FOLLOWUP_RELEASE.md)
+
+The compact release contains episode-level outcomes and pairing metadata; raw
+rollout traces, checkpoints, caches, and large tensor dumps remain excluded.
