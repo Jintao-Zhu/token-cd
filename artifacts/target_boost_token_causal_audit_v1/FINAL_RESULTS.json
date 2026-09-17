@@ -1,0 +1,186 @@
+{
+  "protocol_id": "TARGET_BOOST_TOKEN_CAUSAL_AUDIT_V1",
+  "complete": true,
+  "episodes": 400,
+  "states": 1200,
+  "atomic_swaps": 727,
+  "overall": {
+    "n_states": 1200,
+    "episodes": 400,
+    "mean_m": 34.50666666666667,
+    "mean_swap_count": 0.6058333333333333,
+    "zero_swap_fraction": 0.5225,
+    "mean_residual_cosine": 0.9753326092538511,
+    "mean_action_l2": 0.008654487592334833,
+    "action_flip_state_fraction": 0.17666666666666667,
+    "mean_residual_norm_delta": 0.1465641657511393,
+    "mean_feature_norm_delta": 0.21667911211649576,
+    "interaction_only_action_fraction": 0.008333333333333333,
+    "mean_historical_mask_jaccard": 0.7428433316400956
+  },
+  "by_outcome": {
+    "both_fail": {
+      "category": "both_fail",
+      "n_states": 366,
+      "episodes": 122,
+      "mean_m": 32.74590163934426,
+      "mean_swap_count": 0.680327868852459,
+      "zero_swap_fraction": 0.48633879781420764,
+      "mean_residual_cosine": 0.966051471931947,
+      "mean_action_l2": 0.011503967195542019,
+      "action_flip_state_fraction": 0.2103825136612022,
+      "mean_residual_norm_delta": -0.528560523778363,
+      "mean_feature_norm_delta": 0.1129120790241846,
+      "interaction_only_action_fraction": 0.00819672131147541,
+      "mean_historical_mask_jaccard": 0.7755394691709828
+    },
+    "both_success": {
+      "category": "both_success",
+      "n_states": 531,
+      "episodes": 177,
+      "mean_m": 36.0075329566855,
+      "mean_swap_count": 0.5574387947269304,
+      "zero_swap_fraction": 0.5386064030131826,
+      "mean_residual_cosine": 0.9792737753454975,
+      "mean_action_l2": 0.007120507806028186,
+      "action_flip_state_fraction": 0.1713747645951036,
+      "mean_residual_norm_delta": 0.21570412587311308,
+      "mean_feature_norm_delta": 0.1960364447699653,
+      "interaction_only_action_fraction": 0.013182674199623353,
+      "mean_historical_mask_jaccard": 0.744299920638744
+    },
+    "harm": {
+      "category": "harm",
+      "n_states": 183,
+      "episodes": 61,
+      "mean_m": 36.295081967213115,
+      "mean_swap_count": 0.4972677595628415,
+      "zero_swap_fraction": 0.5792349726775956,
+      "mean_residual_cosine": 0.9873841085841933,
+      "mean_action_l2": 0.0044116890774102266,
+      "action_flip_state_fraction": 0.08196721311475409,
+      "mean_residual_norm_delta": 0.39647641208002476,
+      "mean_feature_norm_delta": 0.216841942625619,
+      "interaction_only_action_fraction": 0.0,
+      "mean_historical_mask_jaccard": 0.7023728961802393
+    },
+    "rescue": {
+      "category": "rescue",
+      "n_states": 120,
+      "episodes": 40,
+      "mean_m": 30.508333333333333,
+      "mean_swap_count": 0.7583333333333333,
+      "zero_swap_fraction": 0.475,
+      "mean_residual_cosine": 0.9678218816513515,
+      "mean_action_l2": 0.013221703092219865,
+      "action_flip_state_fraction": 0.24166666666666667,
+      "mean_residual_norm_delta": 1.5186339696248372,
+      "mean_feature_norm_delta": 0.6242640495300293,
+      "interaction_only_action_fraction": 0.0,
+      "mean_historical_mask_jaccard": 0.6983921199281522
+    }
+  },
+  "harm_vs_rescue_tests": {
+    "swap_count": {
+      "harm_mean": 0.4972677595628415,
+      "rescue_mean": 0.7583333333333333,
+      "statistic": 9226.5,
+      "p": 0.008795494221220385
+    },
+    "residual_cosine": {
+      "harm_mean": 0.9873841085841933,
+      "rescue_mean": 0.9678218816513515,
+      "statistic": 12660.0,
+      "p": 0.022841557778484047
+    },
+    "action_l2": {
+      "harm_mean": 0.0044116890774102266,
+      "rescue_mean": 0.013221703092219865,
+      "statistic": 9193.5,
+      "p": 9.307834245096509e-05
+    },
+    "residual_norm_delta": {
+      "harm_mean": 0.39647641208002476,
+      "rescue_mean": 1.5186339696248372,
+      "statistic": 9846.0,
+      "p": 0.09814743187730177
+    },
+    "feature_norm_delta": {
+      "harm_mean": 0.216841942625619,
+      "rescue_mean": 0.6242640495300293,
+      "statistic": 9158.0,
+      "p": 0.007865952423926492
+    }
+  },
+  "atomic_harm_vs_rescue_tests": {
+    "entered_p_rank": {
+      "harm_mean": 42.20879120879121,
+      "rescue_mean": 33.252747252747255,
+      "statistic": 5547.0,
+      "p": 7.565194706596826e-05
+    },
+    "entered_difference": {
+      "harm_mean": 0.002934039089377967,
+      "rescue_mean": 0.006177884604468415,
+      "statistic": 2203.0,
+      "p": 5.006432581939724e-08
+    },
+    "only_action_l2_vs_correct": {
+      "harm_mean": 0.011579156584691063,
+      "rescue_mean": 0.021485656659867073,
+      "statistic": 3410.5,
+      "p": 0.0115213681816287
+    },
+    "only_residual_cosine_vs_correct": {
+      "harm_mean": 0.9743311261574135,
+      "rescue_mean": 0.9574284358182822,
+      "statistic": 5546.0,
+      "p": 7.687665487025098e-05
+    }
+  },
+  "posthoc_confidence_gate_diagnostics": [
+    {
+      "entered_difference_min": 0.002,
+      "entered_p_rank_max": 40,
+      "rescue_swap_retention": 0.6263736263736264,
+      "harm_swap_retention": 0.31868131868131866
+    },
+    {
+      "entered_difference_min": 0.003,
+      "entered_p_rank_max": 40,
+      "rescue_swap_retention": 0.5824175824175825,
+      "harm_swap_retention": 0.24175824175824176
+    },
+    {
+      "entered_difference_min": 0.004,
+      "entered_p_rank_max": 40,
+      "rescue_swap_retention": 0.5274725274725275,
+      "harm_swap_retention": 0.17582417582417584
+    },
+    {
+      "entered_difference_min": 0.005,
+      "entered_p_rank_max": 40,
+      "rescue_swap_retention": 0.43956043956043955,
+      "harm_swap_retention": 0.13186813186813187
+    },
+    {
+      "entered_difference_min": 0.006,
+      "entered_p_rank_max": 40,
+      "rescue_swap_retention": 0.3956043956043956,
+      "harm_swap_retention": 0.12087912087912088
+    },
+    {
+      "entered_difference_min": 0.008,
+      "entered_p_rank_max": 40,
+      "rescue_swap_retention": 0.37362637362637363,
+      "harm_swap_retention": 0.07692307692307693
+    },
+    {
+      "entered_difference_min": 0.01,
+      "entered_p_rank_max": 40,
+      "rescue_swap_retention": 0.2087912087912088,
+      "harm_swap_retention": 0.04395604395604396
+    }
+  ],
+  "interpretation_boundary": "same-state mask/logit/action causality; no new closed-loop outcomes"
+}

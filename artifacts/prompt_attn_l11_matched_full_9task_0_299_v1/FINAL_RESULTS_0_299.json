@@ -1,0 +1,283 @@
+{
+  "protocol_id": "PROMPT_ATTN_L11_MATCHED_FULL_9TASK_0_299_V1",
+  "complete": true,
+  "tasks": [
+    "google_robot_open_drawer",
+    "google_robot_close_drawer",
+    "google_robot_pick_coke_can",
+    "google_robot_move_near",
+    "google_robot_place_apple_in_closed_top_drawer",
+    "widowx_carrot_on_plate",
+    "widowx_put_eggplant_in_basket",
+    "widowx_spoon_on_towel",
+    "widowx_stack_cube"
+  ],
+  "seeds_per_task": 300,
+  "episodes": 2700,
+  "identity_pass": true,
+  "technical_pass": true,
+  "l11_source": {
+    "seeds_0_99": "/home/leju-suzhou/zjt_ws/token-cd/artifacts/prompt_attn_layer_selection_v1",
+    "seeds_100_299": "/home/leju-suzhou/zjt_ws/token-cd/artifacts/prompt_attn_l11_matched_full_9task_0_299_v1/run"
+  },
+  "summaries": {
+    "google_robot_open_drawer": {
+      "n": 300,
+      "successes": {
+        "vanilla": 71,
+        "shr": 138,
+        "l11_matched": 144
+      },
+      "success_rate": {
+        "vanilla": 0.23666666666666666,
+        "shr": 0.46,
+        "l11_matched": 0.48
+      },
+      "paired_vs_vanilla": {
+        "rescue": 90,
+        "harm": 17,
+        "net": 73,
+        "exact_mcnemar_p": 3.505779998119023e-13
+      },
+      "paired_vs_shr": {
+        "rescue": 53,
+        "harm": 47,
+        "net": 6,
+        "exact_mcnemar_p": 0.617299413589252
+      }
+    },
+    "google_robot_close_drawer": {
+      "n": 300,
+      "successes": {
+        "vanilla": 154,
+        "shr": 209,
+        "l11_matched": 230
+      },
+      "success_rate": {
+        "vanilla": 0.5133333333333333,
+        "shr": 0.6966666666666667,
+        "l11_matched": 0.7666666666666667
+      },
+      "paired_vs_vanilla": {
+        "rescue": 88,
+        "harm": 12,
+        "net": 76,
+        "exact_mcnemar_p": 1.9113575360277067e-15
+      },
+      "paired_vs_shr": {
+        "rescue": 51,
+        "harm": 30,
+        "net": 21,
+        "exact_mcnemar_p": 0.02565435797169625
+      }
+    },
+    "google_robot_pick_coke_can": {
+      "n": 300,
+      "successes": {
+        "vanilla": 83,
+        "shr": 97,
+        "l11_matched": 119
+      },
+      "success_rate": {
+        "vanilla": 0.27666666666666667,
+        "shr": 0.3233333333333333,
+        "l11_matched": 0.39666666666666667
+      },
+      "paired_vs_vanilla": {
+        "rescue": 74,
+        "harm": 38,
+        "net": 36,
+        "exact_mcnemar_p": 0.0008605684481792974
+      },
+      "paired_vs_shr": {
+        "rescue": 59,
+        "harm": 37,
+        "net": 22,
+        "exact_mcnemar_p": 0.03154812025373352
+      }
+    },
+    "google_robot_move_near": {
+      "n": 300,
+      "successes": {
+        "vanilla": 184,
+        "shr": 197,
+        "l11_matched": 182
+      },
+      "success_rate": {
+        "vanilla": 0.6133333333333333,
+        "shr": 0.6566666666666666,
+        "l11_matched": 0.6066666666666667
+      },
+      "paired_vs_vanilla": {
+        "rescue": 25,
+        "harm": 27,
+        "net": -2,
+        "exact_mcnemar_p": 0.8898839652765371
+      },
+      "paired_vs_shr": {
+        "rescue": 22,
+        "harm": 37,
+        "net": -15,
+        "exact_mcnemar_p": 0.06744461190078899
+      }
+    },
+    "google_robot_place_apple_in_closed_top_drawer": {
+      "n": 300,
+      "successes": {
+        "vanilla": 0,
+        "shr": 0,
+        "l11_matched": 1
+      },
+      "success_rate": {
+        "vanilla": 0.0,
+        "shr": 0.0,
+        "l11_matched": 0.0033333333333333335
+      },
+      "paired_vs_vanilla": {
+        "rescue": 1,
+        "harm": 0,
+        "net": 1,
+        "exact_mcnemar_p": 1.0
+      },
+      "paired_vs_shr": {
+        "rescue": 1,
+        "harm": 0,
+        "net": 1,
+        "exact_mcnemar_p": 1.0
+      }
+    },
+    "widowx_carrot_on_plate": {
+      "n": 300,
+      "successes": {
+        "vanilla": 14,
+        "shr": 4,
+        "l11_matched": 0
+      },
+      "success_rate": {
+        "vanilla": 0.04666666666666667,
+        "shr": 0.013333333333333334,
+        "l11_matched": 0.0
+      },
+      "paired_vs_vanilla": {
+        "rescue": 0,
+        "harm": 14,
+        "net": -14,
+        "exact_mcnemar_p": 0.0001220703125
+      },
+      "paired_vs_shr": {
+        "rescue": 0,
+        "harm": 4,
+        "net": -4,
+        "exact_mcnemar_p": 0.125
+      }
+    },
+    "widowx_put_eggplant_in_basket": {
+      "n": 300,
+      "successes": {
+        "vanilla": 1,
+        "shr": 0,
+        "l11_matched": 12
+      },
+      "success_rate": {
+        "vanilla": 0.0033333333333333335,
+        "shr": 0.0,
+        "l11_matched": 0.04
+      },
+      "paired_vs_vanilla": {
+        "rescue": 12,
+        "harm": 1,
+        "net": 11,
+        "exact_mcnemar_p": 0.00341796875
+      },
+      "paired_vs_shr": {
+        "rescue": 12,
+        "harm": 0,
+        "net": 12,
+        "exact_mcnemar_p": 0.00048828125
+      }
+    },
+    "widowx_spoon_on_towel": {
+      "n": 300,
+      "successes": {
+        "vanilla": 0,
+        "shr": 1,
+        "l11_matched": 4
+      },
+      "success_rate": {
+        "vanilla": 0.0,
+        "shr": 0.0033333333333333335,
+        "l11_matched": 0.013333333333333334
+      },
+      "paired_vs_vanilla": {
+        "rescue": 4,
+        "harm": 0,
+        "net": 4,
+        "exact_mcnemar_p": 0.125
+      },
+      "paired_vs_shr": {
+        "rescue": 4,
+        "harm": 1,
+        "net": 3,
+        "exact_mcnemar_p": 0.375
+      }
+    },
+    "widowx_stack_cube": {
+      "n": 300,
+      "successes": {
+        "vanilla": 0,
+        "shr": 0,
+        "l11_matched": 8
+      },
+      "success_rate": {
+        "vanilla": 0.0,
+        "shr": 0.0,
+        "l11_matched": 0.02666666666666667
+      },
+      "paired_vs_vanilla": {
+        "rescue": 8,
+        "harm": 0,
+        "net": 8,
+        "exact_mcnemar_p": 0.0078125
+      },
+      "paired_vs_shr": {
+        "rescue": 8,
+        "harm": 0,
+        "net": 8,
+        "exact_mcnemar_p": 0.0078125
+      }
+    },
+    "overall": {
+      "n": 2700,
+      "successes": {
+        "vanilla": 507,
+        "shr": 646,
+        "l11_matched": 700
+      },
+      "success_rate": {
+        "vanilla": 0.18777777777777777,
+        "shr": 0.23925925925925925,
+        "l11_matched": 0.25925925925925924
+      },
+      "paired_vs_vanilla": {
+        "rescue": 302,
+        "harm": 109,
+        "net": 193,
+        "exact_mcnemar_p": 4.63272820732223e-22
+      },
+      "paired_vs_shr": {
+        "rescue": 210,
+        "harm": 156,
+        "net": 54,
+        "exact_mcnemar_p": 0.0055270345003509925
+      }
+    }
+  },
+  "old_0_99": {
+    "n": 900,
+    "successes": {
+      "vanilla": 173,
+      "shr": 235,
+      "l11_matched": 243
+    }
+  }
+}

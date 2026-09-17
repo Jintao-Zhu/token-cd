@@ -1,0 +1,47 @@
+{
+  "protocol_id": "PROMPT_ATTN_L11_LOOKAHEAD_LAMBDA_PILOT_V1",
+  "date": "2026-09-14",
+  "decision": "STOP",
+  "design": {
+    "candidate_lambdas": [0.0, 0.25, 0.5],
+    "default_lambda": 0.5,
+    "horizon_actions": 10,
+    "commit_actions": 10,
+    "approach_switch_margin": 0.025,
+    "manipulation_switch_margin": 0.002,
+    "weak_tie_tolerance": 0.01,
+    "selection": "privileged task-native physical progress",
+    "sampling": "targeted known fixed-arm discordant/both-success cases"
+  },
+  "technical_pass": true,
+  "episodes": 10,
+  "overall": {
+    "lookahead_successes": 4,
+    "fixed_lambda_0p5_successes": 4,
+    "fixed_arm_oracle_successes": 10,
+    "rescue": 3,
+    "harm": 3,
+    "net": 0
+  },
+  "by_task": {
+    "google_robot_close_drawer": {
+      "episodes": 5,
+      "lookahead_successes": 3,
+      "fixed_lambda_0p5_successes": 2,
+      "fixed_arm_oracle_successes": 5,
+      "rescue": 2,
+      "harm": 1,
+      "net": 1
+    },
+    "google_robot_open_drawer": {
+      "episodes": 5,
+      "lookahead_successes": 1,
+      "fixed_lambda_0p5_successes": 2,
+      "fixed_arm_oracle_successes": 5,
+      "rescue": 1,
+      "harm": 2,
+      "net": -1
+    }
+  },
+  "interpretation": "same-state branching is feasible, but ten-action privileged physical progress does not predict final success well enough"
+}

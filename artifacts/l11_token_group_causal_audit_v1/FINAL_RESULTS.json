@@ -1,0 +1,242 @@
+{
+  "protocol_id": "L11_TOKEN_GROUP_CAUSAL_AUDIT_V1",
+  "decision": "NO_STABLE_SPATIAL_FILTER_RULE",
+  "integrity_pass": true,
+  "cases": 60,
+  "ablations": 290,
+  "cases_by_task_category": {
+    "close_drawer/rescue": 10,
+    "close_drawer/harm": 3,
+    "move_near/rescue": 6,
+    "move_near/harm": 6,
+    "open_drawer/rescue": 10,
+    "open_drawer/harm": 5,
+    "pick_coke_can/rescue": 10,
+    "pick_coke_can/harm": 10
+  },
+  "inference_unit": "episode mean across its spatial ablations",
+  "harm_vs_rescue_delta_mann_whitney_one_sided": {
+    "statistic": 454.0,
+    "p": 0.3727964828092595
+  },
+  "removed_rank_vs_delta_spearman": {
+    "rho": 0.19320771496859543,
+    "p": 0.13912041586549193
+  },
+  "sector_results": [
+    {
+      "sector": "fallback_spatial_a",
+      "harm_n": 0,
+      "rescue_n": 1,
+      "harm_mean_delta": null,
+      "rescue_mean_delta": 0.015764108167879765,
+      "harm_improve_minus_worsen": 0,
+      "rescue_improve_minus_worsen": 1
+    },
+    {
+      "sector": "fallback_spatial_b",
+      "harm_n": 0,
+      "rescue_n": 1,
+      "harm_mean_delta": null,
+      "rescue_mean_delta": 0.015764108167879765,
+      "harm_improve_minus_worsen": 0,
+      "rescue_improve_minus_worsen": 1
+    },
+    {
+      "sector": "r0_c0",
+      "harm_n": 15,
+      "rescue_n": 26,
+      "harm_mean_delta": 0.008353705130673,
+      "rescue_mean_delta": -0.0044640558448501445,
+      "harm_improve_minus_worsen": 7,
+      "rescue_improve_minus_worsen": -7
+    },
+    {
+      "sector": "r0_c1",
+      "harm_n": 21,
+      "rescue_n": 32,
+      "harm_mean_delta": -0.0006071015476814585,
+      "rescue_mean_delta": 0.0024486334190376305,
+      "harm_improve_minus_worsen": 6,
+      "rescue_improve_minus_worsen": 3
+    },
+    {
+      "sector": "r1_c0",
+      "harm_n": 21,
+      "rescue_n": 28,
+      "harm_mean_delta": 0.004479515959283556,
+      "rescue_mean_delta": -0.001677896740370498,
+      "harm_improve_minus_worsen": 7,
+      "rescue_improve_minus_worsen": -5
+    },
+    {
+      "sector": "r1_c1",
+      "harm_n": 24,
+      "rescue_n": 34,
+      "harm_mean_delta": -0.0010284827189348037,
+      "rescue_mean_delta": 0.005891508876229433,
+      "harm_improve_minus_worsen": 0,
+      "rescue_improve_minus_worsen": -1
+    },
+    {
+      "sector": "r2_c0",
+      "harm_n": 21,
+      "rescue_n": 30,
+      "harm_mean_delta": -0.001074009188641917,
+      "rescue_mean_delta": -0.0018450384919809974,
+      "harm_improve_minus_worsen": -2,
+      "rescue_improve_minus_worsen": -3
+    },
+    {
+      "sector": "r2_c1",
+      "harm_n": 14,
+      "rescue_n": 22,
+      "harm_mean_delta": 0.00018303138793630626,
+      "rescue_mean_delta": 0.008965171146406384,
+      "harm_improve_minus_worsen": -2,
+      "rescue_improve_minus_worsen": 2
+    }
+  ],
+  "task_sector_results": [
+    {
+      "sector": "r0_c0",
+      "tasks": {
+        "close_drawer": {
+          "harm_mean_delta": -0.02989935141542266,
+          "rescue_mean_delta": -0.00944392046412107
+        },
+        "move_near": {
+          "harm_mean_delta": 0.01005441870398456,
+          "rescue_mean_delta": -0.0057275657439351995
+        },
+        "open_drawer": {
+          "harm_mean_delta": 0.015115937431261245,
+          "rescue_mean_delta": 0.0023874537637541054
+        },
+        "pick_coke_can": {
+          "harm_mean_delta": 0.009087250639089073,
+          "rescue_mean_delta": -0.009327923175945696
+        }
+      },
+      "harm_positive_tasks": 3,
+      "rescue_nonnegative_tasks": 1
+    },
+    {
+      "sector": "r0_c1",
+      "tasks": {
+        "close_drawer": {
+          "harm_mean_delta": -0.008003347836812483,
+          "rescue_mean_delta": 0.012767295414083118
+        },
+        "move_near": {
+          "harm_mean_delta": 0.008847386533181642,
+          "rescue_mean_delta": -0.002568492268898178
+        },
+        "open_drawer": {
+          "harm_mean_delta": 0.014158236379005817,
+          "rescue_mean_delta": -0.004875643926885348
+        },
+        "pick_coke_can": {
+          "harm_mean_delta": -0.012307044213248287,
+          "rescue_mean_delta": 0.00247511802510259
+        }
+      },
+      "harm_positive_tasks": 2,
+      "rescue_nonnegative_tasks": 2
+    },
+    {
+      "sector": "r1_c0",
+      "tasks": {
+        "close_drawer": {
+          "harm_mean_delta": 0.0,
+          "rescue_mean_delta": 0.025694480842680462
+        },
+        "move_near": {
+          "harm_mean_delta": 0.014043265825438264,
+          "rescue_mean_delta": -0.01922608398540215
+        },
+        "open_drawer": {
+          "harm_mean_delta": -0.012623393206229391,
+          "rescue_mean_delta": -0.006427396742206393
+        },
+        "pick_coke_can": {
+          "harm_mean_delta": 0.007537976627155333,
+          "rescue_mean_delta": -0.0035862537419966514
+        }
+      },
+      "harm_positive_tasks": 2,
+      "rescue_nonnegative_tasks": 1
+    },
+    {
+      "sector": "r1_c1",
+      "tasks": {
+        "close_drawer": {
+          "harm_mean_delta": -0.03524397586250009,
+          "rescue_mean_delta": 0.016805032397901015
+        },
+        "move_near": {
+          "harm_mean_delta": 0.005402845789593519,
+          "rescue_mean_delta": -0.002343984047283814
+        },
+        "open_drawer": {
+          "harm_mean_delta": 0.03091467147919531,
+          "rescue_mean_delta": 0.000204153072673204
+        },
+        "pick_coke_can": {
+          "harm_mean_delta": -0.010594208980047268,
+          "rescue_mean_delta": 0.0049430560491594035
+        }
+      },
+      "harm_positive_tasks": 2,
+      "rescue_nonnegative_tasks": 3
+    },
+    {
+      "sector": "r2_c0",
+      "tasks": {
+        "close_drawer": {
+          "harm_mean_delta": -0.010478085442962026,
+          "rescue_mean_delta": -0.005055999126674144
+        },
+        "move_near": {
+          "harm_mean_delta": 0.0013926397508700155,
+          "rescue_mean_delta": -0.0070776399268760335
+        },
+        "open_drawer": {
+          "harm_mean_delta": 0.0033045746168351765,
+          "rescue_mean_delta": 0.006894528809197533
+        },
+        "pick_coke_can": {
+          "harm_mean_delta": -0.0022855211745700216,
+          "rescue_mean_delta": -0.0022080831903363816
+        }
+      },
+      "harm_positive_tasks": 2,
+      "rescue_nonnegative_tasks": 1
+    },
+    {
+      "sector": "r2_c1",
+      "tasks": {
+        "close_drawer": {
+          "harm_mean_delta": 0.0,
+          "rescue_mean_delta": 0.025291706609622495
+        },
+        "move_near": {
+          "harm_mean_delta": 0.00381382246509801,
+          "rescue_mean_delta": 0.0014117605850103622
+        },
+        "open_drawer": {
+          "harm_mean_delta": -0.004064099071895954,
+          "rescue_mean_delta": -0.0019386358808716672
+        },
+        "pick_coke_can": {
+          "harm_mean_delta": 0.0,
+          "rescue_mean_delta": 0.0
+        }
+      },
+      "harm_positive_tasks": 1,
+      "rescue_nonnegative_tasks": 3
+    }
+  ],
+  "candidate_rules": [],
+  "interpretation_boundary": "5-action local progress is causal for the tested branch point, not a full-episode success claim"
+}

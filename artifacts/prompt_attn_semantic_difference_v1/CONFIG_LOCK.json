@@ -1,0 +1,63 @@
+{
+  "arm_config": {
+    "paraphrase_0p5": {
+      "contrast_kind": "paraphrase",
+      "eta": 0.5
+    },
+    "reverse_0p5": {
+      "contrast_kind": "semantic",
+      "eta": -0.5
+    },
+    "semantic_0p5": {
+      "contrast_kind": "semantic",
+      "eta": 0.5
+    },
+    "semantic_1p0": {
+      "contrast_kind": "semantic",
+      "eta": 1.0
+    }
+  },
+  "arms": [
+    "vanilla",
+    "correct",
+    "semantic_0p5",
+    "semantic_1p0",
+    "paraphrase_0p5",
+    "reverse_0p5"
+  ],
+  "attention_layers": [
+    11
+  ],
+  "closed_loop_scenes": {
+    "google_robot_close_drawer": 66,
+    "google_robot_move_near": 77,
+    "google_robot_open_drawer": 66,
+    "google_robot_pick_coke_can": 100
+  },
+  "closed_loop_total_scenes": 309,
+  "closed_loop_total_six_arm_episodes": 1854,
+  "coverage": "own-state Standard-SHR matched count from the real instruction",
+  "epsilon": 1e-08,
+  "guidance": "lambda=0.5 dimensions 0..5; gripper clean",
+  "new_arms": [
+    "semantic_0p5",
+    "semantic_1p0",
+    "paraphrase_0p5",
+    "reverse_0p5"
+  ],
+  "protocol": "PROMPT_ATTN_SEMANTIC_DIFFERENCE_V1",
+  "reconstruction": "16x16 four-neighbor Dirichlet harmonic beta=0 gamma=1",
+  "reused_arms": [
+    "vanilla",
+    "correct"
+  ],
+  "source_protocol": "PROMPT_ATTN_INSTR_SWAP_V1",
+  "source_scene_manifest_sha256": "913beb0256208ac49a84abd319b569b352041acc77787026d99076a27418d8ef",
+  "state_manifest_sha256": "f18df4ce056900e19b0f7fba3d0a1375aa20e3023b651b17bf451275b5d5d523",
+  "tasks": [
+    "google_robot_open_drawer",
+    "google_robot_close_drawer",
+    "google_robot_pick_coke_can",
+    "google_robot_move_near"
+  ]
+}

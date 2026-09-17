@@ -1,0 +1,25 @@
+{
+  "alternate_prompt_rules": {
+    "move_near": "swap source and target entities",
+    "open_drawer": "top -> middle -> bottom -> top",
+    "pick_coke_can": "pick coke can -> pick pepsi can"
+  },
+  "date": "2026-09-15",
+  "expected_states": 90,
+  "gpus": [
+    2,
+    3
+  ],
+  "intervention_direction": "shared-prefix log-softmax residual between clean and reconstructed negative branch",
+  "manual_target_boxes_used": false,
+  "mask_budget": "cached own-state matched m_t",
+  "primary_metric": "mean cosine over action dimensions 0..5",
+  "primary_ranking": "episode-mean exploration causal margin = Top-m alignment - max(Random, Bottom, wrong-Prompt Top-m)",
+  "prompt_direction": "shared-original-action-prefix log-softmax residual between original and alternate Prompt",
+  "protocol_id": "PROMPT_ACTION_LAYER_CAUSAL_EXPANDED_V1",
+  "purpose": "expanded box-free action-level screen of OpenVLA layers 0..31",
+  "reconstruction": "16x16 four-neighbor harmonic beta=0",
+  "split": "existing locked episode split: 20 exploration episodes / 10 validation episodes",
+  "uncertainty": "20,000 episode bootstrap draws",
+  "validation": "ranking uses only 20 exploration episodes; 10 validation episodes reported separately"
+}

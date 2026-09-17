@@ -1,0 +1,29 @@
+{
+  "protocol_id": "TARGET_BOOST_TOKEN_CAUSAL_AUDIT_V1",
+  "purpose": "causally isolate matched-budget token swaps introduced by Positive-Boost-0.5",
+  "tasks": [
+    "google_robot_open_drawer",
+    "google_robot_close_drawer",
+    "google_robot_pick_coke_can",
+    "google_robot_move_near"
+  ],
+  "seeds": "0-99",
+  "episodes": 400,
+  "state_fractions": [
+    0.12,
+    0.5,
+    0.88
+  ],
+  "same_states": 1200,
+  "primary_comparison": "recomputed Correct versus Positive-Boost-0.5 on the same observation",
+  "atomic_interventions": [
+    "Correct plus exactly one budget-preserving swap",
+    "full Boost with exactly one swap undone"
+  ],
+  "gpus": [
+    2,
+    3
+  ],
+  "workers_per_gpu": 3,
+  "no_new_closed_loop_rollouts": true
+}

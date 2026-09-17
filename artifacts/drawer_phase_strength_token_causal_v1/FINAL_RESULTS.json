@@ -1,0 +1,554 @@
+{
+  "protocol_id": "DRAWER_PHASE_STRENGTH_TOKEN_CAUSAL_V1",
+  "decision": "MIXED_PHASE_STRENGTH_AND_TOKEN_EVIDENCE",
+  "integrity_pass": true,
+  "states": 48,
+  "strength_branches": 144,
+  "token_ablations": 236,
+  "phase_strength_evidence": [
+    {
+      "task": "close_drawer",
+      "phase": "approach",
+      "arm": "dynamic_l11_lambda_0p25",
+      "harm_delta": 0.004925934451625795,
+      "rescue_delta": -0.029217717589280767,
+      "desired_direction": false
+    },
+    {
+      "task": "close_drawer",
+      "phase": "approach",
+      "arm": "clean_lambda_0",
+      "harm_delta": 0.026740307974731165,
+      "rescue_delta": -0.026709963447196877,
+      "desired_direction": false
+    },
+    {
+      "task": "close_drawer",
+      "phase": "contact_or_motion",
+      "arm": "dynamic_l11_lambda_0p25",
+      "harm_delta": -0.01871606210867564,
+      "rescue_delta": 0.04832435088853041,
+      "desired_direction": false
+    },
+    {
+      "task": "close_drawer",
+      "phase": "contact_or_motion",
+      "arm": "clean_lambda_0",
+      "harm_delta": -0.011156494418780008,
+      "rescue_delta": 0.028676067168513935,
+      "desired_direction": false
+    },
+    {
+      "task": "close_drawer",
+      "phase": "late",
+      "arm": "dynamic_l11_lambda_0p25",
+      "harm_delta": 0.0014959474404652913,
+      "rescue_delta": 0.0,
+      "desired_direction": false
+    },
+    {
+      "task": "close_drawer",
+      "phase": "late",
+      "arm": "clean_lambda_0",
+      "harm_delta": 0.005537991722424825,
+      "rescue_delta": 0.0,
+      "desired_direction": true
+    },
+    {
+      "task": "open_drawer",
+      "phase": "approach",
+      "arm": "dynamic_l11_lambda_0p25",
+      "harm_delta": 0.01609464650035235,
+      "rescue_delta": -0.03817638961358426,
+      "desired_direction": false
+    },
+    {
+      "task": "open_drawer",
+      "phase": "approach",
+      "arm": "clean_lambda_0",
+      "harm_delta": -0.0024086289255683345,
+      "rescue_delta": -0.02211900549886524,
+      "desired_direction": false
+    },
+    {
+      "task": "open_drawer",
+      "phase": "contact_or_motion",
+      "arm": "dynamic_l11_lambda_0p25",
+      "harm_delta": -0.002128873204560122,
+      "rescue_delta": -0.005392292141914367,
+      "desired_direction": false
+    },
+    {
+      "task": "open_drawer",
+      "phase": "contact_or_motion",
+      "arm": "clean_lambda_0",
+      "harm_delta": 0.0007165326758016733,
+      "rescue_delta": -0.05481427349150181,
+      "desired_direction": false
+    },
+    {
+      "task": "open_drawer",
+      "phase": "late",
+      "arm": "dynamic_l11_lambda_0p25",
+      "harm_delta": 0.0016523472499083355,
+      "rescue_delta": -0.00029985904693603517,
+      "desired_direction": false
+    },
+    {
+      "task": "open_drawer",
+      "phase": "late",
+      "arm": "clean_lambda_0",
+      "harm_delta": 0.0023562300950269776,
+      "rescue_delta": 0.004272656142711639,
+      "desired_direction": true
+    }
+  ],
+  "stable_strength_hits": [
+    {
+      "task": "close_drawer",
+      "phase": "late",
+      "arm": "clean_lambda_0",
+      "harm_delta": 0.005537991722424825,
+      "rescue_delta": 0.0,
+      "desired_direction": true
+    },
+    {
+      "task": "open_drawer",
+      "phase": "late",
+      "arm": "clean_lambda_0",
+      "harm_delta": 0.0023562300950269776,
+      "rescue_delta": 0.004272656142711639,
+      "desired_direction": true
+    }
+  ],
+  "token_candidates": [
+    {
+      "phase": "approach",
+      "sector": "fallback_spatial_a",
+      "tasks": [
+        {
+          "task": "close_drawer",
+          "harm_delta": null,
+          "rescue_delta": null
+        },
+        {
+          "task": "open_drawer",
+          "harm_delta": null,
+          "rescue_delta": null
+        }
+      ],
+      "desired_direction_both_tasks": false
+    },
+    {
+      "phase": "approach",
+      "sector": "fallback_spatial_b",
+      "tasks": [
+        {
+          "task": "close_drawer",
+          "harm_delta": null,
+          "rescue_delta": null
+        },
+        {
+          "task": "open_drawer",
+          "harm_delta": null,
+          "rescue_delta": null
+        }
+      ],
+      "desired_direction_both_tasks": false
+    },
+    {
+      "phase": "approach",
+      "sector": "r0_c0",
+      "tasks": [
+        {
+          "task": "close_drawer",
+          "harm_delta": -0.06635719598043438,
+          "rescue_delta": -0.026305895633501164
+        },
+        {
+          "task": "open_drawer",
+          "harm_delta": 0.01361016265894821,
+          "rescue_delta": 0.004651086266881099
+        }
+      ],
+      "desired_direction_both_tasks": false
+    },
+    {
+      "phase": "approach",
+      "sector": "r0_c1",
+      "tasks": [
+        {
+          "task": "close_drawer",
+          "harm_delta": -0.03989415813807997,
+          "rescue_delta": 0.00722666104145292
+        },
+        {
+          "task": "open_drawer",
+          "harm_delta": 0.020266268192477885,
+          "rescue_delta": -0.00784560906255991
+        }
+      ],
+      "desired_direction_both_tasks": false
+    },
+    {
+      "phase": "approach",
+      "sector": "r1_c0",
+      "tasks": [
+        {
+          "task": "close_drawer",
+          "harm_delta": 0.0,
+          "rescue_delta": 0.012804423691575362
+        },
+        {
+          "task": "open_drawer",
+          "harm_delta": 0.004533903249933441,
+          "rescue_delta": -0.011190242333510902
+        }
+      ],
+      "desired_direction_both_tasks": false
+    },
+    {
+      "phase": "approach",
+      "sector": "r1_c1",
+      "tasks": [
+        {
+          "task": "close_drawer",
+          "harm_delta": -0.02829285031965517,
+          "rescue_delta": -0.010568729840495561
+        },
+        {
+          "task": "open_drawer",
+          "harm_delta": 0.02136053511432575,
+          "rescue_delta": 0.014894147074535784
+        }
+      ],
+      "desired_direction_both_tasks": false
+    },
+    {
+      "phase": "approach",
+      "sector": "r2_c0",
+      "tasks": [
+        {
+          "task": "close_drawer",
+          "harm_delta": -0.02189158377795669,
+          "rescue_delta": -0.004538713771489141
+        },
+        {
+          "task": "open_drawer",
+          "harm_delta": 0.008860547859601487,
+          "rescue_delta": 0.00815789354722496
+        }
+      ],
+      "desired_direction_both_tasks": false
+    },
+    {
+      "phase": "approach",
+      "sector": "r2_c1",
+      "tasks": [
+        {
+          "task": "close_drawer",
+          "harm_delta": 0.0,
+          "rescue_delta": -0.016741972325231336
+        },
+        {
+          "task": "open_drawer",
+          "harm_delta": -0.017421231507512635,
+          "rescue_delta": -0.00994346095460156
+        }
+      ],
+      "desired_direction_both_tasks": false
+    },
+    {
+      "phase": "contact_or_motion",
+      "sector": "fallback_spatial_a",
+      "tasks": [
+        {
+          "task": "close_drawer",
+          "harm_delta": 0.014463886618614197,
+          "rescue_delta": null
+        },
+        {
+          "task": "open_drawer",
+          "harm_delta": null,
+          "rescue_delta": null
+        }
+      ],
+      "desired_direction_both_tasks": false
+    },
+    {
+      "phase": "contact_or_motion",
+      "sector": "fallback_spatial_b",
+      "tasks": [
+        {
+          "task": "close_drawer",
+          "harm_delta": 0.048406556248664856,
+          "rescue_delta": null
+        },
+        {
+          "task": "open_drawer",
+          "harm_delta": null,
+          "rescue_delta": null
+        }
+      ],
+      "desired_direction_both_tasks": false
+    },
+    {
+      "phase": "contact_or_motion",
+      "sector": "r0_c0",
+      "tasks": [
+        {
+          "task": "close_drawer",
+          "harm_delta": null,
+          "rescue_delta": -0.03457489050924778
+        },
+        {
+          "task": "open_drawer",
+          "harm_delta": -0.006901300046592951,
+          "rescue_delta": 0.031739041209220886
+        }
+      ],
+      "desired_direction_both_tasks": false
+    },
+    {
+      "phase": "contact_or_motion",
+      "sector": "r0_c1",
+      "tasks": [
+        {
+          "task": "close_drawer",
+          "harm_delta": null,
+          "rescue_delta": 0.009050301276147366
+        },
+        {
+          "task": "open_drawer",
+          "harm_delta": -0.005238235741853714,
+          "rescue_delta": 0.0019085973501205445
+        }
+      ],
+      "desired_direction_both_tasks": false
+    },
+    {
+      "phase": "contact_or_motion",
+      "sector": "r1_c0",
+      "tasks": [
+        {
+          "task": "close_drawer",
+          "harm_delta": 0.0,
+          "rescue_delta": -0.003441993147134781
+        },
+        {
+          "task": "open_drawer",
+          "harm_delta": -0.006901300046592951,
+          "rescue_delta": 0.01145356148481369
+        }
+      ],
+      "desired_direction_both_tasks": false
+    },
+    {
+      "phase": "contact_or_motion",
+      "sector": "r1_c1",
+      "tasks": [
+        {
+          "task": "close_drawer",
+          "harm_delta": 0.0,
+          "rescue_delta": 0.025082368403673172
+        },
+        {
+          "task": "open_drawer",
+          "harm_delta": -0.00552104003727436,
+          "rescue_delta": 0.026034195721149445
+        }
+      ],
+      "desired_direction_both_tasks": false
+    },
+    {
+      "phase": "contact_or_motion",
+      "sector": "r2_c0",
+      "tasks": [
+        {
+          "task": "close_drawer",
+          "harm_delta": 0.0,
+          "rescue_delta": 0.006989837313691775
+        },
+        {
+          "task": "open_drawer",
+          "harm_delta": 0.002048752456903458,
+          "rescue_delta": -0.004529322683811188
+        }
+      ],
+      "desired_direction_both_tasks": false
+    },
+    {
+      "phase": "contact_or_motion",
+      "sector": "r2_c1",
+      "tasks": [
+        {
+          "task": "close_drawer",
+          "harm_delta": 0.0,
+          "rescue_delta": -0.016620200127363205
+        },
+        {
+          "task": "open_drawer",
+          "harm_delta": -0.0029834358021616934,
+          "rescue_delta": -0.009422154165804386
+        }
+      ],
+      "desired_direction_both_tasks": false
+    },
+    {
+      "phase": "late",
+      "sector": "fallback_spatial_a",
+      "tasks": [
+        {
+          "task": "close_drawer",
+          "harm_delta": null,
+          "rescue_delta": null
+        },
+        {
+          "task": "open_drawer",
+          "harm_delta": null,
+          "rescue_delta": null
+        }
+      ],
+      "desired_direction_both_tasks": false
+    },
+    {
+      "phase": "late",
+      "sector": "fallback_spatial_b",
+      "tasks": [
+        {
+          "task": "close_drawer",
+          "harm_delta": null,
+          "rescue_delta": null
+        },
+        {
+          "task": "open_drawer",
+          "harm_delta": null,
+          "rescue_delta": null
+        }
+      ],
+      "desired_direction_both_tasks": false
+    },
+    {
+      "phase": "late",
+      "sector": "r0_c0",
+      "tasks": [
+        {
+          "task": "close_drawer",
+          "harm_delta": 0.0,
+          "rescue_delta": 0.0
+        },
+        {
+          "task": "open_drawer",
+          "harm_delta": -0.0005258169956505298,
+          "rescue_delta": 0.0
+        }
+      ],
+      "desired_direction_both_tasks": false
+    },
+    {
+      "phase": "late",
+      "sector": "r0_c1",
+      "tasks": [
+        {
+          "task": "close_drawer",
+          "harm_delta": 0.0,
+          "rescue_delta": 0.0
+        },
+        {
+          "task": "open_drawer",
+          "harm_delta": 0.020610885601490735,
+          "rescue_delta": 0.0
+        }
+      ],
+      "desired_direction_both_tasks": false
+    },
+    {
+      "phase": "late",
+      "sector": "r1_c0",
+      "tasks": [
+        {
+          "task": "close_drawer",
+          "harm_delta": 0.0,
+          "rescue_delta": 0.0
+        },
+        {
+          "task": "open_drawer",
+          "harm_delta": -0.003709929157048464,
+          "rescue_delta": -0.06345072450737159
+        }
+      ],
+      "desired_direction_both_tasks": false
+    },
+    {
+      "phase": "late",
+      "sector": "r1_c1",
+      "tasks": [
+        {
+          "task": "close_drawer",
+          "harm_delta": 0.0,
+          "rescue_delta": 0.0
+        },
+        {
+          "task": "open_drawer",
+          "harm_delta": 0.0004271388053894043,
+          "rescue_delta": 0.0
+        }
+      ],
+      "desired_direction_both_tasks": false
+    },
+    {
+      "phase": "late",
+      "sector": "r2_c0",
+      "tasks": [
+        {
+          "task": "close_drawer",
+          "harm_delta": -0.001305719216664632,
+          "rescue_delta": 0.0
+        },
+        {
+          "task": "open_drawer",
+          "harm_delta": -0.004203656874608249,
+          "rescue_delta": -0.02456504851579666
+        }
+      ],
+      "desired_direction_both_tasks": false
+    },
+    {
+      "phase": "late",
+      "sector": "r2_c1",
+      "tasks": [
+        {
+          "task": "close_drawer",
+          "harm_delta": 0.012652312715848288,
+          "rescue_delta": 0.0
+        },
+        {
+          "task": "open_drawer",
+          "harm_delta": 0.013570836465805768,
+          "rescue_delta": 0.00022616485754648843
+        }
+      ],
+      "desired_direction_both_tasks": true
+    }
+  ],
+  "stable_token_candidates": [
+    {
+      "phase": "late",
+      "sector": "r2_c1",
+      "tasks": [
+        {
+          "task": "close_drawer",
+          "harm_delta": 0.012652312715848288,
+          "rescue_delta": 0.0
+        },
+        {
+          "task": "open_drawer",
+          "harm_delta": 0.013570836465805768,
+          "rescue_delta": 0.00022616485754648843
+        }
+      ],
+      "desired_direction_both_tasks": true
+    }
+  ],
+  "interpretation_boundary": "Same-state 10-action physical progress; not full-episode success."
+}

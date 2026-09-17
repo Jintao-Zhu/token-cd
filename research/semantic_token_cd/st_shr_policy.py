@@ -195,6 +195,11 @@ class STSHRCDInference(AuditedEntityCDInference):
         negative = _action_logits(self, negative_scores)
         residual = (torch.log_softmax(torch.from_numpy(positive).float(), dim=-1)
                     - torch.log_softmax(torch.from_numpy(negative).float(), dim=-1)).numpy()
+        centered_logit_residual = torch.from_numpy(positive[:6].astype(np.float32) - negative[:6].astype(np.float32))
+        centered_logit_residual -= centered_logit_residual.mean(dim=-1, keepdim=True)
+        clean_decoded = self._decode_actions(clean_token_ids, self.unnorm_key)
+        guided_decoded = self._decode_actions(token_ids, self.unnorm_key)
+        feature_perturbation = h_negative - h
         if self._previous_residual is None:
             temporal_cos, temporal_jerk = None, None
         else:
@@ -213,9 +218,26 @@ class STSHRCDInference(AuditedEntityCDInference):
             "residual_temporal_cos": temporal_cos, "residual_jerk": temporal_jerk,
             "residual_norm": float(np.linalg.norm(residual)), "guided_prefix": True,
             "feature_equal": True, "reconstruction_finite": bool(np.isfinite(h_negative).all()),
+            "non_target_bit_identical": bool(np.array_equal(
+                h_negative[np.asarray([i for i in range(256) if i not in claimed])],
+                h[np.asarray([i for i in range(256) if i not in claimed])],
+            )),
+            "feature_perturbation_norm": float(np.linalg.norm(feature_perturbation)),
+            "feature_perturbation_relative": float(
+                np.linalg.norm(feature_perturbation) / (np.linalg.norm(h) + EPS)
+            ),
+            "centered_logit_residual_norm": float(torch.linalg.vector_norm(centered_logit_residual).item()),
+            "centered_logit_residual_norm_per_dim": [
+                float(value) for value in torch.linalg.vector_norm(centered_logit_residual, dim=-1)
+            ],
             "positive_token_ids": clean_scores.argmax(-1).detach().cpu().tolist(),
             "negative_token_ids": negative_scores.argmax(-1).detach().cpu().tolist(),
             "final_token_ids": token_ids.detach().cpu().tolist(),
+            "guided_changed_dims": int((token_ids[:6] != clean_token_ids[:6]).sum().item()),
+            "guided_change_ratio": float((token_ids[:6] != clean_token_ids[:6]).float().mean().item()),
+            "clean_action": np.asarray(clean_decoded).tolist(),
+            "guided_action": np.asarray(guided_decoded).tolist(),
+            "guided_clean_action_l2": float(np.linalg.norm(guided_decoded[:6] - clean_decoded[:6])),
             **guidance_meta,
         }
         self._episode_logits.append({"positive": positive, "negative": negative})

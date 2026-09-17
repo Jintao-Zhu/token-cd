@@ -1,0 +1,18 @@
+{
+  "date": "2026-09-15",
+  "gpus": [
+    2,
+    3
+  ],
+  "intervention_direction": "shared-prefix log-softmax residual between clean and reconstructed negative branch",
+  "manual_target_boxes_used": false,
+  "mask_budget": "cached own-state matched m_t",
+  "primary_metric": "mean cosine over action dimensions 0..5",
+  "primary_ranking": "exploration mean causal margin = Top-m alignment - max(Random, Bottom, wrong-Prompt Top-m)",
+  "prompt_direction": "shared-original-action-prefix log-softmax residual between original and changed-target Prompt",
+  "protocol_id": "PROMPT_ACTION_LAYER_CAUSAL_V1",
+  "purpose": "box-free action-level screen of OpenVLA layers 0..31",
+  "reconstruction": "16x16 four-neighbor harmonic beta=0",
+  "states": "9 existing same-image target switches; 6 exploration / 3 frozen validation",
+  "validation": "candidate weights and ranking frozen before reading 3 validation states"
+}

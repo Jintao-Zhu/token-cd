@@ -1,0 +1,49 @@
+{
+  "arms": [
+    "correct",
+    "positive_boost_0p5",
+    "positive_boost_1p0",
+    "reverse_boost_1p0"
+  ],
+  "attention_layers": [
+    11
+  ],
+  "coverage": "own-state Standard-SHR matched m; all arms exact m",
+  "decode": "real instruction, harmonic beta0 gamma1, shared clean prefix, lambda0.5 dims0..5",
+  "formulae": {
+    "positive_boost_0p5": "P + 0.5*max(P-Q,0)",
+    "positive_boost_1p0": "P + max(P-Q,0)",
+    "reverse_boost_1p0": "P + max(Q-P,0)"
+  },
+  "gate": "eta0 exact Correct; exact m; entered-token direction; generic paraphrase stability",
+  "generic_instructions": {
+    "google_robot_close_drawer": [
+      "close a drawer",
+      "close the drawer"
+    ],
+    "google_robot_move_near": [
+      "move something near something else",
+      "move one item near another"
+    ],
+    "google_robot_open_drawer": [
+      "open a drawer",
+      "open the drawer"
+    ],
+    "google_robot_pick_coke_can": [
+      "pick something up",
+      "pick up an item"
+    ]
+  },
+  "lambda": 0.5,
+  "new_closed_loop_episodes": 1200,
+  "protocol": "TARGET_POSITIVE_BOOST_SHR_V1",
+  "reused_correct_episodes": 400,
+  "seeds": "0-99",
+  "source_offline": "/home/leju-suzhou/zjt_ws/token-cd/artifacts/target_specific_attention_shr_v1/offline",
+  "tasks": [
+    "google_robot_open_drawer",
+    "google_robot_close_drawer",
+    "google_robot_pick_coke_can",
+    "google_robot_move_near"
+  ]
+}

@@ -1,0 +1,54 @@
+{
+  "code_version": {
+    "git_commit": "3ed781f5f1fbfad6ebf6c4dd5678d34c4f86bbce",
+    "policy_sha256": "aed9f6cf66c92b9b7ecf5b36602dcb4722d3c6107fe4d951248def084999e8b0",
+    "rollout_sha256": "37fefd3610262b21f306efadc95d28bbfa965e5ca507d42de03c5ade3446e38f"
+  },
+  "confirmation_arms": [
+    "l11_fixed_025",
+    "development-selected adaptive arm"
+  ],
+  "confirmation_seeds": [
+    100,
+    299
+  ],
+  "controller": {
+    "correction": "six-dimensional soft expected normalized action; gripper excluded",
+    "correction_epsilon": 1e-06,
+    "ema_rho": 0.5,
+    "first_step_lambda": 0.5,
+    "fixed_low_lambda": 0.25,
+    "forward_overhead": 0,
+    "lambda_min": 0.1,
+    "probe_lambda": 0.5,
+    "raw_mapping": "0.1 + 0.4 * clip(cosine, 0, 1)",
+    "small_norm_rule": "hold previous lambda"
+  },
+  "created_date": "2026-09-13",
+  "development_arms": [
+    "l11_fixed_025",
+    "l11_adaptive_raw",
+    "l11_adaptive_ema"
+  ],
+  "development_seeds": [
+    0,
+    99
+  ],
+  "protocol_id": "PROMPT_ATTN_L11_ADAPTIVE_LAMBDA_4TASK_V1",
+  "purpose": "test whether temporal consistency can preserve L11 rescues while reducing harms",
+  "selector": {
+    "attention_layers": [
+      11
+    ],
+    "coverage": "own-state Standard-SHR matched m_t",
+    "harmonic": "16x16 four-neighbor Dirichlet beta=0",
+    "mode": "prompt_attention"
+  },
+  "snapshot_artifact": "/home/leju-suzhou/zjt_ws/token-cd/artifacts/vanilla_recon_shr_canonical_0_299_v2",
+  "tasks": [
+    "google_robot_close_drawer",
+    "google_robot_pick_coke_can",
+    "google_robot_move_near",
+    "widowx_carrot_on_plate"
+  ]
+}

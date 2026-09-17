@@ -1,0 +1,37 @@
+{
+  "protocol": "VLA_PRUNER_OPENVLA_REPRODUCTION_V1",
+  "research_question": "Same checkpoint/snapshot/seed/instruction/postprocess/harness: VLA-Pruner-only better or no worse than Vanilla OpenVLA?",
+  "source_repo": {
+    "url": "https://github.com/MINT-SJTU/VLA-Pruner.git",
+    "local": "/home/leju-suzhou/zjt_ws/VLA-Pruner",
+    "commit": "84d4b71"
+  },
+  "main_method": {
+    "use_fastv": true,
+    "fastv_k": 3,
+    "image_token_start_index": 1,
+    "image_token_length": 256,
+    "use_temporal": true,
+    "temporal_w": 3,
+    "temporal_gamma": 0.8,
+    "use_prefil_attention": true,
+    "use_text_vision_selection": false,
+    "sparsevlm": false,
+    "criterion_note": "paper-main = prefill selection + temporal (README '*_prefil.sh'); fastv_r is REMOVAL ratio, keep=round(256*(1-r))"
+  },
+  "arms": [
+    {"arm": "vanilla", "fastv_r": null, "enabled": false, "note": "current-harness vanilla, identical snapshot+seed"},
+    {"arm": "vla_pruner_r0", "fastv_r": 0.0, "enabled": true, "note": "sanity arm: must equal vanilla token-exact"},
+    {"arm": "vla_pruner_prune25", "fastv_r": 0.25, "enabled": true, "note": "keep ~192 visual tokens"},
+    {"arm": "vla_pruner_prune50", "fastv_r": 0.50, "enabled": true, "note": "keep 128 visual tokens"}
+  ],
+  "frozen_identical_across_arms": [
+    "checkpoint", "simulator snapshot", "seed", "instruction", "action unnormalization",
+    "google_robot postprocess", "sticky gripper", "success criterion", "technical_pass", "rollout restore logic"
+  ],
+  "excluded_this_round": ["Prompt-CD", "SHR", "HH", "historical-HH", "DTP", "lambda", "other attention intervention"],
+  "deliverables": [
+    "IMPLEMENTATION_GAP.md", "offline_sanity_report.md", "closed_loop_results.csv",
+    "paired_rescue_harm.csv", "latency_report.csv", "SUMMARY.md"
+  ]
+}
