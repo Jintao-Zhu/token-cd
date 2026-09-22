@@ -1,0 +1,73 @@
+{
+  "environment_adaptation": {
+    "action_execution": "prepare_env_action with existing LIBERO gripper normalization",
+    "checkpoint_local_dir": "/home/leju-suzhou/zjt_ws/checkpoints/libero/vq-vla-openvla-7b-libero90",
+    "checkpoint_repo": "VQ-VLA/openvla-7b-finetuned-libero-90",
+    "checkpoint_revision": "794ef81b7be928ea9270e81ca1ef5b60ffa9420f",
+    "entity_parser": "source_target_libero90",
+    "init_states_per_task": 50,
+    "max_control_steps": 400,
+    "suite": "libero_90",
+    "tasks": [
+      3,
+      10,
+      49,
+      72,
+      73
+    ],
+    "unnorm_key": "libero_90_no_noops",
+    "warmup_steps": 10
+  },
+  "method": {
+    "attention_layers": [
+      11
+    ],
+    "budget": "m = number of unique visual tokens in matched group union; recomputed each control step",
+    "entity_embedding": "mean-pooled token embeddings",
+    "entity_match": "source+target; per-entity top-1 cosine KMeans group; deduplicated group union",
+    "guidance": {
+      "formula": "(1+lambda)*clean - lambda*negative",
+      "gripper": "clean dimension 6",
+      "guided_dimensions": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5
+      ]
+    },
+    "harmonic": {
+      "beta": 0.0,
+      "gamma": 1.0,
+      "grid": "16x16",
+      "neighbors": 4,
+      "solver": "np.linalg.solve"
+    },
+    "head_query_aggregation": "equal arithmetic mean over all heads and query tokens",
+    "intervention_every_control_step": true,
+    "kmeans": {
+      "K": 8,
+      "features": "projector h_i",
+      "n_init": 10,
+      "seed": 0
+    },
+    "lambda": 0.5,
+    "mask_ranking": "stable L11 Top-m, ascending token index tie-break",
+    "prefix": "shared clean greedy prefix",
+    "query": "full instruction excluding special/template/padding tokens",
+    "sampling": false,
+    "spatial_postprocessing": false
+  },
+  "provenance_evidence": [
+    "docs/2026-09-17_matched_vs_topp_INVESTIGATION.md",
+    "docs/2026-09-18_EXPERIMENT_LOG.md",
+    "artifacts/prompt_attn_l11_token_count_v1/CONFIG_LOCK.json",
+    "research/semantic_token_cd/prompt_attn_shr_policy.py",
+    "research/semantic_token_cd/distractor_policy.py",
+    "research/semantic_token_cd/rollout_policy.py",
+    "research/semantic_token_cd/st_shr_policy.py"
+  ],
+  "source_protocol": "PROMPT_ATTN_L11_TOKEN_COUNT_V1",
+  "source_result": "Matched 213/400 across 4 tasks x seeds 100-199"
+}

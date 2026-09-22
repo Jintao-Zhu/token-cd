@@ -1,0 +1,280 @@
+{
+  "attention_query_indices": [
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20,
+    21,
+    22,
+    23,
+    24,
+    25,
+    26,
+    27
+  ],
+  "attention_shape": [
+    256
+  ],
+  "checks": {
+    "attention_extraction_vanilla_action_max_abs_diff": 0.0,
+    "attention_extraction_vanilla_token_match": true,
+    "guided_action_finite": true,
+    "guided_changed_dims": 1,
+    "guided_features_changed": true,
+    "guided_formula_ids_match": true,
+    "guided_mask_nonempty": true,
+    "guided_mask_unique": true,
+    "identity_reconstruction_action_bin_max_abs_logit_diff": 1.0,
+    "identity_reconstruction_action_ids_match": true,
+    "identity_reconstruction_note": "identity branch uses an empty no-op selection; bf16 generation-vs-teacher-forced logits differ slightly but all seven action-bin argmax tokens match",
+    "lambda_zero_action_max_abs_diff": 0.0,
+    "lambda_zero_ids_match": true
+  },
+  "clean_action": [
+    0.0007930791845508489,
+    0.03507877436338691,
+    0.020089298486709595,
+    0.0004621870523574406,
+    -0.01856933294558058,
+    -0.009573522210121144,
+    0.996078431372549
+  ],
+  "clean_ids": [
+    31891,
+    31865,
+    31872,
+    31898,
+    31894,
+    31890,
+    31744
+  ],
+  "entities": [
+    "butter at the back",
+    "top drawer of the cabinet"
+  ],
+  "env_seed": 0,
+  "feature_perturbation_norm": 74.76006317138672,
+  "feature_perturbation_relative": 0.17526882139704736,
+  "guided_action": [
+    0.0007930791845508489,
+    0.03507877436338691,
+    0.020089298486709595,
+    0.0004621870523574406,
+    -0.01856933294558058,
+    -0.014506295323371887,
+    0.996078431372549
+  ],
+  "guided_ids": [
+    31891,
+    31865,
+    31872,
+    31898,
+    31894,
+    31892,
+    31744
+  ],
+  "h_shape": [
+    256,
+    4096
+  ],
+  "init_state_index": 0,
+  "instruction": "put the butter at the back in the top drawer of the cabinet and close it",
+  "instruction_span": [
+    10,
+    28
+  ],
+  "kmeans_cluster_token_ids": [
+    21,
+    22,
+    37,
+    38,
+    39,
+    40,
+    41,
+    42,
+    54,
+    55,
+    56,
+    57,
+    58
+  ],
+  "kmeans_groups": [
+    4
+  ],
+  "lambda_zero_action": [
+    0.0007930791845508489,
+    0.03507877436338691,
+    0.020089298486709595,
+    0.0004621870523574406,
+    -0.01856933294558058,
+    -0.009573522210121144,
+    0.996078431372549
+  ],
+  "lambda_zero_ids": [
+    31891,
+    31865,
+    31872,
+    31898,
+    31894,
+    31890,
+    31744
+  ],
+  "m_matched": 13,
+  "meta_lambda_zero": {
+    "attention_heads": [],
+    "attention_layers": [
+      11
+    ],
+    "attention_query_mode": "instruction_only",
+    "attention_sha256": "2f34cd3304eb25b8c724c575f17e0110ffc07ff952fcc236aa0b183919fff316",
+    "attention_top_m_token_ids": [
+      55,
+      56,
+      57,
+      58,
+      135,
+      136,
+      137,
+      138,
+      139,
+      147,
+      152,
+      154,
+      155
+    ],
+    "destination_weight": 0.0,
+    "entities": [
+      "butter at the back",
+      "top drawer of the cabinet"
+    ],
+    "entity_mode": "source_target_libero90",
+    "eos_token_id": 2,
+    "feature_perturbation_norm": 74.76006317138672,
+    "feature_perturbation_relative": 0.17526882139704736,
+    "final_token_ids": [
+      31891,
+      31865,
+      31872,
+      31898,
+      31894,
+      31890,
+      31744
+    ],
+    "guided_changed_dims": 0,
+    "guided_prefix": true,
+    "kmeans_cluster_token_ids": [
+      21,
+      22,
+      37,
+      38,
+      39,
+      40,
+      41,
+      42,
+      54,
+      55,
+      56,
+      57,
+      58
+    ],
+    "kmeans_groups": [
+      4
+    ],
+    "lambda": 0.0,
+    "lambda_scale": 0.0,
+    "m_matched": 13,
+    "negative_token_ids": [
+      31887,
+      31870,
+      31872,
+      31898,
+      31894,
+      31890,
+      31744
+    ],
+    "non_target_bit_identical": true,
+    "position_mode": "attention",
+    "positive_token_ids": [
+      31891,
+      31865,
+      31872,
+      31898,
+      31894,
+      31890,
+      31744
+    ],
+    "priority_token_count": 0,
+    "reconstruction_finite": true,
+    "reference_priority_token_count": 0,
+    "selected_attention_jaccard": 1.0,
+    "selected_attention_overlap_count": 13,
+    "selected_outside_priority_count": 13,
+    "selected_priority_count": 0,
+    "selected_reference_count": 0,
+    "selected_target_count": 0,
+    "selected_token_ids": [
+      55,
+      56,
+      57,
+      58,
+      135,
+      136,
+      137,
+      138,
+      139,
+      147,
+      152,
+      154,
+      155
+    ],
+    "target_priority_token_count": 0,
+    "unnorm_key": "libero_90_no_noops"
+  },
+  "overall_pass": true,
+  "selected_token_count": 13,
+  "selected_token_ids": [
+    55,
+    56,
+    57,
+    58,
+    135,
+    136,
+    137,
+    138,
+    139,
+    147,
+    152,
+    154,
+    155
+  ],
+  "selected_unique": true,
+  "settle_steps": 10,
+  "task_id": 3,
+  "task_name": "KITCHEN_SCENE10_put_the_butter_at_the_back_in_the_top_drawer_of_the_cabinet_and_close_it",
+  "unnorm_key": "libero_90_no_noops",
+  "vanilla_action": [
+    0.0007930791845508489,
+    0.03507877436338691,
+    0.020089298486709595,
+    0.0004621870523574406,
+    -0.01856933294558058,
+    -0.009573522210121144,
+    0.996078431372549
+  ],
+  "vanilla_ids": [
+    31891,
+    31865,
+    31872,
+    31898,
+    31894,
+    31890,
+    31744
+  ]
+}
