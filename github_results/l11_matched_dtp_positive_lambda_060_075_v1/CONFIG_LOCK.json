@@ -1,0 +1,32 @@
+{
+  "protocol": "L11_MATCHED_AND_DTP_POSITIVE_HIGH_LAMBDA_V1",
+  "new_episodes": 1600,
+  "tasks": [
+    "google_robot_open_drawer",
+    "google_robot_close_drawer",
+    "google_robot_pick_coke_can",
+    "google_robot_move_near"
+  ],
+  "seeds": "0-99",
+  "arms": {
+    "l11_matched_lambda_0p6": {"family": "pure_l11_matched", "lambda": 0.6},
+    "l11_matched_lambda_0p75": {"family": "pure_l11_matched", "lambda": 0.75},
+    "dtp_l11_lambda_0p6": {"family": "dtp_fixed_positive_l11_matched_negative", "lambda": 0.6},
+    "dtp_l11_lambda_0p75": {"family": "dtp_fixed_positive_l11_matched_negative", "lambda": 0.75}
+  },
+  "pure_l11": {
+    "positive": "unmodified OpenVLA",
+    "negative": "L11-Matched harmonic reconstruction beta0"
+  },
+  "dtp_l11": {
+    "positive": "DTP-Fixed L11/k64/tau0.5 clean-dim0 fixed mask",
+    "negative": "unpruned L11-Matched harmonic reconstruction beta0"
+  },
+  "shared": {
+    "guided_dimensions": [0, 1, 2, 3, 4, 5],
+    "gripper": "positive branch unchanged",
+    "coverage": "own-state standard SHR semantic-group count",
+    "snapshots": "canonical seeds 0-99"
+  },
+  "execution": "GPU2/3, three resumable tmux workers each"
+}

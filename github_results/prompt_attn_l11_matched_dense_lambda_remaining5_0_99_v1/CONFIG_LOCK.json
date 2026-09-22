@@ -1,0 +1,69 @@
+{
+  "arms": {
+    "l11_matched_lambda_010": 0.1,
+    "l11_matched_lambda_015": 0.15,
+    "l11_matched_lambda_020": 0.2,
+    "l11_matched_lambda_025": 0.25,
+    "l11_matched_lambda_030": 0.3,
+    "l11_matched_lambda_035": 0.35,
+    "l11_matched_lambda_040": 0.4,
+    "l11_matched_lambda_045": 0.45,
+    "l11_matched_lambda_055": 0.55,
+    "l11_matched_lambda_060": 0.6,
+    "l11_matched_lambda_075": 0.75
+  },
+  "canonical_snapshot_artifact": "/home/leju-suzhou/zjt_ws/token-cd/artifacts/vanilla_recon_shr_canonical_0_299_v2",
+  "code_version": {
+    "base_rollout_sha256": "d4c4693fbdd699f0f8d7fdc564e59b3fce88443a00cd72fef7c4bcfd65282a75",
+    "git_commit": "3ed781f5f1fbfad6ebf6c4dd5678d34c4f86bbce",
+    "policy_sha256": "5620ed356a6ff0070125a58b8ff6a447e81f001dbb31b384da593c2f78cdddac",
+    "wrapper_sha256": "81e8772374284f288f1bbbec7666a6f02fa5b61c970adeb61d41e660a56eb85a"
+  },
+  "compute": {
+    "gpus": [
+      2,
+      3
+    ],
+    "processes_per_gpu": 3
+  },
+  "created_date": "2026-09-15",
+  "locked_selector": {
+    "beta": 0.0,
+    "coverage": "own-state Standard-SHR matched m_t",
+    "layers": [
+      11
+    ],
+    "mode": "prompt_attention"
+  },
+  "new_episodes": 5500,
+  "new_lambdas": [
+    0.1,
+    0.15,
+    0.2,
+    0.25,
+    0.3,
+    0.35,
+    0.4,
+    0.45,
+    0.55,
+    0.6,
+    0.75
+  ],
+  "protocol_id": "PROMPT_ATTN_L11_MATCHED_DENSE_LAMBDA_REMAINING5_V1",
+  "purpose": "replicate the 13-point L11-Matched lambda curve on the remaining five tasks",
+  "reused_lambdas": [
+    0.0,
+    0.5
+  ],
+  "seeds": [
+    0,
+    99
+  ],
+  "tasks": [
+    "google_robot_place_apple_in_closed_top_drawer",
+    "widowx_carrot_on_plate",
+    "widowx_put_eggplant_in_basket",
+    "widowx_spoon_on_towel",
+    "widowx_stack_cube"
+  ]
+}

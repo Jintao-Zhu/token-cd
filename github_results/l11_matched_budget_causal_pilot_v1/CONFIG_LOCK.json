@@ -1,0 +1,36 @@
+{
+  "attention_layers": [
+    11
+  ],
+  "canonical_source": "artifacts/vanilla_recon_shr_canonical_0_299_v2",
+  "created_date": "2026-09-14",
+  "gpu_policy": "only GPUs 2 and 3; exactly two worker processes per GPU after preflight",
+  "lambda": 0.5,
+  "matched_reused_episodes": 100,
+  "matched_source": "artifacts/prompt_attn_l11_token_count_v1",
+  "new_arms": [
+    "global_shuffle",
+    "within_task_shuffle",
+    "episode_fixed",
+    "matched_scale_050",
+    "matched_scale_075",
+    "matched_scale_125",
+    "matched_scale_150"
+  ],
+  "new_episode_count": 700,
+  "pilot_seeds": [
+    100,
+    124
+  ],
+  "protocol_id": "PROMPT_ATTN_L11_MATCHED_BUDGET_CAUSAL_PILOT_V1",
+  "ranking": "Prompt-L11 descending score with stable token-id tie break",
+  "reconstruction": "harmonic",
+  "schedule_sha256": "03ba7b06c0ba7a80d080009bc7d1b7ebe3fa7e22a6541eece7db697840d71912",
+  "screening_rule": "Extend if any shuffle/episode-fixed matched advantage or any scale paired net has absolute magnitude >=5/100 pilot episodes.",
+  "tasks": [
+    "google_robot_open_drawer",
+    "google_robot_close_drawer",
+    "google_robot_pick_coke_can",
+    "google_robot_move_near"
+  ]
+}

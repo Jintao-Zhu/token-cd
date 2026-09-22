@@ -1,0 +1,238 @@
+{
+  "arms": [
+    "vanilla",
+    "vla_pruner_prune25",
+    "vla_pruner_prune50"
+  ],
+  "decision_status": "PENDING -- review Rescue/Harm + per-task distribution, then freeze one cross-task config for the formal 400-episode run",
+  "deliverables": {
+    "closed_loop_results.csv": "closed_loop_results.csv",
+    "latency_report.csv": "latency_report.csv",
+    "paired_rescue_harm.csv": "paired_rescue_harm.csv"
+  },
+  "paired_rescue_harm": {
+    "vla_pruner_prune25": {
+      "harm": 4,
+      "net": -1,
+      "rescue": 3,
+      "unchanged": 15
+    },
+    "vla_pruner_prune50": {
+      "harm": 1,
+      "net": 0,
+      "rescue": 1,
+      "unchanged": 20
+    }
+  },
+  "per_task": {
+    "google_robot_close_drawer": {
+      "vanilla": {
+        "control_steps_total": 113,
+        "mean_kept_image_active": null,
+        "mean_overlap": null,
+        "n": 1,
+        "prune_activation_steps_total": 0,
+        "runtime_seconds_total": 58.3,
+        "success": 0,
+        "total_pruned_tokens": 0,
+        "total_token_flips": null
+      },
+      "vla_pruner_prune25": {
+        "control_steps_total": 113,
+        "mean_kept_image_active": 192.0,
+        "mean_overlap": 165.01,
+        "n": 1,
+        "prune_activation_steps_total": 110,
+        "runtime_seconds_total": 82.8,
+        "success": 1,
+        "total_pruned_tokens": 7040,
+        "total_token_flips": 118
+      },
+      "vla_pruner_prune50": {
+        "control_steps_total": 113,
+        "mean_kept_image_active": 128.0,
+        "mean_overlap": 102.74,
+        "n": 1,
+        "prune_activation_steps_total": 110,
+        "runtime_seconds_total": 84.5,
+        "success": 0,
+        "total_pruned_tokens": 14080,
+        "total_token_flips": 461
+      }
+    },
+    "google_robot_move_near": {
+      "vanilla": {
+        "control_steps_total": 800,
+        "mean_kept_image_active": null,
+        "mean_overlap": null,
+        "n": 10,
+        "prune_activation_steps_total": 0,
+        "runtime_seconds_total": 238.6,
+        "success": 7,
+        "total_pruned_tokens": 0,
+        "total_token_flips": null
+      },
+      "vla_pruner_prune25": {
+        "control_steps_total": 800,
+        "mean_kept_image_active": 192.0,
+        "mean_overlap": 168.4,
+        "n": 10,
+        "prune_activation_steps_total": 770,
+        "runtime_seconds_total": 419.1,
+        "success": 6,
+        "total_pruned_tokens": 49280,
+        "total_token_flips": 1527
+      },
+      "vla_pruner_prune50": {
+        "control_steps_total": 800,
+        "mean_kept_image_active": 128.0,
+        "mean_overlap": 105.92,
+        "n": 10,
+        "prune_activation_steps_total": 770,
+        "runtime_seconds_total": 407.5,
+        "success": 7,
+        "total_pruned_tokens": 98560,
+        "total_token_flips": 2303
+      }
+    },
+    "google_robot_open_drawer": {
+      "vanilla": {
+        "control_steps_total": 113,
+        "mean_kept_image_active": null,
+        "mean_overlap": null,
+        "n": 1,
+        "prune_activation_steps_total": 0,
+        "runtime_seconds_total": 42.4,
+        "success": 0,
+        "total_pruned_tokens": 0,
+        "total_token_flips": null
+      },
+      "vla_pruner_prune25": {
+        "control_steps_total": 113,
+        "mean_kept_image_active": 192.0,
+        "mean_overlap": 166.3,
+        "n": 1,
+        "prune_activation_steps_total": 110,
+        "runtime_seconds_total": 62.8,
+        "success": 0,
+        "total_pruned_tokens": 7040,
+        "total_token_flips": 400
+      },
+      "vla_pruner_prune50": {
+        "control_steps_total": 113,
+        "mean_kept_image_active": 128.0,
+        "mean_overlap": 104.68,
+        "n": 1,
+        "prune_activation_steps_total": 110,
+        "runtime_seconds_total": 63.1,
+        "success": 0,
+        "total_pruned_tokens": 14080,
+        "total_token_flips": 269
+      }
+    },
+    "google_robot_pick_coke_can": {
+      "vanilla": {
+        "control_steps_total": 800,
+        "mean_kept_image_active": null,
+        "mean_overlap": null,
+        "n": 10,
+        "prune_activation_steps_total": 0,
+        "runtime_seconds_total": 258.2,
+        "success": 3,
+        "total_pruned_tokens": 0,
+        "total_token_flips": null
+      },
+      "vla_pruner_prune25": {
+        "control_steps_total": 800,
+        "mean_kept_image_active": 192.0,
+        "mean_overlap": 171.52,
+        "n": 10,
+        "prune_activation_steps_total": 770,
+        "runtime_seconds_total": 458.8,
+        "success": 2,
+        "total_pruned_tokens": 49280,
+        "total_token_flips": 1250
+      },
+      "vla_pruner_prune50": {
+        "control_steps_total": 800,
+        "mean_kept_image_active": 128.0,
+        "mean_overlap": 105.2,
+        "n": 10,
+        "prune_activation_steps_total": 770,
+        "runtime_seconds_total": 428.2,
+        "success": 3,
+        "total_pruned_tokens": 98560,
+        "total_token_flips": 1749
+      }
+    }
+  },
+  "protocol_id": "VLA_PRUNER_OPENVLA_REPRODUCTION_V1",
+  "scenes": {
+    "google_robot_close_drawer": [
+      118
+    ],
+    "google_robot_move_near": [
+      101,
+      112,
+      119,
+      120,
+      123,
+      131,
+      133,
+      135,
+      136,
+      152
+    ],
+    "google_robot_open_drawer": [
+      118
+    ],
+    "google_robot_pick_coke_can": [
+      100,
+      101,
+      102,
+      103,
+      104,
+      105,
+      106,
+      107,
+      108,
+      109
+    ]
+  },
+  "stage": "closed_loop_calibration_22scenes",
+  "totals": {
+    "vanilla": {
+      "control_steps_total": 1826,
+      "mean_kept_image_active": null,
+      "mean_overlap": null,
+      "n": 22,
+      "prune_activation_steps_total": 0,
+      "runtime_seconds_total": 597.5,
+      "success": 10,
+      "total_pruned_tokens": 0,
+      "total_token_flips": null
+    },
+    "vla_pruner_prune25": {
+      "control_steps_total": 1826,
+      "mean_kept_image_active": 192.0,
+      "mean_overlap": 169.57,
+      "n": 22,
+      "prune_activation_steps_total": 1760,
+      "runtime_seconds_total": 1023.5,
+      "success": 9,
+      "total_pruned_tokens": 112640,
+      "total_token_flips": 3295
+    },
+    "vla_pruner_prune50": {
+      "control_steps_total": 1826,
+      "mean_kept_image_active": 128.0,
+      "mean_overlap": 105.39,
+      "n": 22,
+      "prune_activation_steps_total": 1760,
+      "runtime_seconds_total": 983.4,
+      "success": 10,
+      "total_pruned_tokens": 225280,
+      "total_token_flips": 4782
+    }
+  }
+}

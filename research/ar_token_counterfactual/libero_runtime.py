@@ -87,7 +87,8 @@ def build_prompt(task_description: str) -> str:
 
 
 @torch.inference_mode()
-def predict_action(model: Any, processor: Any, image: Image.Image, task_description: str) -> np.ndarray:
+def predict_action(model: Any, processor: Any, image: Image.Image, task_description: str,
+                   unnorm_key: str = "libero_spatial") -> np.ndarray:
     inputs = processor(build_prompt(task_description), image).to(model.device, dtype=torch.bfloat16)
     if not torch.all(inputs["input_ids"][:, -1] == 29871):
         inputs["input_ids"] = torch.cat(
@@ -96,7 +97,7 @@ def predict_action(model: Any, processor: Any, image: Image.Image, task_descript
         inputs["attention_mask"] = torch.cat(
             [inputs["attention_mask"], torch.ones((1, 1), dtype=inputs["attention_mask"].dtype, device=model.device)], dim=1
         )
-    action = model.predict_action(**inputs, unnorm_key="libero_spatial", do_sample=False)
+    action = model.predict_action(**inputs, unnorm_key=unnorm_key, do_sample=False)
     if action.shape != (7,) or not np.isfinite(action).all():
         raise RuntimeError(f"Invalid action returned by OpenVLA: shape={action.shape}, action={action}")
     return action

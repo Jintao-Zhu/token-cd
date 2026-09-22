@@ -1,0 +1,60 @@
+{
+  "arms": [
+    "vanilla",
+    "shr_target",
+    "shr_other"
+  ],
+  "emit_states": "/home/leju-suzhou/zjt_ws/token-cd/artifacts/xdrawer_topmid_v1/runs/smoke/emitted_states",
+  "envs": {
+    "middle": "OpenMiddleDrawerCustomInScene-v0",
+    "top": "OpenTopDrawerCustomInScene-v0"
+  },
+  "instructions": {
+    "middle": "open middle drawer",
+    "top": "open top drawer"
+  },
+  "locked_downstream": {
+    "beta": 0.0,
+    "gripper": "clean positive dimension 6",
+    "guided_dimensions": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5
+    ],
+    "harmonic": "16x16 four-neighbor Dirichlet beta=0/gamma=1",
+    "lambda": 0.5,
+    "prefix": "shared clean greedy prefix",
+    "sampling": false,
+    "spatial_postprocessing": false
+  },
+  "protocol_id": "PROMPT_SIMREGION_OPEN_TOP_MID_V1",
+  "purpose": "cross-instruction simulator-region mechanism experiment (open top vs open middle)",
+  "region_rule": "3D drawer front+handle corners -> fixed overhead camera -> 16x16 token rectangle",
+  "region_rule_independent_of_instruction": true,
+  "seeds": [
+    100,
+    101,
+    102,
+    103,
+    104,
+    105,
+    106,
+    107,
+    108,
+    109,
+    110,
+    111,
+    112,
+    113,
+    114,
+    115,
+    116,
+    117,
+    118,
+    119
+  ],
+  "snapshot_root": "/home/leju-suzhou/zjt_ws/token-cd/artifacts/xdrawer_topmid_v1"
+}

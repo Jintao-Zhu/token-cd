@@ -1,0 +1,18 @@
+{
+  "protocol_id": "PSC_SHR_DRAWER_0_99_V1",
+  "method": "Positive-Support Constrained SHR",
+  "only_change": "mask fused logits to positive action-vocabulary Top-K before argmax",
+  "top_k": [10, 20],
+  "offline_only_noop": [50],
+  "lambda": 0.5,
+  "beta": 0.0,
+  "kmeans_K": 8,
+  "kmeans_seed": 0,
+  "guided_prefix": "positive greedy action prefix",
+  "constrained_dimensions": [0, 1, 2, 3, 4, 5],
+  "gripper_dimension_6": "positive passthrough",
+  "tasks": ["google_robot_close_drawer", "google_robot_open_drawer"],
+  "seeds": "0-99 canonical snapshots",
+  "episodes": 400,
+  "gpu_policy": "wait for IC-SHR completion, then use healthy GPUs 0-4 at 4 workers each"
+}

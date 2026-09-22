@@ -21,6 +21,8 @@ Reuse:
 """
 from __future__ import annotations
 
+import re
+
 import cv2
 import numpy as np
 import torch
@@ -55,22 +57,99 @@ LIBERO_PRONOUNS = {"it", "them", "this", "that", "itself"}
 
 
 def extract_entities_libero(instruction: str) -> list[str]:
-    """LIBERO-Object template-aware entity extraction (rule-based, no LLM/CLIP).
+    """Rule-based LIBERO entity extraction (no LLM/CLIP/GT object list).
 
-    "pick up the alphabet soup and place it in the basket" -> ["alphabet soup", "basket"].
-    Split on "and", then per clause drop determiners/prepositions/verbs/particles/pronouns.
+    The LIBERO-Spatial instructions contain compound relational phrases, e.g.
+    ``pick up the black bowl between the plate and the ramekin and place it on
+    the plate``.  Splitting only on the word ``and`` would merge the relation
+    object into the source phrase (``black bowl between plate``).  Instead,
+    tokenize the instruction and start a new noun phrase at every determiner,
+    verb, preposition, conjunction, particle, or pronoun.  Consecutive content
+    words remain together, which preserves names such as ``cookie box``,
+    ``table center``, ``top drawer``, and ``alphabet soup``.
     """
-    clauses = instruction.lower().split(" and ")
+    stop = (
+        PREPOSITIONS
+        | DETERMINERS
+        | LIBERO_VERBS
+        | LIBERO_PARTICLES
+        | LIBERO_PRONOUNS
+        | {"and", "of", "between", "next", "to"}
+    )
     ents: list[str] = []
-    for clause in clauses:
-        words = [w for w in clause.split()
-                 if w not in DETERMINERS and w not in PREPOSITIONS
-                 and w not in LIBERO_VERBS and w not in LIBERO_PARTICLES
-                 and w not in LIBERO_PRONOUNS]
-        e = " ".join(words)
-        if e and e not in ents:
-            ents.append(e)
+    current: list[str] = []
+
+    def flush() -> None:
+        if current:
+            phrase = " ".join(current)
+            if phrase and phrase not in ents:
+                ents.append(phrase)
+            current.clear()
+
+    for word in re.findall(r"[a-z0-9]+", instruction.lower()):
+        if word in stop:
+            flush()
+        else:
+            current.append(word)
+    flush()
     return ents
+
+
+def extract_source_target_entities_libero(instruction: str) -> list[str]:
+    """SIMPLER-style source/target extraction for LIBERO instructions.
+
+    The original SIMPLER semantic selector keeps the object being manipulated
+    and the placement target, not the spatial-relation object.  For example:
+
+      pick up the black bowl next to the ramekin and place it on the plate
+      -> ["black bowl", "plate"]
+
+    This is intentionally separate from ``extract_entities_libero`` so the
+    existing multi-entity LIBERO arm remains available as a controlled
+    comparison.
+    """
+    text = instruction.lower().strip()
+    # Split off the placement clause.
+    parts = re.split(r"\band\s+(?=(?:place|put|move)\b)", text, maxsplit=1)
+    source_clause = parts[0]
+    target_clause = parts[1] if len(parts) > 1 else ""
+
+    # Source: remove the action prefix, then cut at the first spatial relation.
+    source_clause = re.sub(
+        r"^(?:pick\s+up|pick|grab|lift|hold)\s+(?:the\s+)?", "", source_clause
+    ).strip()
+    relation = re.search(
+        r"\b(?:on|in|into|onto|next\s+to|between|from|under|over|near|to)\b",
+        source_clause,
+    )
+    source = source_clause[: relation.start()].strip() if relation else source_clause
+    source = re.sub(r"^(?:the|a|an)\s+", "", source)
+    source = " ".join(re.findall(r"[a-z0-9]+", source))
+
+    # Target: keep the noun phrase after the placement preposition.
+    target = ""
+    placement = re.search(
+        r"\b(?:place|put|move)\b.*?\b(?:in|into|on|onto|near|to|next\s+to)\b\s+(.*)$",
+        target_clause,
+    )
+    if placement:
+        target = placement.group(1)
+    else:
+        # Fallback: use the final prepositional phrase.
+        placement = re.search(
+            r"\b(?:in|into|on|onto|near|to|next\s+to)\b\s+(.*)$",
+            target_clause,
+        )
+        target = placement.group(1) if placement else ""
+    target = re.sub(r"\b(?:it|them|this|that)\b", "", target)
+    target = re.sub(r"^(?:the|a|an)\s+", "", target.strip())
+    target = " ".join(re.findall(r"[a-z0-9]+", target))
+
+    entities: list[str] = []
+    for entity in (source, target):
+        if entity and entity not in entities:
+            entities.append(entity)
+    return entities
 
 
 def embed_phrase(model, tokenizer, text: str) -> np.ndarray:

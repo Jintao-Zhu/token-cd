@@ -1,0 +1,99 @@
+{
+  "canonical_snapshot_artifact": "/home/leju-suzhou/zjt_ws/token-cd/artifacts/vanilla_recon_shr_canonical_0_299_v2",
+  "category_counts": {
+    "shr": {
+      "close_drawer": {
+        "both_fail": 8,
+        "both_success": 68,
+        "prefer_l11": 14,
+        "prefer_shr": 10
+      },
+      "move_near": {
+        "both_fail": 25,
+        "both_success": 54,
+        "prefer_l11": 8,
+        "prefer_shr": 13
+      },
+      "open_drawer": {
+        "both_fail": 36,
+        "both_success": 32,
+        "prefer_l11": 18,
+        "prefer_shr": 14
+      },
+      "pick_coke_can": {
+        "both_fail": 39,
+        "both_success": 24,
+        "prefer_l11": 20,
+        "prefer_shr": 17
+      }
+    },
+    "vanilla": {
+      "close_drawer": {
+        "both_fail": 15,
+        "both_success": 53,
+        "prefer_l11": 29,
+        "prefer_vanilla": 3
+      },
+      "move_near": {
+        "both_fail": 32,
+        "both_success": 56,
+        "prefer_l11": 6,
+        "prefer_vanilla": 6
+      },
+      "open_drawer": {
+        "both_fail": 45,
+        "both_success": 22,
+        "prefer_l11": 28,
+        "prefer_vanilla": 5
+      },
+      "pick_coke_can": {
+        "both_fail": 46,
+        "both_success": 13,
+        "prefer_l11": 31,
+        "prefer_vanilla": 10
+      }
+    }
+  },
+  "code_sha256": {
+    "analyzer": "a6d504b27f56fa04d64d9de6d6fcd043856c15b9f915826d908057733bf78ee3",
+    "collector": "fb913f4acff1a098671c2066b24de9f97f5a4cd55c241c7f945e6434f6407ee2",
+    "prepare": "41cc10f42d9aa747221d2b4608576d36c6d82c03ecaf760e42a27fad8809e546",
+    "protocol": "751bc8afcfb9a99bf2ce01ecf0b3fda3f238d8e4c0981bc80957116a051cda17"
+  },
+  "evaluation": {
+    "cross_task": "leave-one-task-out without task identity features",
+    "go": "AUC>=0.65, >=task-only+0.05, and cross-task median AUC>=0.60",
+    "pca": "fit inside each training fold only",
+    "task_only_baseline": true,
+    "within_task": "stratified out-of-fold prediction independently per task"
+  },
+  "features": [
+    "proprio",
+    "visual_mean",
+    "visual_std",
+    "visual_l11_weighted",
+    "prompt_hidden_mean",
+    "action_context_hidden"
+  ],
+  "labels": {
+    "primary": "L11-vs-SHR discordant outcome",
+    "rule": "train only on discordant episodes; never broadcast an episode label to timesteps",
+    "secondary": "L11-vs-Vanilla discordant outcome",
+    "unit": "episode"
+  },
+  "paired_results": "/home/leju-suzhou/zjt_ws/token-cd/artifacts/prompt_attn_l11_matched_full_9task_0_299_v1/paired_results_0_299.csv",
+  "paired_results_sha256": "1a134e635ec50922cffee68c41b7504c001d45c14f4d8aa19fa971a33cbe7b50",
+  "protocol_id": "PROMPT_ATTN_L11_INITIAL_STATE_PROBE_V1",
+  "purpose": "test whether frozen initial scene/action representations predict when L11 beats a baseline",
+  "seeds": [
+    0,
+    99
+  ],
+  "state_count": 400,
+  "tasks": [
+    "google_robot_open_drawer",
+    "google_robot_close_drawer",
+    "google_robot_pick_coke_can",
+    "google_robot_move_near"
+  ]
+}

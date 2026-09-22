@@ -1,0 +1,70 @@
+## google_robot_open_drawer
+- dedup scenes in manifest: 66; scenes with all five arms: 3
+- success rate (Wilson 95% CI):
+  - vanilla      0/  3 = 0.0  CI [0.0, 0.5615]  mean_m None  mean_steps 113.0
+  - correct      2/  3 = 0.6667  CI [0.2077, 0.9385]  mean_m 28.1  mean_steps 113.0
+  - paraphrase   1/  3 = 0.3333  CI [0.0615, 0.7923]  mean_m 31.96  mean_steps 113.0
+  - swapped      2/  3 = 0.6667  CI [0.2077, 0.9385]  mean_m 28.81  mean_steps 113.0
+  - random       0/  3 = 0.0  CI [0.0, 0.5615]  mean_m 32.26  mean_steps 113.0
+- paired (scene-level), rescue/harm:
+  - correct   vs swapped  : correct-win=0, correct-lose=0, net=+0, McNemar p=1.0
+  - correct   vs paraphrase: correct-win=2, correct-lose=1, net=+1, McNemar p=1.0
+  - correct   vs random   : correct-win=2, correct-lose=0, net=+2, McNemar p=0.5
+  - correct   vs vanilla  : correct-win=2, correct-lose=0, net=+2, McNemar p=0.5
+  - paraphrase vs swapped  : paraphrase-win=1, paraphrase-lose=2, net=-1, McNemar p=1.0
+## google_robot_close_drawer
+- dedup scenes in manifest: 66; scenes with all five arms: 0
+- success rate (Wilson 95% CI):
+  - vanilla      0/  0 = None  CI -  mean_m None  mean_steps None
+  - correct      0/  0 = None  CI -  mean_m None  mean_steps None
+  - paraphrase   0/  0 = None  CI -  mean_m None  mean_steps None
+  - swapped      0/  0 = None  CI -  mean_m None  mean_steps None
+  - random       0/  0 = None  CI -  mean_m None  mean_steps None
+- paired (scene-level), rescue/harm:
+  - correct   vs swapped  : correct-win=0, correct-lose=0, net=+0, McNemar p=1.0
+  - correct   vs paraphrase: correct-win=0, correct-lose=0, net=+0, McNemar p=1.0
+  - correct   vs random   : correct-win=0, correct-lose=0, net=+0, McNemar p=1.0
+  - correct   vs vanilla  : correct-win=0, correct-lose=0, net=+0, McNemar p=1.0
+  - paraphrase vs swapped  : paraphrase-win=0, paraphrase-lose=0, net=+0, McNemar p=1.0
+## google_robot_pick_coke_can
+- dedup scenes in manifest: 100; scenes with all five arms: 0
+- success rate (Wilson 95% CI):
+  - vanilla      0/  0 = None  CI -  mean_m None  mean_steps None
+  - correct      0/  0 = None  CI -  mean_m None  mean_steps None
+  - paraphrase   0/  0 = None  CI -  mean_m None  mean_steps None
+  - swapped      0/  0 = None  CI -  mean_m None  mean_steps None
+  - random       0/  0 = None  CI -  mean_m None  mean_steps None
+- paired (scene-level), rescue/harm:
+  - correct   vs swapped  : correct-win=0, correct-lose=0, net=+0, McNemar p=1.0
+  - correct   vs paraphrase: correct-win=0, correct-lose=0, net=+0, McNemar p=1.0
+  - correct   vs random   : correct-win=0, correct-lose=0, net=+0, McNemar p=1.0
+  - correct   vs vanilla  : correct-win=0, correct-lose=0, net=+0, McNemar p=1.0
+  - paraphrase vs swapped  : paraphrase-win=0, paraphrase-lose=0, net=+0, McNemar p=1.0
+## google_robot_move_near
+- dedup scenes in manifest: 77; scenes with all five arms: 0
+- success rate (Wilson 95% CI):
+  - vanilla      0/  0 = None  CI -  mean_m None  mean_steps None
+  - correct      0/  0 = None  CI -  mean_m None  mean_steps None
+  - paraphrase   0/  0 = None  CI -  mean_m None  mean_steps None
+  - swapped      0/  0 = None  CI -  mean_m None  mean_steps None
+  - random       0/  0 = None  CI -  mean_m None  mean_steps None
+- paired (scene-level), rescue/harm:
+  - correct   vs swapped  : correct-win=0, correct-lose=0, net=+0, McNemar p=1.0
+  - correct   vs paraphrase: correct-win=0, correct-lose=0, net=+0, McNemar p=1.0
+  - correct   vs random   : correct-win=0, correct-lose=0, net=+0, McNemar p=1.0
+  - correct   vs vanilla  : correct-win=0, correct-lose=0, net=+0, McNemar p=1.0
+  - paraphrase vs swapped  : paraphrase-win=0, paraphrase-lose=0, net=+0, McNemar p=1.0
+
+## Pooled (scene-level across the four tasks)
+- valid scenes with all five arms: 3
+  - vanilla       0/   3 = 0.0  CI [0.0, 0.5615]  mean_m None  mean_steps 113.0
+  - correct       2/   3 = 0.6667  CI [0.2077, 0.9385]  mean_m 28.1  mean_steps 113.0
+  - paraphrase    1/   3 = 0.3333  CI [0.0615, 0.7923]  mean_m 31.96  mean_steps 113.0
+  - swapped       2/   3 = 0.6667  CI [0.2077, 0.9385]  mean_m 28.81  mean_steps 113.0
+  - random        0/   3 = 0.0  CI [0.0, 0.5615]  mean_m 32.26  mean_steps 113.0
+- paired (scene-level), rescue/harm:
+  - correct   vs swapped  : correct-win=0, correct-lose=0, net=+0, McNemar p=1.0
+  - correct   vs paraphrase: correct-win=2, correct-lose=1, net=+1, McNemar p=1.0
+  - correct   vs random   : correct-win=2, correct-lose=0, net=+2, McNemar p=0.5
+  - correct   vs vanilla  : correct-win=2, correct-lose=0, net=+2, McNemar p=0.5
+  - paraphrase vs swapped  : paraphrase-win=1, paraphrase-lose=2, net=-1, McNemar p=1.0

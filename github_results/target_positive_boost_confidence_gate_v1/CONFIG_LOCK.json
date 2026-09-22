@@ -1,0 +1,35 @@
+{
+  "arms": [
+    "l11_matched_reused",
+    "positive_boost_0p5",
+    "confidence_gate_0p4"
+  ],
+  "attention_layer": 11,
+  "baseline_artifact": "/home/leju-suzhou/zjt_ws/token-cd/artifacts/prompt_attn_l11_token_count_v1",
+  "canonical_snapshots": "/home/leju-suzhou/zjt_ws/token-cd/artifacts/vanilla_recon_shr_canonical_0_299_v2",
+  "confidence": "(P-Q)/(P+1e-8)",
+  "confidence_threshold": 0.4,
+  "eta": 0.5,
+  "gated_score": "P + 0.5*max(P-Q,0)*I[(P-Q)/(P+eps)>=0.4]",
+  "generic_instructions": {
+    "google_robot_close_drawer": "close a drawer",
+    "google_robot_move_near": "move something near something else",
+    "google_robot_open_drawer": "open a drawer",
+    "google_robot_pick_coke_can": "pick something up"
+  },
+  "locked_downstream": "harmonic beta0 gamma1; shared clean prefix; lambda0.5 dims0..5; gripper clean",
+  "matched_budget": "own-state Standard-SHR KMeans count; token identity from L11 score",
+  "new_episodes": 800,
+  "nominal_arm_episodes": 1200,
+  "protocol_id": "TARGET_BOOST_CONFIDENCE_GATE_V1",
+  "reused_l11_matched": 400,
+  "seeds": "100-199",
+  "selection_provenance": "threshold chosen on seeds0-99; evaluated once on held-out seeds100-199",
+  "tasks": [
+    "google_robot_open_drawer",
+    "google_robot_close_drawer",
+    "google_robot_pick_coke_can",
+    "google_robot_move_near"
+  ],
+  "ungated_score": "P + 0.5*max(P-Q,0)"
+}

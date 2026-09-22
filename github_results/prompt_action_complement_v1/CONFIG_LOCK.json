@@ -1,0 +1,71 @@
+{
+  "action_attention_layers_zero_based": [
+    16,
+    17,
+    18,
+    19,
+    20,
+    21,
+    22,
+    23,
+    24,
+    25,
+    26,
+    27,
+    28,
+    29,
+    30,
+    31
+  ],
+  "action_queries": "teacher-forced prediction positions A0..A5; gripper excluded",
+  "arms": [
+    "original",
+    "prompt_high_action_high",
+    "prompt_high_action_low",
+    "prompt_low_action_high"
+  ],
+  "beta": 0.0,
+  "closed_loop": {
+    "new": 1200,
+    "per_task_per_arm": 100,
+    "reused_original": 400,
+    "total": 1600
+  },
+  "core": "Top_(m-floor(m/4)) Prompt-L11",
+  "lambda": 0.5,
+  "original_reuse_audit": {
+    "google_robot_close_drawer": {
+      "count": 100,
+      "source": "/home/leju-suzhou/zjt_ws/token-cd/artifacts/prompt_attn_layer_selection_v1/closed_loop_remaining6/episodes/google_robot_close_drawer/prompt_single"
+    },
+    "google_robot_move_near": {
+      "count": 100,
+      "source": "/home/leju-suzhou/zjt_ws/token-cd/artifacts/prompt_attn_layer_selection_v1/closed_loop/episodes/google_robot_move_near/prompt_single"
+    },
+    "google_robot_open_drawer": {
+      "count": 100,
+      "source": "/home/leju-suzhou/zjt_ws/token-cd/artifacts/prompt_attn_layer_selection_v1/closed_loop/episodes/google_robot_open_drawer/prompt_single"
+    },
+    "google_robot_pick_coke_can": {
+      "count": 100,
+      "source": "/home/leju-suzhou/zjt_ws/token-cd/artifacts/prompt_attn_layer_selection_v1/closed_loop/episodes/google_robot_pick_coke_can/prompt_single"
+    }
+  },
+  "policy_code_sha256": "fbb9aff891767cc2e5655b77ab83b072703a1899cdb96075880bde6e0e6416df",
+  "prompt_attention_layers_zero_based": [
+    11
+  ],
+  "protocol": "PROMPT_ACTION_COMPLEMENT_V1",
+  "reconstruction": "16x16 four-neighbor Dirichlet harmonic",
+  "seeds": [
+    0,
+    99
+  ],
+  "supplement_r": "floor(m/4)",
+  "tasks": [
+    "google_robot_open_drawer",
+    "google_robot_close_drawer",
+    "google_robot_pick_coke_can",
+    "google_robot_move_near"
+  ]
+}

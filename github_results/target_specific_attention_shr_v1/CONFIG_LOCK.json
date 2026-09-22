@@ -1,0 +1,51 @@
+{
+  "arms": [
+    "correct",
+    "target_diff",
+    "target_boost",
+    "reverse_diff"
+  ],
+  "attention_layers": [
+    11
+  ],
+  "attention_normalization": "P and Q independently normalized over 256 visual tokens",
+  "coverage": "own-state Standard-SHR matched count; generic prompt never controls m",
+  "decode_instruction": "real task instruction for clean and harmonic negative branches",
+  "formulae": {
+    "reverse_diff": "Q-P",
+    "target_boost": "P+(P-Q)=2P-Q",
+    "target_diff": "P-Q"
+  },
+  "generic_instructions": {
+    "google_robot_close_drawer": [
+      "close a drawer",
+      "close the drawer"
+    ],
+    "google_robot_move_near": [
+      "move something near something else",
+      "move one item near another"
+    ],
+    "google_robot_open_drawer": [
+      "open a drawer",
+      "open the drawer"
+    ],
+    "google_robot_pick_coke_can": [
+      "pick something up",
+      "pick up an item"
+    ]
+  },
+  "guidance": "lambda=0.5 dimensions 0..5; gripper clean",
+  "lambda": 0.5,
+  "new_closed_loop_episodes": 1200,
+  "offline_gate": "5 fixed episodes x 3 fixed trajectory states x 4 tasks = 60 states",
+  "protocol": "TARGET_SPECIFIC_ATTENTION_SHR_V1",
+  "reconstruction": "16x16 four-neighbor Dirichlet harmonic beta=0 gamma=1",
+  "reused_correct_episodes": 400,
+  "seeds": "0-99",
+  "tasks": [
+    "google_robot_open_drawer",
+    "google_robot_close_drawer",
+    "google_robot_pick_coke_can",
+    "google_robot_move_near"
+  ]
+}

@@ -1,0 +1,168 @@
+{
+  "arms": [
+    "control",
+    "l11_k64_t05",
+    "l7_k64_t05"
+  ],
+  "calibration_scenes": {
+    "google_robot_close_drawer": [
+      118
+    ],
+    "google_robot_move_near": [
+      101,
+      112,
+      119,
+      120,
+      123,
+      131,
+      133,
+      135,
+      136,
+      152
+    ],
+    "google_robot_open_drawer": [
+      118
+    ],
+    "google_robot_pick_coke_can": [
+      100,
+      101,
+      102,
+      103,
+      104,
+      105,
+      106,
+      107,
+      108,
+      109
+    ]
+  },
+  "chosen_arm": "l11_k64_t05",
+  "chosen_config": {
+    "enabled": true,
+    "k": 64,
+    "layer": 11,
+    "tau": 0.5
+  },
+  "decision_rule": "choose candidate with larger total calibration success; tie -> L11; if neither exceeds control, freeze L11 as offline default",
+  "paired_rescue_harm": {
+    "l11_k64_t05": {
+      "harm": 4,
+      "net": -4,
+      "rescue": 0,
+      "success": 6,
+      "unchanged": 18
+    },
+    "l7_k64_t05": {
+      "harm": 4,
+      "net": -3,
+      "rescue": 1,
+      "success": 7,
+      "unchanged": 17
+    }
+  },
+  "per_task": {
+    "google_robot_close_drawer": {
+      "control": {
+        "control_steps_total": 113,
+        "n": 1,
+        "prune_activation_steps_total": 0,
+        "success": 0
+      },
+      "l11_k64_t05": {
+        "control_steps_total": 113,
+        "n": 1,
+        "prune_activation_steps_total": 7,
+        "success": 0
+      },
+      "l7_k64_t05": {
+        "control_steps_total": 113,
+        "n": 1,
+        "prune_activation_steps_total": 9,
+        "success": 0
+      }
+    },
+    "google_robot_move_near": {
+      "control": {
+        "control_steps_total": 800,
+        "n": 10,
+        "prune_activation_steps_total": 0,
+        "success": 7
+      },
+      "l11_k64_t05": {
+        "control_steps_total": 800,
+        "n": 10,
+        "prune_activation_steps_total": 466,
+        "success": 5
+      },
+      "l7_k64_t05": {
+        "control_steps_total": 800,
+        "n": 10,
+        "prune_activation_steps_total": 503,
+        "success": 5
+      }
+    },
+    "google_robot_open_drawer": {
+      "control": {
+        "control_steps_total": 113,
+        "n": 1,
+        "prune_activation_steps_total": 0,
+        "success": 0
+      },
+      "l11_k64_t05": {
+        "control_steps_total": 113,
+        "n": 1,
+        "prune_activation_steps_total": 17,
+        "success": 0
+      },
+      "l7_k64_t05": {
+        "control_steps_total": 113,
+        "n": 1,
+        "prune_activation_steps_total": 0,
+        "success": 0
+      }
+    },
+    "google_robot_pick_coke_can": {
+      "control": {
+        "control_steps_total": 800,
+        "n": 10,
+        "prune_activation_steps_total": 0,
+        "success": 3
+      },
+      "l11_k64_t05": {
+        "control_steps_total": 800,
+        "n": 10,
+        "prune_activation_steps_total": 302,
+        "success": 1
+      },
+      "l7_k64_t05": {
+        "control_steps_total": 800,
+        "n": 10,
+        "prune_activation_steps_total": 285,
+        "success": 2
+      }
+    }
+  },
+  "protocol_id": "DTP_OPENVLA_CALIBRATION_V1",
+  "stage": "calibration",
+  "summary_csv": "calibration_summary.csv",
+  "totals": {
+    "control": {
+      "control_steps_total": 1826,
+      "n": 22,
+      "prune_activation_steps_total": 0,
+      "success": 10
+    },
+    "l11_k64_t05": {
+      "control_steps_total": 1826,
+      "n": 22,
+      "prune_activation_steps_total": 792,
+      "success": 6
+    },
+    "l7_k64_t05": {
+      "control_steps_total": 1826,
+      "n": 22,
+      "prune_activation_steps_total": 797,
+      "success": 7
+    }
+  }
+}

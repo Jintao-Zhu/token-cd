@@ -1,0 +1,17 @@
+{
+  "protocol_id": "PROMPT_ATTN_L11_BUDGET_ESTIMATOR_CLOSED_LOOP_V1",
+  "created_date": "2026-09-19",
+  "tasks": ["google_robot_open_drawer", "google_robot_close_drawer", "google_robot_pick_coke_can", "google_robot_move_near"],
+  "seeds": [100, 199],
+  "arms": ["relative", "spectral"],
+  "matched_reused": true,
+  "new_episode_count": 800,
+  "attention_layers": [11],
+  "lambda": 0.5,
+  "ranking": "Prompt-L11 descending score with stable token-id tie break",
+  "reconstruction": "harmonic beta=0",
+  "gamma_star": 1.750,
+  "tau_star": 0.900,
+  "gpu_policy": "only GPUs 2 and 3; two worker processes per GPU",
+  "calibration": "gamma_star/tau_star fixed from OFFLINE_RESULTS.json; no success labels"
+}

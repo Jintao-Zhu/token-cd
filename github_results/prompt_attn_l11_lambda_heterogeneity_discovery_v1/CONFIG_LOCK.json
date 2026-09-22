@@ -1,0 +1,50 @@
+{
+  "arms": {
+    "l11_fixed_025": 0.25,
+    "l11_positive_only": 0.0
+  },
+  "canonical_snapshot_artifact": "/home/leju-suzhou/zjt_ws/token-cd/artifacts/vanilla_recon_shr_canonical_0_299_v2",
+  "code_version": {
+    "git_commit": "3ed781f5f1fbfad6ebf6c4dd5678d34c4f86bbce",
+    "policy_sha256": "c09582d1e8ff7210434bfcb0e3954ce39af82efe911034ebe92b63686c5647ee",
+    "rollout_sha256": "40a221d620f6df4919f5293136690afb5e1cf48e7d373520d0258a5b73879121"
+  },
+  "created_date": "2026-09-13",
+  "locked_selector": {
+    "beta": 0.0,
+    "coverage": "own-state Standard-SHR matched m_t",
+    "layers": [
+      11
+    ],
+    "mode": "prompt_attention"
+  },
+  "new_arm_plan": {
+    "l11_fixed_025": {
+      "google_robot_open_drawer": 100
+    },
+    "l11_positive_only": {
+      "google_robot_close_drawer": 100,
+      "google_robot_move_near": 100,
+      "google_robot_open_drawer": 100,
+      "google_robot_pick_coke_can": 100
+    }
+  },
+  "new_episodes": 500,
+  "positive_only_definition": "compute the unchanged L11 negative branch but execute z*=z+ for all seven action dimensions",
+  "protocol_id": "PROMPT_ATTN_L11_LAMBDA_HETEROGENEITY_DISCOVERY_V1",
+  "purpose": "measure episode-level heterogeneity across fixed L11 guidance strengths",
+  "reused": {
+    "lambda_0_25": "adaptive-lambda artifact for close/pick/move seeds 0-99",
+    "lambda_0_5": "prompt_attn_layer_selection_v1 paired L11 Prompt-Single"
+  },
+  "seeds": [
+    0,
+    99
+  ],
+  "tasks": [
+    "google_robot_open_drawer",
+    "google_robot_close_drawer",
+    "google_robot_pick_coke_can",
+    "google_robot_move_near"
+  ]
+}

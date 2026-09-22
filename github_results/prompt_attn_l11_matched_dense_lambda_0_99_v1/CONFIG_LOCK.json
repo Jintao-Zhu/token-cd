@@ -1,0 +1,51 @@
+{
+  "arms": {
+    "l11_matched_lambda_010": 0.1,
+    "l11_matched_lambda_015": 0.15,
+    "l11_matched_lambda_020": 0.2,
+    "l11_matched_lambda_030": 0.3,
+    "l11_matched_lambda_035": 0.35,
+    "l11_matched_lambda_040": 0.4,
+    "l11_matched_lambda_045": 0.45,
+    "l11_matched_lambda_055": 0.55
+  },
+  "canonical_snapshot_artifact": "/home/leju-suzhou/zjt_ws/token-cd/artifacts/vanilla_recon_shr_canonical_0_299_v2",
+  "code_version": {
+    "git_commit": "3ed781f5f1fbfad6ebf6c4dd5678d34c4f86bbce",
+    "policy_sha256": "c09582d1e8ff7210434bfcb0e3954ce39af82efe911034ebe92b63686c5647ee",
+    "rollout_sha256": "d4c4693fbdd699f0f8d7fdc564e59b3fce88443a00cd72fef7c4bcfd65282a75"
+  },
+  "comparison_set": "same tasks and canonical seeds 0-99 as the existing lambda={0,.25,.5,.6,.75} sweep",
+  "created_date": "2026-09-14",
+  "episodes": 3200,
+  "lambdas": [
+    0.1,
+    0.15,
+    0.2,
+    0.3,
+    0.35,
+    0.4,
+    0.45,
+    0.55
+  ],
+  "locked_selector": {
+    "beta": 0.0,
+    "coverage": "own-state Standard-SHR matched m_t",
+    "layers": [
+      11
+    ],
+    "mode": "prompt_attention"
+  },
+  "protocol_id": "PROMPT_ATTN_L11_MATCHED_DENSE_LAMBDA_SWEEP_V1",
+  "purpose": "complete the pure L11-Matched fixed-lambda response curve near the global optimum",
+  "seeds": [
+    0,
+    99
+  ],
+  "tasks": [
+    "google_robot_open_drawer",
+    "google_robot_close_drawer",
+    "google_robot_pick_coke_can",
+    "google_robot_move_near"
+  ]
+}

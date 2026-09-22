@@ -1,0 +1,13 @@
+{
+  "protocol_id": "QUERY_PROVENANCE_CLOSED_LOOP_V1",
+  "created_date": "2026-09-20",
+  "tasks": ["google_robot_open_drawer", "google_robot_close_drawer", "google_robot_pick_coke_can", "google_robot_move_near"],
+  "seeds": [100, 199],
+  "arms": ["wrong_entity", "random_cluster"],
+  "new_episode_count": 800,
+  "position_source": "L11 Top-m",
+  "wrong_entity_definition": "predefined wrong-query phrase from WRONG_ENTITIES, not scene candidate",
+  "random_cluster_definition": "same number of random KMeans clusters as matched entity groups",
+  "reconstruction": "harmonic beta=0 gamma=1",
+  "lambda": 0.5
+}

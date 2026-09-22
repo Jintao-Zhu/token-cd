@@ -1,0 +1,35 @@
+{
+  "protocol": "DTP_FIXED_POSITIVE_L11_MATCHED_NEGATIVE_LAMBDA_SWEEP_V1",
+  "new_episodes": 1200,
+  "tasks": [
+    "google_robot_open_drawer",
+    "google_robot_close_drawer",
+    "google_robot_pick_coke_can",
+    "google_robot_move_near"
+  ],
+  "seeds": "0-99",
+  "arms": {
+    "dtp_l11_lambda_0p1": 0.1,
+    "dtp_l11_lambda_0p25": 0.25,
+    "dtp_l11_lambda_0p5": 0.5
+  },
+  "positive_branch": {
+    "method": "DTP-Fixed",
+    "prompt_relevance_layer": 11,
+    "protected_k": 64,
+    "tau": 0.5,
+    "mask_rule": "clean action dimension 0 determines one fixed visual-key mask for all 7 dimensions"
+  },
+  "negative_branch": {
+    "method": "L11-Matched harmonic reconstruction",
+    "attention_layer": 11,
+    "coverage": "own-state standard SHR semantic-group count",
+    "harmonic_beta": 0.0,
+    "dtp_mask_applied": false,
+    "prefix": "DTP-positive greedy prefix"
+  },
+  "fusion": "z_final=(1+lambda)*z_DTP_positive-lambda*z_L11_negative on dimensions 0..5",
+  "gripper": "DTP positive dimension 6 unchanged",
+  "baseline_reuse": ["Vanilla", "DTP-Fixed", "L11-Matched"],
+  "execution": "six resumable workers on GPU2/3, queued per slot behind PA-Full-Joint"
+}
