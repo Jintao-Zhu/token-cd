@@ -20,6 +20,7 @@ import numpy as np
 import torch
 
 from research.ar_token_counterfactual.libero_runtime import (
+    encode_video,
     load_policy,
     predict_action,
     prepare_agentview,
@@ -31,6 +32,13 @@ torch.set_num_threads(1)
 torch.set_num_interop_threads(1)
 
 MAX_STEPS = 220
+DEFAULT_MAX_STEPS = {
+    "libero_spatial": 220,
+    "libero_object": 280,
+    "libero_goal": 300,
+    "libero_10": 520,
+    "libero_90": 400,
+}
 CHECKPOINT = Path(
     "/home/leju-suzhou/zjt_ws/checkpoints/libero/"
     "openvla-7b-finetuned-libero-spatial"
@@ -62,9 +70,13 @@ def main() -> None:
     p.add_argument("--task", required=True)
     p.add_argument("--episodes", required=True)
     p.add_argument("--gpu", type=int, default=1)
+    p.add_argument("--suite", default="libero_spatial")
+    p.add_argument("--unnorm-key", default="libero_spatial")
+    p.add_argument("--dataset-statistics", type=Path, default=None)
     p.add_argument("--env-seed", type=int, default=0)
     p.add_argument("--settle-steps", type=int, default=10)
-    p.add_argument("--max-steps", type=int, default=MAX_STEPS)
+    p.add_argument("--max-steps", type=int, default=None)
+    p.add_argument("--video-dir", type=Path, default=None)
     a = p.parse_args()
 
     os.environ["MUJOCO_GL"] = "egl"
@@ -75,7 +87,7 @@ def main() -> None:
     from libero.libero.envs import OffScreenRenderEnv
 
     episodes = parse_episodes(a.episodes)
-    suite = benchmark.get_benchmark_dict()["libero_spatial"]()
+    suite = benchmark.get_benchmark_dict()[a.suite]()
     task = next(
         t for i in range(suite.n_tasks)
         if (t := suite.get_task(i)).name == a.task
@@ -95,12 +107,19 @@ def main() -> None:
         camera_widths=256,
     )
     init_states = suite.get_task_init_states(task_index)
+    max_steps = int(
+        a.max_steps
+        if a.max_steps is not None
+        else DEFAULT_MAX_STEPS.get(a.suite, MAX_STEPS)
+    )
 
     set_determinism(7)
     model, processor = load_policy(
         a.checkpoint,
         CODE_DIR,
         device=f"cuda:{a.gpu}",
+        dataset_statistics_path=a.dataset_statistics,
+        unnorm_key=a.unnorm_key,
     )
     root = a.artifact.resolve() / task.name
     root.mkdir(parents=True, exist_ok=True)
@@ -120,12 +139,21 @@ def main() -> None:
             obs, _reward, _done, _info = env.step([0, 0, 0, 0, 0, 0, -1])
         initial_state = np.asarray(env.get_sim_state()).copy()
         trajectory: list[np.ndarray] = []
+        video_frames: list[np.ndarray] = []
         done = False
         started = time.monotonic()
 
-        for _ in range(int(a.max_steps)):
+        for _ in range(max_steps):
             _, image = prepare_agentview(obs)
-            raw_action = predict_action(model, processor, image, task.language)
+            if a.video_dir is not None:
+                video_frames.append(np.asarray(image.copy()))
+            raw_action = predict_action(
+                model,
+                processor,
+                image,
+                task.language,
+                unnorm_key=a.unnorm_key,
+            )
             action = prepare_env_action(raw_action)
             if action.shape != (7,) or not np.isfinite(action).all():
                 raise RuntimeError(
@@ -137,17 +165,26 @@ def main() -> None:
                 break
 
         success = bool(env.check_success())
+        if a.video_dir is not None and video_frames:
+            encode_video(
+                video_frames,
+                a.video_dir.resolve() / task.name / f"episode_{ep:03d}.mp4",
+                fps=30,
+            )
         action_array = np.asarray(trajectory, dtype=np.float64)
         summary = {
-            "protocol_id": "LIBERO_SPATIAL_OFFICIAL_VANILLA_V1",
-            "benchmark": "LIBERO-Spatial",
+            "protocol_id": f"{a.suite.upper()}_OFFICIAL_VANILLA_V1",
+            "benchmark": a.suite,
+            "task_id": int(task_index),
+            "unnorm_key": a.unnorm_key,
+            "dataset_statistics_path": str(a.dataset_statistics) if a.dataset_statistics else None,
             "task": task.name,
             "instruction": task.language,
             "episode": int(ep),
             "init_state_index": int(init_index),
             "env_seed": int(a.env_seed),
             "settle_steps": int(a.settle_steps),
-            "max_policy_steps": int(a.max_steps),
+            "max_policy_steps": int(max_steps),
             "success": success,
             "steps": len(trajectory),
             "runtime_seconds": time.monotonic() - started,

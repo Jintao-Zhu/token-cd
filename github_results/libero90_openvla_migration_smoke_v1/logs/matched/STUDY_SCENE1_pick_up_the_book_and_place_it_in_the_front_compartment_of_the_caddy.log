@@ -1,0 +1,15 @@
+[command] arm=matched task=STUDY_SCENE1_pick_up_the_book_and_place_it_in_the_front_compartment_of_the_caddy cvd=3 2026-09-22T18:19:21+08:00
+python /home/leju-suzhou/zjt_ws/token-cd/research/semantic_token_cd/libero_matched_rollout.py --artifact /home/leju-suzhou/zjt_ws/token-cd/artifacts/libero90_openvla_migration_smoke_v1/runs/matched --checkpoint /home/leju-suzhou/zjt_ws/checkpoints/libero/vq-vla-openvla-7b-libero90 --suite libero_90 --task STUDY_SCENE1_pick_up_the_book_and_place_it_in_the_front_compartment_of_the_caddy --episodes 0 --gpu 1 --unnorm-key libero_90_no_noops --dataset-statistics /home/leju-suzhou/zjt_ws/checkpoints/libero/vq-vla-openvla-7b-libero90/dataset_statistics.json --entity-mode source_target_libero90 --query-mode instruction_only --attention-layers 11 --attention-heads '' --destination-weight 0.0 --lambda-scale 0.25 --position-mode attention --env-seed 0 --settle-steps 10 --max-steps 400 --video-dir /home/leju-suzhou/zjt_ws/token-cd/artifacts/libero90_openvla_migration_smoke_v1/videos/matched
+[robosuite WARNING] No private macro file found! (macros.py:53)
+[robosuite WARNING] It is recommended to use a private macro file (macros.py:54)
+[robosuite WARNING] To setup, run: python /home/leju-suzhou/zjt_ws/libero-openvla-env/lib/python3.10/site-packages/robosuite/scripts/setup_macros.py (macros.py:55)
+Gym has been unmaintained since 2022 and does not support NumPy 2.0 amongst other critical functionality.
+Please upgrade to Gymnasium, the maintained drop-in replacement of Gym, or contact the authors of your software and request that they upgrade.
+Users of this version of Gym should be able to simply replace 'import gym' with 'import gymnasium as gym' in the vast majority of cases.
+See the migration guide at https://gymnasium.farama.org/introduction/migration_guide/ for additional information.
+[Warning]: datasets path /home/leju-suzhou/zjt_ws/openpi/third_party/libero/libero/datasets does not exist!
+[Warning]: datasets path /home/leju-suzhou/zjt_ws/openpi/third_party/libero/libero/datasets does not exist!
+/home/leju-suzhou/zjt_ws/openpi/third_party/libero/libero/libero/benchmark/__init__.py:164: UserWarning: Environment variable TORCH_FORCE_NO_WEIGHTS_ONLY_LOAD detected, since the`weights_only` argument was not explicitly passed to `torch.load`, forcing weights_only=False.
+  init_states = torch.load(init_states_path)
+Loading checkpoint shards:   0%|          | 0/4 [00:00<?, ?it/s]Loading checkpoint shards:  25%|██▌       | 1/4 [00:00<00:00,  5.44it/s]Loading checkpoint shards:  50%|█████     | 2/4 [00:00<00:00,  6.07it/s]Loading checkpoint shards:  75%|███████▌  | 3/4 [00:00<00:00,  6.30it/s]Loading checkpoint shards: 100%|██████████| 4/4 [00:00<00:00,  6.52it/s]Loading checkpoint shards: 100%|██████████| 4/4 [00:00<00:00,  6.33it/s]
+{"task": "STUDY_SCENE1_pick_up_the_book_and_place_it_in_the_front_compartment_of_the_caddy", "episode": 0, "success": true, "steps": 241, "mean_m": 39.03319502074689}

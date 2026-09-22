@@ -152,6 +152,63 @@ def extract_source_target_entities_libero(instruction: str) -> list[str]:
     return entities
 
 
+def extract_source_target_entities_libero90(instruction: str) -> list[str]:
+    """Explicit source/target parser for the official LIBERO-90 instruction mix.
+
+    LIBERO-90 contains direct placement commands such as ``put the white mug on
+    the plate`` and compound displacement commands such as ``put the butter at
+    the back in the top drawer ... and close it``.  The Spatial parser above is
+    intentionally left unchanged for reproducing the Spatial experiments.
+    This parser keeps the same source/destination roles and projects both roles
+    into the existing entity-cosine budget rule.
+    """
+    text = instruction.lower().strip().rstrip(".")
+    locative = r"(?:in|into|on|onto|near|to|next\s+to)"
+
+    # Relocate-then-place: the source is the object being picked up and the
+    # target is the destination after the second action verb.
+    pick_and_place = re.match(
+        rf"pick\s+up\s+(?P<source>.*?)\s+and\s+(?:place|put|move)\s+"
+        rf"(?:it|them|this|that)?\s*{locative}\s+(?P<target>.*)$",
+        text,
+    )
+    if pick_and_place:
+        source = pick_and_place.group("source")
+        target = pick_and_place.group("target")
+    else:
+        # Direct placement: split at the first strong locative relation.  The
+        # word "at" is deliberately not a split point, so disambiguating source
+        # phrases such as "butter at the back" remain attached to the source.
+        direct_place = re.match(
+            rf"(?:put|place|move)\s+(?P<source>.*?)\s+{locative}\s+(?P<target>.*)$",
+            text,
+        )
+        if not direct_place:
+            raise RuntimeError(f"unsupported LIBERO-90 source/target instruction: {instruction!r}")
+        source = direct_place.group("source")
+        target = direct_place.group("target")
+
+    # For relocated objects, remove the source-side spatial disambiguator while
+    # preserving the manipulated object phrase.  This mirrors the established
+    # Spatial source-role semantics.
+    source = re.split(rf"\b{locative}\b", source, maxsplit=1)[0]
+    target = re.sub(r"\s+and\s+(?:close|open)\b.*$", "", target)
+    target = re.sub(r"\b(?:it|them|this|that)\b", " ", target)
+
+    def clean_phrase(value: str) -> str:
+        value = value.strip()
+        value = re.sub(r"^(?:the|a|an)\s+", "", value)
+        return " ".join(re.findall(r"[a-z0-9]+", value))
+
+    source = clean_phrase(source)
+    target = clean_phrase(target)
+    entities: list[str] = []
+    for entity in (source, target):
+        if entity and entity not in entities:
+            entities.append(entity)
+    return entities
+
+
 def embed_phrase(model, tokenizer, text: str) -> np.ndarray:
     ids = tokenizer(text, add_special_tokens=False)["input_ids"]
     if not ids:

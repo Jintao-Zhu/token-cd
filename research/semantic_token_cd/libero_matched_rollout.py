@@ -31,6 +31,7 @@ from research.ar_token_counterfactual.intervention import (
 )
 from research.ar_token_counterfactual.libero_runtime import (
     build_prompt,
+    encode_video,
     load_policy,
     prepare_agentview,
     prepare_env_action,
@@ -40,6 +41,7 @@ from research.semantic_token_cd.libero_policy import (
     embed_phrase,
     entity_select,
     extract_entities_libero,
+    extract_source_target_entities_libero90,
     extract_source_target_entities_libero,
     forward_logits,
     token_ids_from_mask,
@@ -469,6 +471,7 @@ def predict_matched(
     attention_heads: tuple[tuple[int, int], ...] = (),
     destination_weight: float = 0.0,
     lambda_scale: float = 1.0,
+    unnorm_key: str = "libero_spatial",
     position_mode: str = "attention",
     priority_tokens: set[int] | None = None,
     target_priority_tokens: set[int] | None = None,
@@ -493,6 +496,8 @@ def predict_matched(
     )
     if entity_mode == "source_target":
         entities = extract_source_target_entities_libero(instruction)
+    elif entity_mode == "source_target_libero90":
+        entities = extract_source_target_entities_libero90(instruction)
     elif entity_mode == "all":
         entities = extract_entities_libero(instruction)
     else:
@@ -532,11 +537,12 @@ def predict_matched(
     if not torch.isfinite(final).all():
         raise FloatingPointError("non-finite final SHR action logits")
     token_ids = final.argmax(dim=-1)
-    action = decode_action_ids(model, token_ids.unsqueeze(0).detach().cpu(), "libero_spatial")
+    action = decode_action_ids(model, token_ids.unsqueeze(0).detach().cpu(), unnorm_key)
     if action.shape != (7,) or not np.isfinite(action).all():
         raise RuntimeError(f"invalid decoded action: shape={action.shape}, action={action}")
     meta = {
         "entity_mode": entity_mode,
+        "unnorm_key": unnorm_key,
         "attention_query_mode": query_mode,
         "attention_layers": attention_meta["attention_layers"],
         "attention_heads": attention_meta["attention_heads"],
@@ -586,7 +592,14 @@ def main() -> None:
     p.add_argument("--task", required=True)
     p.add_argument("--episodes", required=True, help="comma-separated episode ids")
     p.add_argument("--gpu", type=int, default=2)
-    p.add_argument("--entity-mode", choices=("all", "source_target"), default="source_target")
+    p.add_argument(
+        "--entity-mode",
+        choices=("all", "source_target", "source_target_libero90"),
+        default="source_target",
+    )
+    p.add_argument("--suite", default="libero_spatial")
+    p.add_argument("--unnorm-key", default="libero_spatial")
+    p.add_argument("--dataset-statistics", type=Path, default=None)
     p.add_argument(
         "--query-mode",
         choices=("prompt", "instruction_only", "role", "source_relation", "target_relation_endpoint", "full_instruction_endpoint"),
@@ -606,6 +619,7 @@ def main() -> None:
     p.add_argument("--settle-steps", type=int, default=10)
     p.add_argument("--smoke", action="store_true")
     p.add_argument("--max-steps", type=int, default=None)
+    p.add_argument("--video-dir", type=Path, default=None)
     a = p.parse_args()
     os.environ["MUJOCO_GL"] = "egl"
     os.environ["PYOPENGL_PLATFORM"] = "egl"
@@ -627,8 +641,19 @@ def main() -> None:
     episodes = sorted(set(episodes))
     if a.smoke:
         episodes = episodes[:1]
-    max_steps = int(a.max_steps if a.max_steps is not None else (3 if a.smoke else MAX_STEPS))
-    suite = benchmark.get_benchmark_dict()["libero_spatial"]()
+    default_max_steps = {
+        "libero_spatial": 220,
+        "libero_object": 280,
+        "libero_goal": 300,
+        "libero_10": 520,
+        "libero_90": 400,
+    }
+    max_steps = int(
+        a.max_steps
+        if a.max_steps is not None
+        else (3 if a.smoke else default_max_steps.get(a.suite, MAX_STEPS))
+    )
+    suite = benchmark.get_benchmark_dict()[a.suite]()
     task_index = next(i for i in range(suite.n_tasks) if suite.get_task(i).name == a.task)
     task = suite.get_task(task_index)
     bddl = str(Path(get_libero_path("bddl_files")) / task.problem_folder / task.bddl_file)
@@ -638,7 +663,13 @@ def main() -> None:
 
     code_dir = Path("/home/leju-suzhou/zjt_ws/token-cd/third_party/openvla/prismatic/extern/hf")
     set_determinism(7)
-    model, processor = load_policy(a.checkpoint, code_dir, device=f"cuda:{a.gpu}")
+    model, processor = load_policy(
+        a.checkpoint,
+        code_dir,
+        device=f"cuda:{a.gpu}",
+        dataset_statistics_path=a.dataset_statistics,
+        unnorm_key=a.unnorm_key,
+    )
     root = a.artifact.resolve() / task.name
     root.mkdir(parents=True, exist_ok=True)
     for ep in episodes:
@@ -656,10 +687,13 @@ def main() -> None:
         initial_state = np.asarray(env.get_sim_state()).copy()
         trajectory = []
         trace = []
+        video_frames = []
         done = False
         started = time.monotonic()
         for step in range(max_steps):
             _, image = prepare_agentview(obs)
+            if a.video_dir is not None:
+                video_frames.append(np.asarray(image.copy()))
             priority_tokens = None
             target_priority_tokens = None
             reference_priority_tokens = None
@@ -690,6 +724,7 @@ def main() -> None:
                 attention_heads=parse_head_spec(a.attention_heads),
                 destination_weight=a.destination_weight,
                 lambda_scale=a.lambda_scale,
+                unnorm_key=a.unnorm_key,
                 position_mode=a.position_mode,
                 priority_tokens=priority_tokens,
                 target_priority_tokens=target_priority_tokens,
@@ -702,9 +737,18 @@ def main() -> None:
             if done:
                 break
         success = bool(env.check_success())
+        if a.video_dir is not None and video_frames:
+            encode_video(
+                video_frames,
+                a.video_dir.resolve() / task.name / f"episode_{ep:03d}.mp4",
+                fps=30,
+            )
         summary = {
-            "protocol_id": "LIBERO_SPATIAL_L11_MATCHED_OFFICIAL_V1",
-            "benchmark": "LIBERO-Spatial",
+            "protocol_id": f"{a.suite.upper()}_L11_MATCHED_OFFICIAL_V1",
+            "benchmark": a.suite,
+            "task_id": int(task_index),
+            "unnorm_key": a.unnorm_key,
+            "dataset_statistics_path": str(a.dataset_statistics) if a.dataset_statistics else None,
             "entity_mode": a.entity_mode,
             "query_mode": a.query_mode,
             "attention_layers": list(parse_layer_spec(a.attention_layers)),
@@ -721,6 +765,8 @@ def main() -> None:
             "max_policy_steps": int(max_steps),
             "success": success,
             "steps": len(trajectory),
+            "done": bool(done),
+            "normal_end": bool(success or done or len(trajectory) >= max_steps),
             "runtime_seconds": time.monotonic() - started,
             "initial_state_sha256": __import__("hashlib").sha256(initial_state.tobytes()).hexdigest(),
             "selected_token_count_mean": float(np.mean([x["m_matched"] for x in trace])) if trace else 0.0,

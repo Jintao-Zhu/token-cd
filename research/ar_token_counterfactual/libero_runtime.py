@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import io
+import json
 import os
 import random
 from pathlib import Path
@@ -30,7 +31,53 @@ def set_determinism(seed: int) -> None:
     os.environ["PYTHONHASHSEED"] = str(seed)
 
 
-def load_policy(checkpoint: Path, code_dir: Path, device: str = "cuda:0") -> tuple[Any, Any]:
+def attach_action_statistics(
+    model: Any,
+    dataset_statistics_path: Path,
+    unnorm_key: str,
+) -> dict[str, Any]:
+    """Attach one explicitly selected action-statistics entry to an OpenVLA model.
+
+    Some OpenVLA checkpoints store LIBERO-90 statistics in the standalone
+    ``dataset_statistics.json`` file rather than under ``config.norm_stats``.
+    Keeping this as an explicit load-time adaptation avoids silently rewriting
+    the downloaded checkpoint config.
+    """
+    dataset_statistics_path = Path(dataset_statistics_path)
+    if not dataset_statistics_path.is_file():
+        raise FileNotFoundError(f"dataset statistics file not found: {dataset_statistics_path}")
+    payload = json.loads(dataset_statistics_path.read_text())
+    if unnorm_key not in payload:
+        raise KeyError(
+            f"unnorm key {unnorm_key!r} not found in {dataset_statistics_path}; "
+            f"available={sorted(payload)}"
+        )
+    stats = payload[unnorm_key]
+    action = stats.get("action")
+    if not isinstance(action, dict):
+        raise ValueError(f"missing action statistics for unnorm key {unnorm_key!r}")
+    required = ("q01", "q99")
+    for field in required:
+        values = action.get(field)
+        if not isinstance(values, list) or len(values) != 7:
+            raise ValueError(
+                f"invalid {field!r} action statistics for {unnorm_key!r}: {values!r}"
+            )
+    mask = action.get("mask")
+    if mask is not None and (not isinstance(mask, list) or len(mask) != 7):
+        raise ValueError(f"invalid action mask for {unnorm_key!r}: {mask!r}")
+    model.norm_stats = dict(model.norm_stats or {})
+    model.norm_stats[unnorm_key] = stats
+    return stats
+
+
+def load_policy(
+    checkpoint: Path,
+    code_dir: Path,
+    device: str = "cuda:0",
+    dataset_statistics_path: Path | None = None,
+    unnorm_key: str | None = None,
+) -> tuple[Any, Any]:
     classes = load_and_register_openvla_hf(code_dir)
     processor = classes["processor"].from_pretrained(checkpoint, local_files_only=True)
     model = classes["model"].from_pretrained(
@@ -43,6 +90,15 @@ def load_policy(checkpoint: Path, code_dir: Path, device: str = "cuda:0") -> tup
     model = model.to(torch.device(device)).eval()
     for parameter in model.parameters():
         parameter.requires_grad_(False)
+    if dataset_statistics_path is not None:
+        if not unnorm_key:
+            raise ValueError("unnorm_key is required when dataset_statistics_path is provided")
+        attach_action_statistics(model, dataset_statistics_path, unnorm_key)
+    if unnorm_key is not None and unnorm_key not in (model.norm_stats or {}):
+        raise KeyError(
+            f"unnorm key {unnorm_key!r} not found in model.norm_stats; "
+            f"available={sorted((model.norm_stats or {}).keys())}"
+        )
     return model, processor
 
 
