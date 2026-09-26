@@ -473,14 +473,76 @@ def predict_matched(
     lambda_scale: float = 1.0,
     unnorm_key: str = "libero_spatial",
     position_mode: str = "attention",
+    selector_transform: str = "identity",
+    fixed_m: int | None = None,
     priority_tokens: set[int] | None = None,
     target_priority_tokens: set[int] | None = None,
     reference_priority_tokens: set[int] | None = None,
+    distractor_priority_tokens: set[int] | None = None,
+    spatial_null_prior: np.ndarray | None = None,
+    spatial_null_seed: int | None = None,
+    rank_bin: int | None = None,
+    random_seed: int | None = None,
 ):
     """Return decoded action [7] and per-step matched metadata."""
     if inputs is None:
         inputs = processor(build_prompt(instruction), image).to(model.device, dtype=torch.bfloat16)
     clean_ids, clean_logits, clean_h = generate_clean_action(model, processor, image, instruction, inputs)
+
+    # An object-only mask can legitimately be empty when that object is fully
+    # occluded or occupies less than the segmentation-to-patch overlap
+    # threshold. In that state the requested intervention has no visible
+    # tokens, so execute the clean action instead of aborting the episode.
+    if fixed_m == 0:
+        clean_token_ids = clean_ids[0].detach().cpu().tolist()
+        action = decode_action_ids(model, clean_ids.detach().cpu(), unnorm_key)
+        target_set = set(int(x) for x in (target_priority_tokens or ()))
+        distractor_set = set(int(x) for x in (distractor_priority_tokens or ()))
+        meta = {
+            "entity_mode": entity_mode,
+            "unnorm_key": unnorm_key,
+            "attention_query_mode": query_mode,
+            "attention_layers": list(attention_layers),
+            "attention_heads": [list(x) for x in attention_heads],
+            "destination_weight": float(destination_weight),
+            "entities": [],
+            "kmeans_groups": None,
+            "kmeans_cluster_token_ids": None,
+            "m_matched": None,
+            "m_used": 0,
+            "fixed_m": 0,
+            "position_mode": position_mode,
+            "selector_transform": selector_transform,
+            "selector_source": "empty_object_mask_clean_fallback",
+            "priority_token_count": len(priority_tokens) if priority_tokens is not None else 0,
+            "target_priority_token_count": len(target_set),
+            "distractor_priority_token_count": len(distractor_set),
+            "reference_priority_token_count": len(reference_priority_tokens or ()),
+            "selected_priority_count": 0,
+            "selected_target_count": 0,
+            "selected_distractor_count": 0,
+            "selected_reference_count": 0,
+            "selected_outside_priority_count": 0,
+            "selected_attention_overlap_count": 0,
+            "selected_attention_jaccard": 0.0,
+            "attention_top_m_token_ids": [],
+            "selected_token_ids": [],
+            "positive_token_ids": clean_token_ids,
+            "negative_token_ids": clean_token_ids,
+            "final_token_ids": clean_token_ids,
+            "guided_prefix": False,
+            "guided_changed_dims": 0,
+            "eos_token_id": int(model.generation_config.eos_token_id),
+            "attention_sha256": None,
+            "feature_perturbation_norm": 0.0,
+            "feature_perturbation_relative": 0.0,
+            "non_target_bit_identical": True,
+            "reconstruction_finite": True,
+            "lambda": float(LAMBDA) * float(lambda_scale),
+            "lambda_scale": float(lambda_scale),
+            "empty_object_mask_clean_fallback": True,
+        }
+        return action, meta
 
     attention, h, attention_meta = prompt_attention_and_features(
         model,
@@ -494,23 +556,78 @@ def predict_matched(
         attention_heads=attention_heads,
         destination_weight=destination_weight,
     )
-    if entity_mode == "source_target":
-        entities = extract_source_target_entities_libero(instruction)
-    elif entity_mode == "source_target_libero90":
-        entities = extract_source_target_entities_libero90(instruction)
-    elif entity_mode == "all":
-        entities = extract_entities_libero(instruction)
+    if rank_bin is not None or random_seed is not None:
+        if fixed_m != 32 or query_mode != "instruction_only" or tuple(attention_layers) != (11,):
+            raise ValueError("rank-bin/Random32 closed-loop arms require fixed K=32, instruction-only L11")
+        if rank_bin is not None and (not 0 <= int(rank_bin) < 8 or random_seed is not None):
+            raise ValueError("rank_bin must be in [0,7] and cannot be combined with random_seed")
+        entities = []
+        kmeans_meta = {}
+        matched_m = None
     else:
-        raise ValueError(f"unknown entity_mode: {entity_mode}")
-    if not entities:
-        raise RuntimeError(f"no entities extracted from instruction: {instruction}")
-    entity_embs = [embed_phrase(model, processor.tokenizer, e) for e in entities]
-    kmeans_selected, kmeans_meta = entity_select(h, entity_embs, K=K, seed=KMEANS_SEED)
-    m = len(kmeans_selected)
-    if priority_tokens is None:
-        selected = stable_top_m(attention, m)
+        if entity_mode == "source_target":
+            entities = extract_source_target_entities_libero(instruction)
+        elif entity_mode == "source_target_libero90":
+            entities = extract_source_target_entities_libero90(instruction)
+        elif entity_mode == "all":
+            entities = extract_entities_libero(instruction)
+        else:
+            raise ValueError(f"unknown entity_mode: {entity_mode}")
+        if not entities:
+            raise RuntimeError(f"no entities extracted from instruction: {instruction}")
+        entity_embs = [embed_phrase(model, processor.tokenizer, e) for e in entities]
+        kmeans_selected, kmeans_meta = entity_select(h, entity_embs, K=K, seed=KMEANS_SEED)
+        matched_m = len(kmeans_selected)
+    m = matched_m if fixed_m is None else int(fixed_m)
+    if not 1 <= m <= N_VISUAL:
+        raise ValueError(f"invalid intervention budget m={m}")
+    if spatial_null_prior is not None:
+        prior = np.asarray(spatial_null_prior, dtype=np.float64).reshape(-1)
+        if prior.shape != (N_VISUAL,) or not np.isfinite(prior).all() or (prior < 0).any() or prior.sum() <= 0:
+            raise ValueError("invalid spatial_null_prior")
+        if spatial_null_seed is None:
+            raise ValueError("spatial_null_seed is required with spatial_null_prior")
+        if selector_transform != "identity":
+            raise ValueError("spatial null cannot be combined with selector_transform")
+        prior = prior / prior.sum()
+        selected = np.random.default_rng(int(spatial_null_seed)).choice(
+            N_VISUAL, size=m, replace=False, p=prior
+        ).astype(np.int64).tolist()
+        selector_source = "task_position_prior_weighted_sampling"
+    elif rank_bin is not None:
+        if selector_transform != "identity" or priority_tokens is not None or spatial_null_prior is not None:
+            raise ValueError("rank-bin selector cannot be combined with selector transforms or spatial priorities")
+        order = np.lexsort((np.arange(N_VISUAL), -np.asarray(attention, dtype=np.float64)))
+        selected = sorted(int(x) for x in order[int(rank_bin) * 32:(int(rank_bin) + 1) * 32])
+        selector_scores = attention
+        selector_source = f"current_l11_rank_bin_{int(rank_bin) + 1}"
+    elif random_seed is not None:
+        if selector_transform != "identity" or priority_tokens is not None or spatial_null_prior is not None:
+            raise ValueError("Random32 cannot be combined with selector transforms or spatial priorities")
+        selected = sorted(int(x) for x in np.random.default_rng(int(random_seed)).choice(
+            N_VISUAL, size=32, replace=False
+        ))
+        selector_scores = attention
+        selector_source = "deterministic_random32"
+    elif selector_transform == "identity":
+        selector_scores = attention
+        selected = None
+        selector_source = "current_l11_attention"
+    elif selector_transform == "rot180":
+        # A fixed spatial placebo for selector-only experiments.  Rotating the
+        # score grid by 180 degrees is a graph automorphism of the 16x16
+        # four-neighbor lattice, so it preserves score values and mask topology
+        # while changing their correspondence to the observed scene.
+        selector_scores = np.rot90(attention.reshape(GRID, GRID), 2).reshape(-1).copy()
+        selected = None
+        selector_source = "rotated_l11_attention"
     else:
-        selected = priority_top_m(attention, priority_tokens, m)
+        raise ValueError(f"unknown selector transform: {selector_transform}")
+    if selected is None:
+        if priority_tokens is None:
+            selected = stable_top_m(selector_scores, m)
+        else:
+            selected = priority_top_m(selector_scores, priority_tokens, m)
 
     replacement = h.copy()
     replacement[np.asarray(selected, dtype=np.int64)] = harmonic_reconstruct(h, np.asarray(selected, dtype=np.int64))
@@ -530,6 +647,7 @@ def predict_matched(
     selected_set = set(int(x) for x in selected)
     target_set = set(int(x) for x in (target_priority_tokens or ()))
     reference_set = set(int(x) for x in (reference_priority_tokens or ()))
+    distractor_set = set(int(x) for x in (distractor_priority_tokens or ()))
     final = clean_logits.clone()
     final[:-1] = (1.0 + lambd) * clean_logits[:-1] - lambd * neg_logits[:-1]
     eos_id = int(model.generation_config.eos_token_id)
@@ -553,15 +671,21 @@ def predict_matched(
         "entities": entities,
         "kmeans_groups": kmeans_meta.get("selected_groups"),
         "kmeans_cluster_token_ids": kmeans_meta.get("selected_token_ids"),
-        "m_matched": int(m),
+        "m_matched": int(matched_m) if matched_m is not None else None,
+        "m_used": int(m),
+        "fixed_m": int(fixed_m) if fixed_m is not None else None,
         "position_mode": position_mode,
+        "selector_transform": selector_transform,
+        "selector_source": selector_source,
         "priority_token_count": len(priority_tokens) if priority_tokens is not None else 0,
         "target_priority_token_count": len(target_set),
+        "distractor_priority_token_count": len(distractor_set),
         "reference_priority_token_count": len(reference_set),
-        "selected_priority_count": len(selected_set & (target_set | reference_set)),
+        "selected_priority_count": len(selected_set & (target_set | reference_set | distractor_set)),
         "selected_target_count": len(selected_set & target_set),
+        "selected_distractor_count": len(selected_set & distractor_set),
         "selected_reference_count": len(selected_set & reference_set),
-        "selected_outside_priority_count": len(selected_set - target_set - reference_set),
+        "selected_outside_priority_count": len(selected_set - target_set - reference_set - distractor_set),
         "selected_attention_overlap_count": len(selected_set & attention_selected),
         "selected_attention_jaccard": len(selected_set & attention_selected) / max(1, len(selected_set | attention_selected)),
         "attention_top_m_token_ids": sorted(attention_selected),
@@ -611,10 +735,21 @@ def main() -> None:
     p.add_argument("--lambda-scale", type=float, default=1.0)
     p.add_argument(
         "--position-mode",
-        choices=("attention", "gt_target", "gt_target_reference"),
+        choices=(
+            "attention", "gt_target", "gt_target_reference",
+            "object_target_only", "object_distractor_only",
+            "non_bowl_target_count", "non_bowl_distractor_count",
+        ),
         default="attention",
         help="diagnostic-only GT position priority; attention is the method",
     )
+    p.add_argument(
+        "--selector-transform",
+        choices=("identity", "rot180"),
+        default="identity",
+        help="identity is canonical; rot180 is a fixed spatial placebo preserving m and mask topology",
+    )
+    p.add_argument("--fixed-m", type=int, default=None, help="diagnostic arm: hold selected-token count fixed")
     p.add_argument("--env-seed", type=int, default=0)
     p.add_argument("--settle-steps", type=int, default=10)
     p.add_argument("--smoke", action="store_true")
@@ -697,11 +832,35 @@ def main() -> None:
             priority_tokens = None
             target_priority_tokens = None
             reference_priority_tokens = None
+            distractor_priority_tokens = None
+            fixed_m_this_step = a.fixed_m
             if a.position_mode != "attention":
                 seg = np.asarray(obs["agentview_segmentation_instance"])
                 target_mask = seg[..., 0] == env.instance_to_id[GT_TARGET_NAME]
                 target_ids, _ = token_ids_from_mask(target_mask.astype(np.uint8))
                 target_priority_tokens = set(int(x) for x in target_ids)
+                object_only_modes = {
+                    "object_target_only", "object_distractor_only",
+                    "non_bowl_target_count", "non_bowl_distractor_count",
+                }
+                if a.position_mode in object_only_modes:
+                    distractor_mask = seg[..., 0] == env.instance_to_id["akita_black_bowl_2" if GT_TARGET_NAME == "akita_black_bowl_1" else "akita_black_bowl_1"]
+                    distractor_ids, _ = token_ids_from_mask(distractor_mask.astype(np.uint8))
+                    distractor_priority_tokens = set(int(x) for x in distractor_ids)
+                    if a.position_mode == "object_target_only":
+                        priority_tokens = set(target_priority_tokens)
+                        fixed_m_this_step = len(target_priority_tokens)
+                    elif a.position_mode == "object_distractor_only":
+                        priority_tokens = set(distractor_priority_tokens)
+                        fixed_m_this_step = len(distractor_priority_tokens)
+                    else:
+                        priority_tokens = set(range(N_VISUAL)) - target_priority_tokens - distractor_priority_tokens
+                        if a.position_mode == "non_bowl_target_count":
+                            fixed_m_this_step = len(target_priority_tokens)
+                        else:
+                            fixed_m_this_step = len(distractor_priority_tokens)
+                else:
+                    distractor_priority_tokens = set()
                 reference_mask = np.zeros_like(target_mask)
                 if a.position_mode == "gt_target_reference":
                     for name in GT_REFERENCE_NAMES.get(task_index, ()):
@@ -711,7 +870,7 @@ def main() -> None:
                 reference_priority_tokens = set(int(x) for x in reference_ids)
                 if a.position_mode == "gt_target":
                     priority_tokens = set(target_priority_tokens)
-                else:
+                elif a.position_mode == "gt_target_reference":
                     priority_tokens = set(target_priority_tokens) | set(reference_priority_tokens)
             raw_action, meta = predict_matched(
                 model,
@@ -726,9 +885,12 @@ def main() -> None:
                 lambda_scale=a.lambda_scale,
                 unnorm_key=a.unnorm_key,
                 position_mode=a.position_mode,
+                selector_transform=a.selector_transform,
+                fixed_m=fixed_m_this_step,
                 priority_tokens=priority_tokens,
                 target_priority_tokens=target_priority_tokens,
                 reference_priority_tokens=reference_priority_tokens,
+                distractor_priority_tokens=distractor_priority_tokens,
             )
             action = prepare_env_action(raw_action)
             obs, _reward, done, _info = env.step(action.tolist())
@@ -737,6 +899,8 @@ def main() -> None:
             if done:
                 break
         success = bool(env.check_success())
+        matched_counts = [x.get("m_matched") for x in trace if x.get("m_matched") is not None]
+        effective_mask_counts = [int(x.get("m_used", 0)) for x in trace]
         if a.video_dir is not None and video_frames:
             encode_video(
                 video_frames,
@@ -756,6 +920,8 @@ def main() -> None:
             "destination_weight": float(a.destination_weight),
             "lambda_scale": float(a.lambda_scale),
             "position_mode": a.position_mode,
+            "selector_transform": a.selector_transform,
+            "fixed_m": a.fixed_m,
             "task": task.name,
             "instruction": task.language,
             "episode": int(ep),
@@ -769,8 +935,10 @@ def main() -> None:
             "normal_end": bool(success or done or len(trajectory) >= max_steps),
             "runtime_seconds": time.monotonic() - started,
             "initial_state_sha256": __import__("hashlib").sha256(initial_state.tobytes()).hexdigest(),
-            "selected_token_count_mean": float(np.mean([x["m_matched"] for x in trace])) if trace else 0.0,
-            "selected_token_count_std": float(np.std([x["m_matched"] for x in trace])) if trace else 0.0,
+            "selected_token_count_mean": float(np.mean(matched_counts)) if matched_counts else 0.0,
+            "selected_token_count_std": float(np.std(matched_counts)) if matched_counts else 0.0,
+            "effective_mask_token_count_mean": float(np.mean(effective_mask_counts)) if effective_mask_counts else 0.0,
+            "empty_object_mask_fallback_steps": sum(bool(x.get("empty_object_mask_clean_fallback")) for x in trace),
             "trajectory": [x.tolist() for x in trajectory],
             "trace": trace,
         }

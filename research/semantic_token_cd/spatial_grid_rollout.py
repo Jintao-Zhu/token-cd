@@ -59,19 +59,31 @@ MODES = {
 }
 
 
-def make_environment(task: str):
+def make_environment(task: str, shader_dir: str | None = None):
     import gymnasium as gym
     import simpler_env
 
+    if shader_dir is not None and shader_dir not in ("ibl", "rt"):
+        raise ValueError(f"Unsupported SAPIEN shader_dir: {shader_dir}")
     if task == "google_robot_pick_coke_can":
-        return gym.make(
-            "GraspSingleOpenedCokeCanDistractorInScene-v0",
-            obs_mode="rgbd",
-            prepackaged_config=True,
-            distractor_config="less",
-        ), "GraspSingleOpenedCokeCanDistractorInScene-v0"
+        env_id = "GraspSingleOpenedCokeCanDistractorInScene-v0"
+        kwargs = {
+            "obs_mode": "rgbd",
+            "prepackaged_config": True,
+            "distractor_config": "less",
+        }
+        if shader_dir is not None:
+            kwargs["shader_dir"] = shader_dir
+            kwargs["renderer_kwargs"] = {"device": "cuda:0", "offscreen_only": True}
+        return gym.make(env_id, **kwargs), env_id
     if task in TASKS or task in WIDOWX_TASKS:
-        return simpler_env.make(task), simpler_env.ENVIRONMENT_MAP[task][0]
+        env_id, kwargs = simpler_env.ENVIRONMENT_MAP[task]
+        kwargs = dict(kwargs)
+        kwargs["prepackaged_config"] = True
+        if shader_dir is not None:
+            kwargs["shader_dir"] = shader_dir
+            kwargs["renderer_kwargs"] = {"device": "cuda:0", "offscreen_only": True}
+        return gym.make(env_id, obs_mode="rgbd", **kwargs), env_id
     raise ValueError(f"Task is not preregistered: {task}")
 
 

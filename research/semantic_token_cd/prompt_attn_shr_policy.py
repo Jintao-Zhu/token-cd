@@ -614,6 +614,27 @@ class PromptAttentionSHRInference(STSHRCDInference):
         if self.selector_mode not in {"prompt_attention", "random_matched", "sim_region"}:
             raise ValueError(f"unknown Prompt-Attn-SHR selector mode: {self.selector_mode}")
 
+        # Additive diagnostic/ablation hook for equal-size contiguous L11 rank
+        # bins.  The default None preserves every pre-existing selector path.
+        rank_bin = getattr(self, "selection_rank_bin", None)
+        if rank_bin is not None:
+            rank_bin = int(rank_bin)
+            if (
+                self.selector_mode != "prompt_attention"
+                or self.selection_count != 32
+                or self.selection_top_p is not None
+                or self.selection_budget_schedule is not None
+                or not 0 <= rank_bin < 8
+                or self.complement_arm is not None
+                or self.prompt_action_rerank_multiplier is not None
+                or self.prompt_action_bounded_mode is not None
+                or self.prompt_action_full_joint
+            ):
+                raise RuntimeError(
+                    "rank-bin selection requires plain L11 prompt attention, "
+                    "fixed K=32, rank_bin in [0,7], and no other selector transform"
+                )
+
         inputs = self.process_inputs(image, task_description=task_description)
         with projector_intervention(self.vla) as positive_trace:
             clean_scores = self._forward_scores(inputs, self.unnorm_key, do_sample=False)
@@ -996,7 +1017,13 @@ class PromptAttentionSHRInference(STSHRCDInference):
                 "full_joint_subset_of_candidate_pool": set(selected).issubset(spec["candidates"]),
             }
         elif self.selector_mode == "prompt_attention":
-            selected = stable_top_m(attention_scores, m)
+            if rank_bin is None:
+                selected = stable_top_m(attention_scores, m)
+            else:
+                order = np.lexsort((np.arange(N_VISUAL), -np.asarray(attention_scores, dtype=np.float64)))
+                selected = sorted(int(index) for index in order[rank_bin * 32:(rank_bin + 1) * 32])
+                if len(selected) != 32 or len(set(selected)) != 32:
+                    raise RuntimeError(f"rank bin {rank_bin} did not select exactly 32 tokens")
             if self.selection_top_p is not None:
                 selected_attention_mass = float(probability[selected].sum())
         elif self.selector_mode == "sim_region":
@@ -1081,6 +1108,10 @@ class PromptAttentionSHRInference(STSHRCDInference):
             "matched_budget_group_ids": matched_entity_groups,
             "per_entity_score": per_entity_score,
             "selected_token_ids": selected,
+            "selection_rank_bin": rank_bin,
+            "selection_rank_span": (
+                [rank_bin * 32 + 1, (rank_bin + 1) * 32] if rank_bin is not None else None
+            ),
             "reference_shr_token_ids": reference,
             "m_t": m,
             "num_tokens": m,
