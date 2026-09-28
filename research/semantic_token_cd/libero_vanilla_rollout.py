@@ -40,12 +40,17 @@ DEFAULT_MAX_STEPS = {
     "libero_90": 400,
 }
 CHECKPOINT = Path(
-    "/home/leju-suzhou/zjt_ws/checkpoints/libero/"
-    "openvla-7b-finetuned-libero-spatial"
+    os.environ.get(
+        "OPENVLA_CHECKPOINT",
+        "/home/leju-suzhou/zjt_ws/checkpoints/libero/"
+        "openvla-7b-finetuned-libero-spatial",
+    )
 )
 CODE_DIR = Path(
-    "/home/leju-suzhou/zjt_ws/token-cd/"
-    "third_party/openvla/prismatic/extern/hf"
+    os.environ.get(
+        "OPENVLA_HF_CODE_DIR",
+        Path(__file__).resolve().parents[2] / "third_party/openvla/prismatic/extern/hf",
+    )
 )
 
 

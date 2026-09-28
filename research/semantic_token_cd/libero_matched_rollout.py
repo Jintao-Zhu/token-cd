@@ -796,7 +796,12 @@ def main() -> None:
     env = env_cls(bddl_file_name=bddl, camera_heights=256, camera_widths=256)
     init_states = suite.get_task_init_states(task_index)
 
-    code_dir = Path("/home/leju-suzhou/zjt_ws/token-cd/third_party/openvla/prismatic/extern/hf")
+    code_dir = Path(
+        os.environ.get(
+            "OPENVLA_HF_CODE_DIR",
+            Path(__file__).resolve().parents[2] / "third_party/openvla/prismatic/extern/hf",
+        )
+    )
     set_determinism(7)
     model, processor = load_policy(
         a.checkpoint,

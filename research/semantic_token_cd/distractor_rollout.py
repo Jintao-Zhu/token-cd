@@ -12,9 +12,12 @@ import numpy as np
 import torch
 from PIL import Image
 
-REPO_ROOT = Path("/home/leju-suzhou/zjt_ws/token-cd")
-PCD_ROOT = Path("/home/leju-suzhou/zjt_ws/pcd_openvla_simpler_box_31b027e")
-PCD_SOURCE = PCD_ROOT / "source"
+REPO_ROOT = Path(os.environ.get("TOKEN_CD", Path(__file__).resolve().parents[2])).resolve()
+PCD_ROOT = Path(os.environ.get(
+    "PCD_ROOT",
+    REPO_ROOT.parent / "official-reproductions/pcd_openvla_simpler_box_31b027e",
+)).resolve()
+PCD_SOURCE = Path(os.environ.get("PCD_SOURCE", PCD_ROOT / "source")).resolve()
 MEAN_PATH = (
     REPO_ROOT
     / "artifacts/_archive/token_pcd/token_pcd_openvla_simpler_stage_a_v1_20260814"

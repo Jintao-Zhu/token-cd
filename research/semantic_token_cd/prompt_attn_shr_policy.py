@@ -72,6 +72,62 @@ def stable_top_m(scores: np.ndarray, m: int) -> list[int]:
     return sorted(int(index) for index in order[:m])
 
 
+def geometry_patch_scores(policy, image: np.ndarray) -> tuple[np.ndarray, np.ndarray]:
+    """Sobel magnitude averaged over the exact 16x16 OpenVLA visual patches."""
+    import cv2
+
+    resized = policy._resize_image(image)
+    if resized.shape != (224, 224, 3) or resized.dtype != np.uint8:
+        raise ValueError(
+            f"OpenVLA geometry selector expects resized RGB uint8 [224,224,3], got "
+            f"{resized.shape} {resized.dtype}"
+        )
+    gray = cv2.cvtColor(resized, cv2.COLOR_RGB2GRAY)
+    gx = cv2.Sobel(gray, cv2.CV_32F, 1, 0, ksize=3)
+    gy = cv2.Sobel(gray, cv2.CV_32F, 0, 1, ksize=3)
+    magnitude = cv2.magnitude(gx, gy)
+    scores = magnitude.reshape(16, 14, 16, 14).mean(axis=(1, 3)).reshape(N_VISUAL)
+    if scores.shape != (N_VISUAL,) or not np.isfinite(scores).all():
+        raise FloatingPointError("invalid Sobel patch scores")
+    return scores.astype(np.float32), resized
+
+
+def select_mask(
+    mask_selector: str,
+    l11_scores: np.ndarray,
+    geometry_scores: np.ndarray,
+    m: int,
+    *,
+    task_index: int,
+    episode_seed: int,
+    control_step: int,
+) -> tuple[list[int], int | None]:
+    """Select exactly m tokens while keeping all downstream intervention code fixed."""
+    if mask_selector == "l11":
+        return stable_top_m(l11_scores, m), None
+    if mask_selector == "geometry_mask":
+        return stable_top_m(geometry_scores, m), None
+    if mask_selector == "geometry_protect":
+        protected = set(stable_top_m(geometry_scores, m))
+        l11_order = np.lexsort((np.arange(N_VISUAL), -np.asarray(l11_scores, dtype=np.float64)))
+        selected = [int(index) for index in l11_order if int(index) not in protected][:m]
+        if len(selected) != m:
+            raise RuntimeError(
+                f"Geometry-Protect cannot select m={m} outside a protected set of size {m}; "
+                "this design requires m <= 128"
+            )
+        return sorted(selected), None
+    if mask_selector == "random_matched":
+        seed = int(np.random.SeedSequence([
+            int(task_index), int(episode_seed), int(control_step), RANDOM_SALT,
+        ]).generate_state(1, dtype=np.uint32)[0])
+        selected = sorted(int(index) for index in np.random.default_rng(seed).choice(
+            N_VISUAL, size=m, replace=False
+        ))
+        return selected, seed
+    raise ValueError(f"unknown mask selector: {mask_selector}")
+
+
 def stable_rank(scores: np.ndarray, indices: list[int], descending: bool = True) -> list[int]:
     """Rank a candidate subset with ascending token id as the tie-break."""
     values = np.asarray(scores, dtype=np.float64)
@@ -636,6 +692,22 @@ class PromptAttentionSHRInference(STSHRCDInference):
                 )
 
         inputs = self.process_inputs(image, task_description=task_description)
+        mask_selector = getattr(self, "mask_selector", "l11")
+        if getattr(self, "geometry_diagnostics", False) or mask_selector in {
+            "geometry_mask", "geometry_protect", "random_matched",
+        }:
+            geometry_scores, resized_rgb = geometry_patch_scores(self, image)
+            if tuple(int(value) for value in inputs["pixel_values"].shape[-2:]) != (224, 224):
+                raise RuntimeError(
+                    "Geometry selector patch map expects 224x224 processor tensors, got "
+                    f"{tuple(inputs['pixel_values'].shape)}"
+                )
+            resized_rgb_sha256 = hashlib.sha256(
+                np.ascontiguousarray(resized_rgb).tobytes()
+            ).hexdigest()
+        else:
+            geometry_scores = np.zeros(N_VISUAL, dtype=np.float32)
+            resized_rgb_sha256 = None
         with projector_intervention(self.vla) as positive_trace:
             clean_scores = self._forward_scores(inputs, self.unnorm_key, do_sample=False)
         if clean_scores.shape[0] != 7 or positive_trace.before is None:
@@ -1018,8 +1090,20 @@ class PromptAttentionSHRInference(STSHRCDInference):
             }
         elif self.selector_mode == "prompt_attention":
             if rank_bin is None:
-                selected = stable_top_m(attention_scores, m)
+                if attention_scores is None:
+                    raise RuntimeError("Prompt-Attn mask selection requires L11 attention scores")
+                selected, random_seed = select_mask(
+                    mask_selector,
+                    attention_scores,
+                    geometry_scores,
+                    m,
+                    task_index=self.task_index,
+                    episode_seed=self._episode_seed,
+                    control_step=len(self._episode_trace),
+                )
             else:
+                if mask_selector != "l11":
+                    raise RuntimeError("rank-bin selection cannot be combined with a mask selector")
                 order = np.lexsort((np.arange(N_VISUAL), -np.asarray(attention_scores, dtype=np.float64)))
                 selected = sorted(int(index) for index in order[rank_bin * 32:(rank_bin + 1) * 32])
                 if len(selected) != 32 or len(set(selected)) != 32:
@@ -1082,8 +1166,16 @@ class PromptAttentionSHRInference(STSHRCDInference):
         centered = (clean_scores[:6, start:start + ACTION_VOCAB_SIZE].float()
                     - negative_scores[:6, start:start + ACTION_VOCAB_SIZE].float())
         centered = centered - centered.mean(dim=-1, keepdim=True)
+        logit_residual_norm = float(torch.linalg.vector_norm(
+            clean_scores[:, start:start + ACTION_VOCAB_SIZE].float()
+            - negative_scores[:, start:start + ACTION_VOCAB_SIZE].float()
+        ).item())
         clean_decoded = self._decode_actions(clean_token_ids, self.unnorm_key)
         guided_decoded = self._decode_actions(token_ids, self.unnorm_key)
+        action_change_norm = float(np.linalg.norm(
+            np.asarray(guided_decoded, dtype=np.float64)
+            - np.asarray(clean_decoded, dtype=np.float64)
+        ))
         overlap = len(set(selected) & set(reference))
         if self.selector_difference_eta is not None:
             correct_prompt_selected = stable_top_m(p, m)
@@ -1102,6 +1194,7 @@ class PromptAttentionSHRInference(STSHRCDInference):
         perturbation = h_negative - h
         meta = {
             "selection_mode": self.selector_mode,
+            "mask_selector": mask_selector,
             "instruction": task_description,
             "selected_entities": list(self._entities),
             "selected_group_ids": entity_groups,
@@ -1153,6 +1246,14 @@ class PromptAttentionSHRInference(STSHRCDInference):
             "region_aux": dict(self.region_aux) if self.region_aux else None,
             "random_seed": random_seed,
             "random_rule": "SeedSequence([task_index, episode_seed, control_step, 0x50A77E11])",
+            "l11_score_sha256": hashlib.sha256(
+                np.ascontiguousarray(attention_scores).tobytes()
+            ).hexdigest() if attention_scores is not None else None,
+            "geometry_score_sha256": (
+                hashlib.sha256(np.ascontiguousarray(geometry_scores).tobytes()).hexdigest()
+                if resized_rgb_sha256 is not None else None
+            ),
+            "preprocessor_rgb_224_sha256": resized_rgb_sha256,
             "kmeans_K": int(self.kmeans_K),
             "kmeans_seed": int(self.kmeans_seed),
             "beta": 0.0,
@@ -1161,10 +1262,12 @@ class PromptAttentionSHRInference(STSHRCDInference):
             "non_target_bit_identical": non_target_equal,
             "reconstruction_finite": True,
             "feature_perturbation_norm": float(np.linalg.norm(perturbation)),
+            "D_feat": float(np.linalg.norm(perturbation)),
             "feature_perturbation_relative": float(
                 np.linalg.norm(perturbation) / (np.linalg.norm(h) + EPS)
             ),
             "centered_logit_residual_norm": float(torch.linalg.vector_norm(centered).item()),
+            "D_res": logit_residual_norm,
             "centered_logit_residual_norm_per_dim": [
                 float(value) for value in torch.linalg.vector_norm(centered, dim=-1).cpu()
             ],
@@ -1177,6 +1280,7 @@ class PromptAttentionSHRInference(STSHRCDInference):
             "clean_action": np.asarray(clean_decoded).tolist(),
             "guided_action": np.asarray(guided_decoded).tolist(),
             "guided_clean_action_l2": float(np.linalg.norm(guided_decoded[:6] - clean_decoded[:6])),
+            "D_action": action_change_norm,
             **attention_meta,
             **action_attention_meta,
             **complement_meta,
@@ -1199,6 +1303,8 @@ class PromptAttentionSHRInference(STSHRCDInference):
         }
         if attention_scores is not None and self.save_prompt_attention:
             record["prompt_attention"] = attention_scores.astype(np.float32)
+        if resized_rgb_sha256 is not None:
+            record["geometry_scores"] = geometry_scores.astype(np.float32)
             if self.selector_difference_eta is not None:
                 record["correct_attention_probability"] = p
                 record["contrast_attention_probability"] = q

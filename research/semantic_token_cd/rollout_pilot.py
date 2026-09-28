@@ -35,11 +35,18 @@ import torch
 # load avg 106, ~5x per-episode slowdown). Pin every CPU-side pool to 1 thread;
 # GPU compute is unaffected.
 torch.set_num_threads(1)
-torch.set_num_interop_threads(1)
+try:
+    torch.set_num_interop_threads(1)
+except RuntimeError:
+    # Another imported runtime may already have initialized PyTorch's pool.
+    pass
 
-REPO_ROOT = Path("/home/leju-suzhou/zjt_ws/token-cd")
-PCD_ROOT = Path("/home/leju-suzhou/zjt_ws/pcd_openvla_simpler_box_31b027e")
-PCD_SOURCE = PCD_ROOT / "source"
+REPO_ROOT = Path(os.environ.get("TOKEN_CD", Path(__file__).resolve().parents[2])).resolve()
+PCD_ROOT = Path(os.environ.get(
+    "PCD_ROOT",
+    REPO_ROOT.parent / "official-reproductions/pcd_openvla_simpler_box_31b027e",
+)).resolve()
+PCD_SOURCE = Path(os.environ.get("PCD_SOURCE", PCD_ROOT / "source")).resolve()
 MEAN_PATH = (REPO_ROOT / "artifacts/_archive/token_pcd/token_pcd_openvla_simpler_stage_a_v1_20260814/"
              "position_conditioned_visual_mean.pt")
 
