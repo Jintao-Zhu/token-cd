@@ -21,10 +21,12 @@
 
 ## Progress checkpoint
 
-At this checkpoint, the nine state-library workers and the pipeline orchestrator were active in tmux. The Open Drawer state library had 88/100 complete four-frame seed records; Close Drawer had begun. No final A, B, or C conclusions are available yet. The state-library replay phase is data extraction from recorded actions, not a new policy evaluation.
+The state library completed: 1,600/1,600 sampled frames across 400 source episodes. A1 completed on those frames. Its preliminary aggregate Spearman correlation between Matched budget and visible target/source-union patch count is `-0.041` (episode-bootstrap 95% CI `[-0.105, 0.023]`); task-wise correlations are Open Drawer `-0.157`, Close Drawer `-0.167`, Pick Coke Can `-0.001`, and Move Near `-0.256`. The partial rank correlation controlling task and phase is `-0.142`; median within-episode Spearman is `-0.258`. This does not support the simple positive spatial-support-size hypothesis in this replay-derived sample. Treat it as preliminary pending replay-fidelity review; it is not a final A/B/C conclusion.
 
-The small preflight rollouts for the four tasks passed their initial-state/RGB pairing and renderer checks. A separate long replay spot-check found one episode whose restored initial state and RGB hashes matched the source, but whose replayed final success differed. This replay-fidelity discrepancy is recorded for follow-up; replayed success labels must not replace the original rollout labels.
+The state-library replay phase is data extraction from recorded actions, not a new policy evaluation. A2's four-state/five-dose preflight passed and the nine formal offline shards are now running. B and C have not started.
+
+The small preflight rollouts for the four tasks passed their initial-state/RGB pairing and renderer checks. A separate long replay spot-check found one episode whose restored initial state and RGB hashes matched the source, but whose replayed final success differed. This replay-fidelity discrepancy is recorded for follow-up; replayed success labels must not replace the original rollout labels. A1 also handles fully invisible target unions as zero visible support, with undefined bbox/recall values left null instead of aborting the analysis.
 
 ## Data handling
 
-Raw RGB/segmentation/state arrays, checkpoints, and large exports remain in local ignored artifact directories. This repository record contains the protocol and progress only; it does not claim that the planned experiments have completed.
+Raw RGB/segmentation/state arrays, checkpoints, and large exports remain in local ignored artifact directories. The compact A1 interim summary and state-level metric CSV are tracked next to this record. This record does not claim that the planned experiments have completed.

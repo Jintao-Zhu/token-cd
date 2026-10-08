@@ -11,6 +11,8 @@ from pathlib import Path
 
 import numpy as np
 
+ROOT = Path(__file__).resolve().parents[2]
+
 
 def softmax(x):
     x = np.asarray(x, dtype=np.float64)
@@ -51,7 +53,7 @@ def main():
     action_scales = {}
     for task in table2.FIG4_TASKS:
         chunks = []
-        for p in (table2.ROOT / "artifacts/l11_table2_main_ablation_v1/formal/full/episodes" / task / "full").glob("*_arrays.npz"):
+        for p in (ROOT / "artifacts/l11_table2_main_ablation_v1/formal/full/episodes" / task / "full").glob("*_arrays.npz"):
             with np.load(p, allow_pickle=False) as a:
                 if "executed_actions" in a and a["executed_actions"].ndim == 2:
                     chunks.append(a["executed_actions"][:, :6])

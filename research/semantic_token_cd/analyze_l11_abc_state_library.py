@@ -68,24 +68,31 @@ def summarize_region(task: str, seg: np.ndarray, entities: dict) -> dict:
         primary = grids["target_union"]
     occupied = primary > 0
     coords = np.argwhere(occupied.reshape(16, 16))
-    if len(coords) == 0:
-        raise ValueError(f"no target patches for {task}; IDs={groups}")
-    r0, c0 = coords.min(axis=0)
-    r1, c1 = coords.max(axis=0)
-    centroid = coords.mean(axis=0)
-    dist = np.linalg.norm(coords - centroid, axis=1)
+    if len(coords):
+        r0, c0 = coords.min(axis=0)
+        r1, c1 = coords.max(axis=0)
+        centroid = coords.mean(axis=0)
+        mean_distance = float(np.linalg.norm(coords - centroid, axis=1).mean() / np.sqrt(2 * 15**2))
+        bbox_area = int((r1 - r0 + 1) * (c1 - c0 + 1))
+        bbox_fill = float(occupied.sum() / bbox_area)
+    else:
+        # Fully occluded or out-of-view target entities are valid observations.
+        # Keep their visible support at zero; bbox and centroid distance are
+        # undefined and are represented as null rather than aborting A1.
+        bbox_area = 0
+        bbox_fill = None
+        mean_distance = None
     target_ids = list(values_int(groups))
     visible_pixels = int(np.isin(seg, target_ids).sum())
-    bbox_pixels = int((r1 - r0 + 1) * (c1 - c0 + 1) * 14 * 14)
     return {
         "gt_visible_patches": int(occupied.sum()),
-        "gt_bbox_area_patches": int((r1 - r0 + 1) * (c1 - c0 + 1)),
-        "gt_bbox_area_fraction": float((r1 - r0 + 1) * (c1 - c0 + 1) / 256),
+        "gt_bbox_area_patches": bbox_area if len(coords) else None,
+        "gt_bbox_area_fraction": float(bbox_area / 256) if len(coords) else None,
         "gt_mask_area_fraction_model_view": float(primary.sum() / 256),
-        "gt_mean_spatial_distance_grid": float(dist.mean() / np.sqrt(2 * 15**2)),
-        "gt_bbox_fill_fraction": float(occupied.sum() / ((r1 - r0 + 1) * (c1 - c0 + 1))),
+        "gt_mean_spatial_distance_grid": mean_distance,
+        "gt_bbox_fill_fraction": bbox_fill,
         "gt_visible_pixel_count_source_resolution": visible_pixels,
-        "gt_bbox_pixel_count_model_view_approx": bbox_pixels,
+        "gt_bbox_pixel_count_model_view_approx": bbox_area * 14 * 14 if len(coords) else None,
         "region_patch_overlap": primary,
         "region_groups": grids,
     }
@@ -98,6 +105,7 @@ def partial_rank_corr(rows: list[dict]) -> float:
     for it would remove the target variable mechanically. An amodal object mask
     is unavailable, so occlusion-adjusted visibility is not claimed.
     """
+    rows = [r for r in rows if r.get("gt_visible_patches") is not None]
     x = rankdata([r["m_matched"] for r in rows])
     y = rankdata([r["gt_visible_patches"] for r in rows])
     task_names = sorted({r["task"] for r in rows})
@@ -151,8 +159,9 @@ def main() -> None:
         selected_mask[selected] = True
         target = overlap > 0
         target_precision = float((selected_mask & target).sum() / max(selected_mask.sum(), 1))
-        target_recall = float((selected_mask & target).sum() / max(target.sum(), 1))
-        enrichment = target_precision / max(float(target.mean()), 1e-12)
+        target_recall = (float((selected_mask & target).sum() / target.sum())
+                         if target.sum() else None)
+        enrichment = (target_precision / float(target.mean()) if target.mean() > 0 else None)
         sm = selected_mask.reshape(16, 16)
         boundary = 0
         for r in range(16):
@@ -207,8 +216,8 @@ def main() -> None:
             "mean_m": float(np.mean([r['m_matched'] for r in rs])),
             "mean_target_patches": float(np.mean([r['gt_visible_patches'] for r in rs])),
             "mean_target_precision": float(np.mean([r['target_precision'] for r in rs])),
-            "mean_target_recall": float(np.mean([r['target_recall'] for r in rs])),
-            "mean_target_enrichment": float(np.mean([r['target_enrichment'] for r in rs])),
+            "mean_target_recall": float(np.mean([r['target_recall'] for r in rs if r['target_recall'] is not None])) if any(r['target_recall'] is not None for r in rs) else None,
+            "mean_target_enrichment": float(np.mean([r['target_enrichment'] for r in rs if r['target_enrichment'] is not None])) if any(r['target_enrichment'] is not None for r in rs) else None,
         }
     rho, lo, hi = boot_spearman(rows, "m_matched", "gt_visible_patches", args.bootstrap, rng)
     all_episode_corrs = []
