@@ -30,6 +30,36 @@ SCALE_ARMS = {
     "matched_scale_125": 1.25,
     "matched_scale_150": 1.50,
 }
+RT_DEPTH = {
+    "google_robot_open_drawer": 8,
+    "google_robot_close_drawer": 8,
+    "google_robot_pick_coke_can": 0,
+    "google_robot_move_near": 0,
+}
+RT0_REFERENCE = Path(__file__).resolve().parents[2] / "artifacts/simpler_rt_depth0_7task_4200_v1"
+
+
+def load_task_reference(snapshot_root: Path, task: str, seed: int) -> dict:
+    """Use the existing renderer-matched baseline for paired hash validation.
+
+    Canonical snapshot metadata for pick/move was rendered in a different
+    mode. Their paired main-result Vanilla records are the RT-depth0 source;
+    drawer records in the canonical artifact already match RT-full depth 8.
+    """
+    if task in {"google_robot_pick_coke_can", "google_robot_move_near"}:
+        path = RT0_REFERENCE / "episodes" / task / "vanilla" / f"episode_{seed:03d}_summary.json"
+        if not path.is_file():
+            raise FileNotFoundError(f"missing RT-depth0 pairing reference: {path}")
+        reference = json.loads(path.read_text())
+        canonical = load_reference(snapshot_root, task, seed)
+        # The task instruction belongs to the canonical episode metadata; the
+        # renderer-specific baseline provides the expected RT0 image hash.
+        reference["instruction"] = canonical["instruction"]
+        expected_renderer = "depth0"
+        if expected_renderer not in str(reference.get("renderer", "")).lower():
+            raise RuntimeError(f"RT-depth0 reference has wrong renderer: {path}")
+        return reference
+    return load_reference(snapshot_root, task, seed)
 ARMS = SCHEDULE_ARMS + tuple(SCALE_ARMS)
 
 
@@ -48,20 +78,34 @@ def parse_seeds(specification: str) -> list[int]:
     return result
 
 
-def make_environment(task: str):
+def make_environment(task: str, renderer_device: str = "cuda:0"):
     import gymnasium as gym
     import simpler_env
 
-    renderer_kwargs = {"device": "cuda:0", "offscreen_only": True}
+    # Match the current OpenVLA SIMPLER main-result renderer lock.  Leaving
+    # shader_dir unset silently selects the legacy IBL path, which is both a
+    # different experiment and the known unstable path for pick-can here.
+    render_config = {
+        "rt_samples_per_pixel": 32,
+        "rt_max_path_depth": RT_DEPTH[task],
+        "rt_use_denoiser": True,
+    }
+    renderer_kwargs = {"device": renderer_device, "offscreen_only": True}
     if task == "google_robot_pick_coke_can":
         return gym.make(
             "GraspSingleOpenedCokeCanDistractorInScene-v0",
             obs_mode="rgbd", prepackaged_config=True, distractor_config="less",
+            shader_dir="rt", render_config=render_config,
             renderer_kwargs=renderer_kwargs,
         ), "GraspSingleOpenedCokeCanDistractorInScene-v0"
     environment_id, base_kwargs = simpler_env.ENVIRONMENT_MAP[task]
     kwargs = dict(base_kwargs)
-    kwargs.update({"prepackaged_config": True, "renderer_kwargs": renderer_kwargs})
+    kwargs.update({
+        "prepackaged_config": True,
+        "shader_dir": "rt",
+        "render_config": render_config,
+        "renderer_kwargs": renderer_kwargs,
+    })
     return gym.make(environment_id, obs_mode="rgbd", **kwargs), environment_id
 
 
@@ -176,7 +220,7 @@ def main() -> None:
     for seed in seeds:
         with (source / "snapshots" / args.task / f"seed_{seed:03d}.pkl").open("rb") as handle:
             snapshot = pickle.load(handle)
-        reference = load_reference(source, args.task, seed)
+        reference = load_task_reference(source, args.task, seed)
         expected = (
             reference["canonical_snapshot_sha256"], reference["initial_state_sha256"],
             reference["initial_rgb_sha256"],

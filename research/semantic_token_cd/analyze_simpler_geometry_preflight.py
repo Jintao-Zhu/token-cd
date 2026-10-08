@@ -29,7 +29,7 @@ def sobel_scores(rgb: np.ndarray) -> np.ndarray:
     gray = cv2.cvtColor(rgb, cv2.COLOR_RGB2GRAY)
     gx = cv2.Sobel(gray, cv2.CV_32F, 1, 0, ksize=3)
     gy = cv2.Sobel(gray, cv2.CV_32F, 0, 1, ksize=3)
-    mag = cv2.magnitude(gx, gy)
+    mag = np.hypot(gx, gy)
     return mag.reshape(16, 14, 16, 14).mean(axis=(1, 3)).reshape(256).astype(np.float32)
 
 
@@ -60,14 +60,16 @@ def main() -> None:
                 l11 = pair["l11_scores"]
                 geo = pair["geometry_scores"]
                 budget = pair["matched_budget_m"].astype(int)
-                rgb = pair["processor_rgb_224_first_step"]
+                rgb_by_arm = pair["processor_rgb_224_first_step_by_arm"]
                 if masks.shape != l11.shape or masks.shape != geo.shape or masks.shape[0] != 4 or masks.shape[2] != 256:
                     raise AssertionError(f"score/mask dimensions invalid: {masks.shape}, {l11.shape}, {geo.shape}")
-                if rgb.shape != (224, 224, 3):
-                    raise AssertionError(f"224 RGB mapping invalid: {rgb.shape}")
-                expected_geo = sobel_scores(rgb)
-                if not np.allclose(geo[:, 0], expected_geo[None, :], rtol=0, atol=1e-5):
-                    raise AssertionError("first-step Sobel scores do not match 14x14 patch recomputation")
+                if rgb_by_arm.shape != (4, 224, 224, 3) or rgb_by_arm.dtype != np.uint8:
+                    raise AssertionError(f"processor RGB audit data invalid: {rgb_by_arm.shape}/{rgb_by_arm.dtype}")
+                if not np.all(rgb_by_arm == rgb_by_arm[0]):
+                    raise AssertionError("the four arms did not receive the same processor-aligned first-step RGB")
+                expected_geo = np.stack([sobel_scores(rgb) for rgb in rgb_by_arm])
+                if not np.allclose(geo[:, 0], expected_geo, rtol=0, atol=1e-5):
+                    raise AssertionError("first-step Sobel scores do not match each arm's exact 14x14 input patches")
                 if not np.allclose(l11[:, 0], l11[0, 0][None, :], rtol=0, atol=1e-7):
                     raise AssertionError("first-step L11 scores differ despite identical input RGB")
                 if not np.allclose(geo[:, 0], geo[0, 0][None, :], rtol=0, atol=1e-7):
@@ -117,7 +119,9 @@ def main() -> None:
                         elif arm == "geometry_protect":
                             protected = set(stable_top_m(geo[arm_index, step], m))
                             order = np.lexsort((np.arange(256), -l11[arm_index, step].astype(np.float64)))
-                            expected = sorted(int(x) for x in order if int(x) not in protected)[:m]
+                            expected = sorted(
+                                int(x) for x in [int(x) for x in order if int(x) not in protected][:m]
+                            )
                             if len(expected) != m:
                                 raise AssertionError(f"Geometry-Protect impossible for m={m}")
                         else:
@@ -132,12 +136,14 @@ def main() -> None:
                                 raise AssertionError("Random-Matched seed rule changed")
                         if selected != expected:
                             raise AssertionError(f"selector mask mismatch at {arm} step {step}")
-                    for key in ("positive_logits", "negative_logits", "selected_mask", "l11_scores", "geometry_scores"):
+                    for key in ("positive_logits", "negative_logits", "selected_mask", "l11_scores", "geometry_scores", "processor_rgb_224_first_step"):
                         if key not in arm_arrays:
                             raise AssertionError(f"missing required per-step record {key}: {arm}")
-                    checks.append({"task": task, "seed": seed, "pair_exact": True,
-                                   "steps": len(budget), "m_min": int(budget.min()),
-                                   "m_max": int(budget.max())})
+                    if not np.array_equal(arm_arrays["processor_rgb_224_first_step"], rgb_by_arm[arm_index]):
+                        raise AssertionError(f"saved processor RGB differs between pair and arm arrays: {arm}")
+                checks.append({"task": task, "seed": seed, "pair_exact": True,
+                               "steps": len(budget), "m_min": int(budget.min()),
+                               "m_max": int(budget.max())})
             except Exception as exc:
                 errors.append(f"{task} seed {seed}: {type(exc).__name__}: {exc}")
 

@@ -24,6 +24,54 @@ PROTOCOL = "SIMPLER_L11_GEOMETRY_MASK_PROTECT_RANDOM_V1"
 SEEDS = tuple(range(100, 200))
 LAMBDA = 0.5
 RANDOM_SALT = 0x50A77E11
+RENDERER_DEPTH = {
+    "google_robot_open_drawer": 8,
+    "google_robot_close_drawer": 8,
+    "google_robot_pick_coke_can": 0,
+    "google_robot_move_near": 0,
+}
+
+
+def make_environment(task: str, gpu: int):
+    """Use established per-task RT settings; IBL is intentionally avoided.
+
+    The worker exposes its assigned physical GPU through CUDA_VISIBLE_DEVICES,
+    so the renderer's cuda:0 is process-local and resolves to that GPU.
+    """
+    import gymnasium as gym
+    import simpler_env
+
+    if os.environ.get("CUDA_VISIBLE_DEVICES") != str(gpu):
+        raise RuntimeError(
+            f"renderer GPU mapping mismatch: --gpu={gpu}, "
+            f"CUDA_VISIBLE_DEVICES={os.environ.get('CUDA_VISIBLE_DEVICES')}"
+        )
+
+    render_config = {
+        "rt_samples_per_pixel": 32,
+        "rt_max_path_depth": RENDERER_DEPTH[task],
+        "rt_use_denoiser": True,
+    }
+    renderer_kwargs = {"device": "cuda:0", "offscreen_only": True}
+    if task == "google_robot_pick_coke_can":
+        return gym.make(
+            "GraspSingleOpenedCokeCanDistractorInScene-v0",
+            obs_mode="rgbd",
+            prepackaged_config=True,
+            distractor_config="less",
+            shader_dir="rt",
+            render_config=render_config,
+            renderer_kwargs=renderer_kwargs,
+        ), "GraspSingleOpenedCokeCanDistractorInScene-v0"
+    environment_id, base_kwargs = simpler_env.ENVIRONMENT_MAP[task]
+    kwargs = dict(base_kwargs)
+    kwargs.update({
+        "prepackaged_config": True,
+        "shader_dir": "rt",
+        "render_config": render_config,
+        "renderer_kwargs": renderer_kwargs,
+    })
+    return gym.make(environment_id, obs_mode="rgbd", **kwargs), environment_id
 
 
 def parse_seeds(spec: str) -> list[int]:
@@ -74,6 +122,7 @@ def _write_arm_arrays(path: Path, records: list[dict], actions) -> None:
         selected_mask=np.stack([record["selected_mask"] for record in records]),
         l11_scores=np.stack([record["prompt_attention"] for record in records]),
         geometry_scores=np.stack([record["geometry_scores"] for record in records]),
+        processor_rgb_224_first_step=records[0]["processor_rgb_224_first_step"],
         executed_actions=actions,
     )
 
@@ -185,8 +234,10 @@ def _write_pair_arrays(path: Path, arms_data: dict[str, dict], budget: list[int]
         "jaccard_vs_l11": jaccard,
         **metrics,
     }
-    if rgb224 is not None:
-        payload["processor_rgb_224_first_step"] = np.asarray(rgb224, dtype=np.uint8)
+    payload["processor_rgb_224_first_step_by_arm"] = np.stack([
+        np.asarray(arms_data[arm]["processor_rgb_224_first_step"], dtype=np.uint8)
+        for arm in ARMS
+    ])
     np.savez_compressed(path, **payload)
     return {
         "control_steps": steps,
@@ -212,7 +263,8 @@ def main() -> None:
     parser.add_argument("--snapshot-artifact", type=Path, required=True)
     parser.add_argument("--task", choices=TASKS, required=True)
     parser.add_argument("--seeds", required=True)
-    parser.add_argument("--gpu", type=int, default=0)
+    parser.add_argument("--gpu", type=int, choices=(1, 2, 3), default=1,
+                        help="physical GPU id; this runner is restricted to GPUs 1, 2, and 3")
     parser.add_argument("--worker-id", default="manual")
     parser.add_argument("--phase", choices=("preflight", "full"), required=True)
     args = parser.parse_args()
@@ -244,10 +296,8 @@ def main() -> None:
     from research.semantic_token_cd.distractor_rollout import (
         PCD_SOURCE, array_sha256, jsonable, restore_snapshot, snapshot_sha,
     )
-    from research.semantic_token_cd.prompt_attn_shr_policy import geometry_patch_scores
-    from research.semantic_token_cd.prompt_attn_layer_rollout import make_environment
     from research.semantic_token_cd.rollout_pilot import capture_snapshot
-    from research.semantic_token_cd.spatial_grid_rollout import get_image_from_maniskill2_obs_dict, run_episode
+    from research.semantic_token_cd.spatial_grid_rollout import run_episode
 
     if not torch.cuda.is_available():
         raise RuntimeError("CUDA unavailable")
@@ -276,6 +326,17 @@ def main() -> None:
         "canonical_snapshot_artifact": str(source),
         "checkpoint": str(PCD_SOURCE / "pretrained/openvla-7b"),
         "checkpoint_config_sha256": file_sha256(PCD_SOURCE / "pretrained/openvla-7b/config.json"),
+        "renderer_by_task": {
+            task: {
+                "shader_dir": "rt",
+                "rt_samples_per_pixel": 32,
+                "rt_max_path_depth": RENDERER_DEPTH[task],
+                "rt_use_denoiser": True,
+                "offscreen_only": True,
+                "physical_gpu": "--gpu / CUDA_VISIBLE_DEVICES; renderer cuda:0 is process-local",
+            }
+            for task in TASKS
+        },
         "geometry": {
             "processor_resize": "OpenVLAInference._resize_image, cv2.INTER_AREA to 224x224 RGB",
             "grayscale": "cv2.COLOR_RGB2GRAY",
@@ -370,6 +431,7 @@ def main() -> None:
                         "selected_mask": loaded["selected_mask"],
                         "l11_scores": loaded["l11_scores"],
                         "geometry_scores": loaded["geometry_scores"],
+                        "processor_rgb_224_first_step": loaded["processor_rgb_224_first_step"],
                         "D_feat": np.asarray([x["D_feat"] for x in summary["selector_trace"]], dtype=np.float32),
                         "D_res": np.asarray([x["D_res"] for x in summary["selector_trace"]], dtype=np.float32),
                         "D_action": np.asarray([x["D_action"] for x in summary["selector_trace"]], dtype=np.float32),
@@ -393,10 +455,6 @@ def main() -> None:
                 policy.reset(instruction, seed=seed)
                 policy._episode_trace = []
                 policy._episode_logits = []
-                if args.phase == "preflight":
-                    image = get_image_from_maniskill2_obs_dict(env, obs)
-                    _score, rgb224_for_figure = geometry_patch_scores(policy, image)
-
                 started = time.monotonic()
                 result, steps, reason, actions, jitter = run_episode(env, policy, instruction, obs)
                 elapsed = time.monotonic() - started
@@ -416,11 +474,14 @@ def main() -> None:
                     "selected_mask": np.stack([record["selected_mask"] for record in policy._episode_logits]),
                     "l11_scores": np.stack([record["prompt_attention"] for record in policy._episode_logits]),
                     "geometry_scores": np.stack([record["geometry_scores"] for record in policy._episode_logits]),
+                    "processor_rgb_224_first_step": policy._episode_logits[0]["processor_rgb_224_first_step"],
                     "D_feat": np.asarray([row["D_feat"] for row in trace], dtype=np.float32),
                     "D_res": np.asarray([row["D_res"] for row in trace], dtype=np.float32),
                     "D_action": np.asarray([row["D_action"] for row in trace], dtype=np.float32),
                     "m_t": np.asarray([row["m_t"] for row in trace], dtype=np.int16),
                 }
+                if args.phase == "preflight" and arm == "l11_matched":
+                    rgb224_for_figure = values["processor_rgb_224_first_step"]
                 arm_data[arm] = values
                 if arm == "l11_matched":
                     budget_tape = values["m_t"].astype(int).tolist()
@@ -428,6 +489,13 @@ def main() -> None:
                 summary = {
                     "protocol_id": PROTOCOL, "phase": args.phase,
                     "task": args.task, "environment_id": environment_id,
+                    "renderer": {
+                        "shader_dir": "rt",
+                        "rt_samples_per_pixel": 32,
+                        "rt_max_path_depth": RENDERER_DEPTH[args.task],
+                        "rt_use_denoiser": True,
+                        "physical_gpu": args.gpu,
+                    },
                     "seed": seed, "arm": arm, "instruction": instruction,
                     "success": bool(result["success"]), "result": jsonable(result),
                     "failure_reason": reason, "control_steps": steps,
@@ -468,6 +536,12 @@ def main() -> None:
             )
             pair_summary = {
                 "protocol_id": PROTOCOL, "task": args.task, "seed": seed,
+                "renderer": {
+                    "shader_dir": "rt",
+                    "rt_samples_per_pixel": 32,
+                    "rt_max_path_depth": RENDERER_DEPTH[args.task],
+                    "rt_use_denoiser": True,
+                },
                 "arms": list(ARMS), "canonical_snapshot_sha256": canonical_sha,
                 "initial_state_sha256": expected[1], "initial_rgb_sha256": initial_hashes["l11_matched"][1],
                 "canonical_reference_rgb_sha256": expected[2],

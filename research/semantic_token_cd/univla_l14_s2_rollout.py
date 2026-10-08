@@ -1,0 +1,317 @@
+"""Paired SAPIEN2 RT SIMPLER rollout for UniVLA Vanilla vs L14-Matched."""
+from __future__ import annotations
+
+import argparse
+import copy
+import hashlib
+import json
+import os
+import socket
+import struct
+import time
+from pathlib import Path
+
+import gymnasium as gym
+import numpy as np
+import simpler_env
+from simpler_env.utils.env.observation_utils import get_image_from_maniskill2_obs_dict
+
+TASK_ENVS = {
+    "widowx_spoon_on_towel": "PutSpoonOnTableClothInScene-v0",
+    "widowx_carrot_on_plate": "PutCarrotOnPlateInScene-v0",
+    "widowx_stack_cube": "StackGreenCubeOnYellowCubeBakedTexInScene-v0",
+    "widowx_put_eggplant_in_basket": "PutEggplantInBasketScene-v0",
+}
+ARMS = ("vanilla", "l14_matched")
+MAX_STEPS = 80
+
+
+def parse_seeds(spec: str) -> list[int]:
+    values = []
+    for part in spec.split(","):
+        part = part.strip()
+        if not part:
+            continue
+        if "-" in part:
+            lo, hi = map(int, part.split("-", 1))
+            values.extend(range(lo, hi + 1))
+        else:
+            values.append(int(part))
+    seeds = sorted(set(values))
+    if not seeds or seeds[0] < 0:
+        raise ValueError("invalid seed list")
+    return seeds
+
+
+def recv_exact(conn: socket.socket, count: int) -> bytes:
+    buf = bytearray()
+    while len(buf) < count:
+        chunk = conn.recv(count - len(buf))
+        if not chunk:
+            raise EOFError("model service disconnected")
+        buf.extend(chunk)
+    return bytes(buf)
+
+
+def send_message(conn: socket.socket, head: dict, payload: bytes = b""):
+    head = dict(head, payload_nbytes=len(payload))
+    body = json.dumps(head).encode()
+    conn.sendall(struct.pack("!I", len(body)) + body + payload)
+
+
+def recv_message(conn: socket.socket) -> dict:
+    n = struct.unpack("!I", recv_exact(conn, 4))[0]
+    return json.loads(recv_exact(conn, n))
+
+
+def observation_hash(obj) -> str:
+    digest = hashlib.sha256()
+    def visit(x):
+        if isinstance(x, dict):
+            for key in sorted(x):
+                digest.update(str(key).encode())
+                visit(x[key])
+        elif isinstance(x, (tuple, list)):
+            for item in x:
+                visit(item)
+        else:
+            a = np.asarray(x)
+            digest.update(str(a.dtype).encode())
+            digest.update(np.asarray(a.shape, dtype=np.int64).tobytes())
+            digest.update(np.ascontiguousarray(a).tobytes())
+    visit(obj)
+    return digest.hexdigest()
+
+
+def atomic_json(path: Path, value: dict):
+    path.parent.mkdir(parents=True, exist_ok=True)
+    tmp = path.with_name(path.name + f".{os.getpid()}.tmp")
+    tmp.write_text(json.dumps(value, indent=2, sort_keys=True, default=str) + "\n")
+    os.replace(tmp, path)
+
+
+def wrapped_observation(env):
+    obs = env.unwrapped.get_obs()
+    wrappers, current = [], env
+    while hasattr(current, "env"):
+        if hasattr(current, "observation"):
+            wrappers.append(current)
+        current = current.env
+    for wrapper in reversed(wrappers):
+        obs = wrapper.observation(obs)
+    return obs
+
+
+def capture_snapshot(env, seed: int):
+    _obs, reset_info = env.reset(seed=seed)
+    inner = env.unwrapped
+    return {
+        "sim_state": np.asarray(inner.get_state()).copy(),
+        "agent_state": copy.deepcopy(inner.agent.get_state()),
+        "rng_state": copy.deepcopy(inner._episode_rng.get_state()),
+        "instruction": inner.get_language_instruction(),
+        "episode_id": reset_info.get("episode_id"),
+    }
+
+
+def restore_snapshot(env, seed: int, snapshot: dict):
+    env.reset(seed=seed)
+    inner = env.unwrapped
+    inner.set_state(snapshot["sim_state"].copy())
+    inner.agent.set_state(copy.deepcopy(snapshot["agent_state"]))
+    inner._episode_rng.set_state(copy.deepcopy(snapshot["rng_state"]))
+    inner._elapsed_steps = 0
+    obs = wrapped_observation(env)
+    # Match the established SIMPLER snapshot-pairing audit: simulator get_state
+    # hash plus exact initial RGB hash. Agent state is also explicitly restored
+    # from the canonical snapshot before these hashes are measured.
+    state_sha = observation_hash(np.asarray(inner.get_state()))
+    image = np.asarray(get_image_from_maniskill2_obs_dict(env.unwrapped, obs), dtype=np.uint8)
+    rgb_sha = hashlib.sha256(np.ascontiguousarray(image).tobytes()).hexdigest()
+    return obs, image, state_sha, rgb_sha
+
+
+def snapshot_hash(snapshot: dict) -> str:
+    return observation_hash({
+        "sim_state": snapshot["sim_state"],
+        "agent_state": snapshot["agent_state"],
+        "rng_state": snapshot["rng_state"],
+        "instruction": snapshot["instruction"],
+        "episode_id": snapshot["episode_id"],
+    })
+
+
+def main():
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--task", choices=tuple(TASK_ENVS), required=True)
+    ap.add_argument("--seeds", required=True)
+    ap.add_argument("--worker-id", required=True)
+    ap.add_argument("--artifact", type=Path, required=True)
+    ap.add_argument("--socket", required=True)
+    args = ap.parse_args()
+    seeds = parse_seeds(args.seeds)
+    task_root = args.artifact / "episodes" / args.task
+    task_root.mkdir(parents=True, exist_ok=True)
+    env_id = TASK_ENVS[args.task]
+    env = gym.make(
+        env_id,
+        obs_mode="rgbd",
+        prepackaged_config=True,
+        shader_dir="rt",
+        renderer_kwargs={"device": "cuda:0"},
+    )
+    conn = socket.socket(socket.AF_UNIX, socket.SOCK_STREAM)
+    deadline = time.time() + 240
+    while True:
+        try:
+            conn.connect(args.socket)
+            break
+        except (FileNotFoundError, ConnectionRefusedError):
+            if time.time() > deadline:
+                raise TimeoutError(f"model service socket not ready: {args.socket}")
+            time.sleep(1)
+
+    completed = []
+    try:
+        for seed in seeds:
+            outputs = {}
+            paths = {arm: task_root / arm / f"seed_{seed:03d}.json" for arm in ARMS}
+            if all(path.exists() for path in paths.values()):
+                existing = {arm: json.loads(path.read_text()) for arm, path in paths.items()}
+                if (all(row.get("complete") for row in existing.values())
+                    and existing["vanilla"].get("initial_state_sha256") == existing["l14_matched"].get("initial_state_sha256")
+                    and existing["vanilla"].get("initial_rgb_sha256") == existing["l14_matched"].get("initial_rgb_sha256")):
+                    completed.append(seed)
+                    print(json.dumps({"worker": args.worker_id, "skip_complete_pair": True, "task": args.task, "seed": seed}), flush=True)
+                    continue
+
+            snapshot = capture_snapshot(env, seed)
+            canonical_sha = snapshot_hash(snapshot)
+            pair_state = {}
+            for arm in ARMS:
+                obs, image, state_sha, rgb_sha = restore_snapshot(env, seed, snapshot)
+                instruction = env.unwrapped.get_language_instruction()
+                pair_state[arm] = {
+                    "state_sha256": state_sha,
+                    "rgb_sha256": rgb_sha,
+                    "episode_id": snapshot["episode_id"],
+                    "instruction": instruction,
+                }
+                send_message(conn, {"cmd": "reset", "instruction": instruction, "seed": seed})
+                ack = recv_message(conn)
+                if not ack.get("ok"):
+                    raise RuntimeError(f"model reset failed: {ack}")
+                started = time.monotonic()
+                success = False
+                terminated = truncated = False
+                step_rows = []
+                info = {}
+                for step in range(MAX_STEPS):
+                    send_message(conn, {
+                        "cmd": "step", "arm": arm, "instruction": instruction,
+                        "shape": list(image.shape),
+                    }, image.tobytes())
+                    response = recv_message(conn)
+                    if not response.get("ok"):
+                        raise RuntimeError(f"model step failed at {args.task}/{seed}/{arm}: {response}")
+                    prediction = response["result"]
+                    action = prediction["action"]
+                    action_vec = np.concatenate([
+                        np.asarray(action["world_vector"], dtype=np.float32).reshape(-1),
+                        np.asarray(action["rot_axangle"], dtype=np.float32).reshape(-1),
+                        np.asarray(action["gripper"], dtype=np.float32).reshape(-1),
+                    ])
+                    obs, reward, terminated, truncated, info = env.step(action_vec)
+                    image = np.asarray(get_image_from_maniskill2_obs_dict(env.unwrapped, obs), dtype=np.uint8)
+                    success = bool(info.get("success", terminated))
+                    meta = prediction["meta"]
+                    step_rows.append({
+                        "step": step + 1,
+                        "action_token_ids": meta.get("action_token_ids"),
+                        "m_t": meta.get("m_t"),
+                        "selected_token_ids": meta.get("selected_token_ids"),
+                        "attention_mass": meta.get("attention_mass"),
+                        "action": action,
+                        "terminated": bool(terminated),
+                        "truncated": bool(truncated),
+                        "success": success,
+                    })
+                    if step == 0 or (step + 1) % 10 == 0 or terminated or truncated:
+                        print(json.dumps({
+                            "worker": args.worker_id, "task": args.task, "seed": seed, "arm": arm,
+                            "step": step + 1, "success": success,
+                            "m_t": meta.get("m_t"),
+                            "action_tokens_in_learned_range": meta.get("action_tokens_in_learned_range"),
+                        }), flush=True)
+                    if terminated or truncated:
+                        break
+
+                row = {
+                    "protocol_id": "UNIVLA_SAPIEN2_RT_L14_MATCHED_PAIRED_V1",
+                    "complete": True,
+                    "worker_id": args.worker_id,
+                    "task": args.task,
+                    "environment_id": env_id,
+                    "seed": seed,
+                    "episode_id": pair_state[arm]["episode_id"],
+                    "arm": arm,
+                    "canonical_snapshot_sha256": canonical_sha,
+                    "instruction": instruction,
+                    "renderer": {"shader_dir": "rt", "device": "cuda:0", "spp": 32, "path_depth": 8},
+                    "initial_state_sha256": state_sha,
+                    "initial_rgb_sha256": rgb_sha,
+                    "success": bool(success),
+                    "terminated": bool(terminated),
+                    "truncated": bool(truncated),
+                    "steps": len(step_rows),
+                    "runtime_seconds": round(time.monotonic() - started, 4),
+                    "final_info": info,
+                    "step_log": step_rows,
+                    "num_action_tokens_in_learned_range": [x.get("action_token_ids") for x in step_rows],
+                }
+                outputs[arm] = row
+                atomic_json(paths[arm], row)
+                print(json.dumps({"worker": args.worker_id, "task": args.task, "seed": seed, "arm": arm,
+                                  "success": bool(success), "steps": len(step_rows),
+                                  "runtime_seconds": row["runtime_seconds"]}), flush=True)
+
+            if pair_state["vanilla"]["instruction"] != pair_state["l14_matched"]["instruction"]:
+                raise RuntimeError(f"paired instruction mismatch: {pair_state}")
+            if pair_state["vanilla"]["state_sha256"] != pair_state["l14_matched"]["state_sha256"]:
+                raise RuntimeError(f"paired state mismatch for {args.task}/{seed}: {pair_state}")
+            if pair_state["vanilla"]["rgb_sha256"] != pair_state["l14_matched"]["rgb_sha256"]:
+                raise RuntimeError(f"paired RGB mismatch for {args.task}/{seed}: {pair_state}")
+            pair = {
+                "task": args.task, "seed": seed,
+                "vanilla_success": outputs["vanilla"]["success"],
+                "l14_matched_success": outputs["l14_matched"]["success"],
+                "exact_initial_pair": True,
+                "initial_state_sha256": pair_state["vanilla"]["state_sha256"],
+                "initial_rgb_sha256": pair_state["vanilla"]["rgb_sha256"],
+                "episode_id": pair_state["vanilla"]["episode_id"],
+                "canonical_snapshot_sha256": canonical_sha,
+            }
+            completed.append(seed)
+    finally:
+        try:
+            send_message(conn, {"cmd": "quit"})
+            recv_message(conn)
+        except Exception:
+            pass
+        conn.close()
+        env.close()
+    worker_manifest = {
+        "protocol_id": "UNIVLA_SAPIEN2_RT_L14_MATCHED_PAIRED_V1",
+        "worker_id": args.worker_id,
+        "task": args.task,
+        "completed_seeds": completed,
+        "completed_pairs": len(completed),
+        "all_initial_state_pairs_checked": True,
+    }
+    atomic_json(args.artifact / "worker_manifests" / f"{args.worker_id}.json", worker_manifest)
+    print(json.dumps({"worker": args.worker_id, "task": args.task, "completed_seeds": completed,
+                      "worker_complete": len(completed) == len(seeds)}), flush=True)
+
+
+if __name__ == "__main__":
+    main()

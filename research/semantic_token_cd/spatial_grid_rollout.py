@@ -117,7 +117,7 @@ def build_policies(base):
     return policies
 
 
-def run_episode(env, policy, instruction, obs):
+def run_episode(env, policy, instruction, obs, observation_transform=None, max_steps=None):
     from utils import convert_numpy_or_torch_to_python, stat_final, stat_first, summarize
 
     predicted_terminated = truncated = False
@@ -125,6 +125,8 @@ def run_episode(env, policy, instruction, obs):
     step_infos = []
     executed_actions = []
     image = get_image_from_maniskill2_obs_dict(env, obs)
+    if observation_transform is not None:
+        image = observation_transform(image, obs)
     while not (predicted_terminated or truncated):
         _raw_action, actions, _aux = policy.step(
             image, None, instruction, proprio=obs["agent"]["eef_pos"]
@@ -138,9 +140,14 @@ def run_episode(env, policy, instruction, obs):
             executed_actions.append(executed.copy())
             obs, _reward, _success, truncated, info = env.step(executed)
             image = get_image_from_maniskill2_obs_dict(env, obs)
+            if observation_transform is not None:
+                image = observation_transform(image, obs)
             timestep += 1
             step_infos.append(convert_numpy_or_torch_to_python(info))
             predicted_terminated = bool(action["terminate_episode"][0] > 0)
+            if max_steps is not None and timestep >= int(max_steps):
+                truncated = True
+                break
             if predicted_terminated and not env.unwrapped.is_final_subtask():
                 predicted_terminated = False
                 env.advance_to_next_subtask()

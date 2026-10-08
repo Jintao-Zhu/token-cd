@@ -1,0 +1,104 @@
+"""OpenPI websocket server exposing Vanilla and L6-Matched pi0-FAST inference."""
+from __future__ import annotations
+
+import argparse
+import logging
+import os
+import sys
+from pathlib import Path
+
+import numpy as np
+
+ROOT = Path("/home/leju-suzhou/zjt_ws")
+TOKEN_CD = ROOT / "token-cd"
+
+
+class ArmPolicy:
+    def __init__(self, gpu: int, checkpoint: Path):
+        os.environ["CUDA_VISIBLE_DEVICES"] = str(gpu)
+        os.environ["XLA_PYTHON_CLIENT_PREALLOCATE"] = "false"
+        os.environ["XLA_PYTHON_CLIENT_MEM_FRACTION"] = "0.45"
+        os.environ["TOKENIZERS_PARALLELISM"] = "false"
+        sys.path.insert(0, str(TOKEN_CD))
+        from research.semantic_token_cd.pi0_fast_matched_cd import Pi0FastMatchedCDPolicy
+
+        self.adapter = Pi0FastMatchedCDPolicy(gpu=gpu, checkpoint=checkpoint)
+        self.jax = self.adapter.jax
+        self.call_count = 0
+        logging.info("JAX backend=%s devices=%s CPU=%s", self.jax.default_backend(), self.jax.devices(), self.jax.devices("cpu"))
+        # Compile both official Vanilla and L6-CD paths before accepting client
+        # traffic. This also verifies that the per-layer attention callback and
+        # FAST decoding are live in the server's exact import environment.
+        warm = {
+            "observation/primary_image": np.zeros((224, 224, 3), dtype=np.uint8),
+            "observation/wrist_image": np.zeros((224, 224, 3), dtype=np.uint8),
+            "observation/state": np.zeros((8,), dtype=np.float32),
+            "prompt": "open the drawer",
+        }
+        self.adapter.policy._rng = self.jax.random.key(0)
+        vanilla = self.adapter.policy.infer(dict(warm))
+        if not np.isfinite(vanilla["actions"]).all():
+            raise RuntimeError("OpenPI vanilla warmup produced non-finite actions")
+        guided = self.adapter.infer(dict(warm), seed=0)
+        trace = guided["pi0_fast_matched_cd_trace"]
+        if not trace.get("fast_action_stream_valid") or not trace.get("openpi_official_decoder_agrees"):
+            raise RuntimeError(f"L6-Matched server warmup/FAST decoder failed: {trace}")
+        logging.info("Vanilla and L6-Matched warmups passed; trace=%s", {
+            "selected_token_count": trace.get("selected_token_count"),
+            "matched_m_t": trace.get("matched_m_t"),
+            "selector_layer_label": trace.get("selector_layer_label"),
+            "decoded_fast_payload_chars": trace.get("decoded_fast_payload_chars"),
+        })
+
+    def infer(self, observation: dict):
+        request = dict(observation)
+        arm = str(request.pop("cd_arm", "vanilla"))
+        seed = int(request.pop("cd_seed", 0)) % (2**31 - 1)
+        if arm == "l6_matched":
+            result = self.adapter.infer(request, seed=seed)
+        elif arm == "vanilla":
+            # Deterministic paired replays, independent of socket scheduling or
+            # server process history.
+            self.adapter.policy._rng = self.jax.random.key(seed)
+            result = self.adapter.policy.infer(request)
+        else:
+            raise ValueError(f"unknown arm {arm!r}")
+        self.call_count += 1
+        result["pi0_fast_server_meta"] = {"arm": arm, "request_seed": seed, "request_index": self.call_count}
+        return result
+
+
+def main() -> None:
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--gpu", type=int, required=True)
+    parser.add_argument("--port", type=int, required=True)
+    parser.add_argument("--checkpoint", type=Path, default=ROOT / "checkpoints/openpi_fast_finetuned/fractal")
+    args = parser.parse_args()
+
+    os.environ["CUDA_VISIBLE_DEVICES"] = str(args.gpu)
+    os.environ["XLA_PYTHON_CLIENT_PREALLOCATE"] = "false"
+    os.environ["XLA_PYTHON_CLIENT_MEM_FRACTION"] = "0.45"
+    policy = ArmPolicy(args.gpu, args.checkpoint)
+    # The adapter installs the temporary attention-instrumented OpenPI overlay.
+    # Importing ``openpi.serving`` first would preload the uninstrumented package
+    # root and make the L6 attention tap silently invisible.
+    from openpi.serving import websocket_policy_server
+
+    server = websocket_policy_server.WebsocketPolicyServer(
+        policy=policy,
+        host="0.0.0.0",
+        port=args.port,
+        metadata={
+            "model": "pi0-FAST",
+            "checkpoint": str(args.checkpoint),
+            "arms": ["vanilla", "l6_matched"],
+            "selector": "L6 Prompt-Attention, dynamic entity-matched budget, harmonic reconstruction, lambda=0.5",
+        },
+    )
+    logging.info("Loaded %s policy on physical GPU %s; serving port %s", args.checkpoint, args.gpu, args.port)
+    server.serve_forever()
+
+
+if __name__ == "__main__":
+    logging.basicConfig(level=logging.INFO, force=True)
+    main()

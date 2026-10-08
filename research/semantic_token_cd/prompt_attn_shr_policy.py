@@ -17,6 +17,7 @@ from research.ar_token_counterfactual.intervention import (
 )
 from research.semantic_token_cd.distractor_policy import ACTION_VOCAB_SIZE, _action_logits
 from research.semantic_token_cd.global_merge_policy import (
+    guided_layer_intervention_scores,
     guided_forward_scores,
     projector_merge_intervention,
 )
@@ -85,7 +86,10 @@ def geometry_patch_scores(policy, image: np.ndarray) -> tuple[np.ndarray, np.nda
     gray = cv2.cvtColor(resized, cv2.COLOR_RGB2GRAY)
     gx = cv2.Sobel(gray, cv2.CV_32F, 1, 0, ksize=3)
     gy = cv2.Sobel(gray, cv2.CV_32F, 0, 1, ksize=3)
-    magnitude = cv2.magnitude(gx, gy)
+    # cv2.magnitude can vary by a few float32 ULPs across identical calls on
+    # this host, which can perturb ties in the geometry-token ranking.  NumPy
+    # hypot is deterministic for the same Sobel arrays.
+    magnitude = np.hypot(gx, gy)
     scores = magnitude.reshape(16, 14, 16, 14).mean(axis=(1, 3)).reshape(N_VISUAL)
     if scores.shape != (N_VISUAL,) or not np.isfinite(scores).all():
         raise FloatingPointError("invalid Sobel patch scores")
@@ -125,6 +129,8 @@ def select_mask(
             N_VISUAL, size=m, replace=False
         ))
         return selected, seed
+    if mask_selector == "kmeans_matched":
+        raise RuntimeError("kmeans_matched selection requires the matched entity token set")
     raise ValueError(f"unknown mask selector: {mask_selector}")
 
 
@@ -535,6 +541,99 @@ def extract_prompt_attention_per_layer(
     return payload, meta
 
 
+@torch.inference_mode()
+def extract_prompt_attention_l11_partial(
+    policy, inputs, instruction: str, clean_visual: torch.Tensor
+) -> tuple[np.ndarray, dict]:
+    """Compute exact L11 prompt attention from cached projector features.
+
+    This opt-in path keeps the canonical no-cache decoder computation and
+    attention definition, but reuses the projector output captured from the
+    clean action forward and evaluates only decoder layers 0..11. It is valid
+    only for an OpenVLA model with the expected Prismatic/Gemma multimodal
+    layout (BOS, 256 visual tokens, remaining text tokens).
+    """
+    input_ids = inputs["input_ids"]
+    tokenizer = policy.processor.tokenizer
+    expected = tokenizer(instruction, return_tensors="pt")["input_ids"]
+    if not torch.equal(input_ids.detach().cpu(), expected):
+        raise RuntimeError("processor input_ids differ from direct instruction tokenization")
+    text_indices, query_positions, query_token_ids = prompt_query_layout(
+        input_ids, set(int(value) for value in tokenizer.all_special_ids)
+    )
+    if clean_visual.ndim != 3 or clean_visual.shape[0] != 1 or clean_visual.shape[1] != N_VISUAL:
+        raise RuntimeError(f"expected cached projector features [1,{N_VISUAL},D], got {tuple(clean_visual.shape)}")
+
+    text_embeds = policy.vla.get_input_embeddings()(input_ids)
+    visual_embeds = clean_visual.to(device=text_embeds.device, dtype=text_embeds.dtype)
+    multimodal_embeds = torch.cat(
+        [text_embeds[:, :1, :], visual_embeds, text_embeds[:, 1:, :]], dim=1
+    )
+    attention_mask = inputs["attention_mask"]
+    visual_mask = torch.ones(
+        (visual_embeds.shape[0], visual_embeds.shape[1]),
+        dtype=attention_mask.dtype,
+        device=attention_mask.device,
+    )
+    multimodal_mask = torch.cat(
+        [attention_mask[:, :1], visual_mask, attention_mask[:, 1:]], dim=1
+    )
+
+    decoder = getattr(policy.vla.language_model, "model", None)
+    if decoder is None or not hasattr(decoder, "layers"):
+        raise RuntimeError("partial L11 attention requires a language model exposing decoder layers")
+    original_layers = decoder.layers
+    if len(original_layers) != LAYER_END:
+        raise RuntimeError(f"expected {LAYER_END} decoder layers, got {len(original_layers)}")
+    try:
+        decoder.layers = torch.nn.ModuleList(list(original_layers[:12]))
+        output = decoder(
+            input_ids=None,
+            attention_mask=multimodal_mask,
+            position_ids=None,
+            past_key_values=None,
+            inputs_embeds=multimodal_embeds,
+            use_cache=False,
+            output_attentions=True,
+            output_hidden_states=False,
+            return_dict=True,
+        )
+    finally:
+        decoder.layers = original_layers
+
+    attentions = output.attentions
+    if attentions is None or len(attentions) != 12:
+        raise RuntimeError(
+            f"expected 12 attention tensors through zero-based L11, got "
+            f"{None if attentions is None else len(attentions)}"
+        )
+    if max(query_positions) >= attentions[11].shape[-2]:
+        raise RuntimeError("instruction query index exceeds multimodal sequence")
+    scores = (
+        attentions[11][0, :, query_positions, 1 : 1 + N_VISUAL]
+        .detach().float().mean(dim=(0, 1)).cpu().numpy().astype(np.float32)
+    )
+    if scores.shape != (N_VISUAL,) or not np.isfinite(scores).all():
+        raise FloatingPointError("invalid partial L11 prompt attention scores")
+    meta = {
+        "attention_available_layers": list(range(12)),
+        "attention_head_count": int(attentions[11].shape[1]),
+        "prompt_text_indices": text_indices,
+        "prompt_multimodal_query_indices": query_positions,
+        "prompt_query_token_ids": query_token_ids,
+        "prompt_query_tokens": tokenizer.convert_ids_to_tokens(query_token_ids),
+        "visual_key_indices": [1, 1 + N_VISUAL],
+        "attention_post_softmax": True,
+        "attention_visual_renormalized": False,
+        "attention_layers": [11],
+        "attention_layer_count": 1,
+        "attention_sha256": hashlib.sha256(scores.tobytes()).hexdigest(),
+        "attention_mass_on_visual": float(scores.sum()),
+        "attention_source": "cached_clean_projector_features_partial_decoder",
+    }
+    return scores, meta
+
+
 def extract_prompt_attention(
     policy,
     inputs,
@@ -546,6 +645,10 @@ def extract_prompt_attention(
     chosen = tuple(range(LAYER_START, LAYER_END)) if layers is None else tuple(int(x) for x in layers)
     if not chosen or len(set(chosen)) != len(chosen) or min(chosen) < 0 or max(chosen) >= LAYER_END:
         raise ValueError(f"invalid attention layers: {chosen}")
+    if getattr(policy, "use_partial_l11_attention", False):
+        if chosen != (11,):
+            raise RuntimeError("partial attention path supports only zero-based L11")
+        return extract_prompt_attention_l11_partial(policy, inputs, instruction, clean_visual)
     per_layer, meta = extract_prompt_attention_per_layer(policy, inputs, instruction, clean_visual)
     payload = per_layer[list(chosen)].mean(axis=0).astype(np.float32)
     meta.update({
@@ -577,6 +680,9 @@ class PromptAttentionSHRInference(STSHRCDInference):
     selector_mode: str = "prompt_attention"
     task_index: int = 0
     attention_layers: tuple[int, ...] = tuple(range(LAYER_START, LAYER_END))
+    # Opt-in compute optimization. False keeps the established all-layer
+    # selector extraction path unchanged.
+    use_partial_l11_attention: bool = False
     # None preserves the original own-state Standard-SHR matched coverage.
     # An integer selects exactly that many L11-ranked tokens and deliberately
     # bypasses KMeans, so fixed-K arms do not depend on the baseline selector.
@@ -601,6 +707,12 @@ class PromptAttentionSHRInference(STSHRCDInference):
     region_token_ids: list[int] | None = None
     region_label: str | None = None
     region_aux: dict | None = None
+    # GT-segmentation mechanism controls. The rollout supplies a 256-vector of
+    # visible target-patch overlap immediately before each step; these modes
+    # preserve the canonical L11-Matched count and rank tokens by L11 within
+    # the allowed target/non-target pool.
+    region_mask_mode: str | None = None
+    _region_patch_overlap: np.ndarray | None = None
     # Optional separate instruction used only to extract prompt attention.
     # None keeps the historical behaviour (attention from the actual task
     # instruction).  When set, the positive/negative decode always still uses
@@ -641,6 +753,14 @@ class PromptAttentionSHRInference(STSHRCDInference):
     # Full joint selector: no protected Prompt core. All final K tokens are
     # selected by the harmonic mean of Prompt and Action rank support in Top-2K.
     prompt_action_full_joint: bool = False
+    # Optional fixed-K rank-value protocol.  None preserves all existing
+    # selector behavior; the five supported arms only choose a different
+    # 32-token subset from the same L11 ranking.
+    ranking_value_arm: str | None = None
+    # Additive mechanism-ablation controls.  Defaults preserve the historical
+    # projector-space harmonic + contrastive path exactly.
+    counterfactual_constructor: str = "harmonic"
+    guidance_execution: str = "contrast"
 
     def _forward_scores(self, inputs, unnorm_key, **kwargs):
         """Generate one logit vector for every fixed action dimension.
@@ -673,6 +793,25 @@ class PromptAttentionSHRInference(STSHRCDInference):
         # Additive diagnostic/ablation hook for equal-size contiguous L11 rank
         # bins.  The default None preserves every pre-existing selector path.
         rank_bin = getattr(self, "selection_rank_bin", None)
+        ranking_value_arm = getattr(self, "ranking_value_arm", None)
+        if ranking_value_arm is not None:
+            if (
+                self.selector_mode != "prompt_attention"
+                or self.attention_layers != (11,)
+                or self.selection_count != 32
+                or self.selection_top_p is not None
+                or self.selection_budget_schedule is not None
+                or rank_bin is not None
+                or self.selector_difference_eta is not None
+                or self.complement_arm is not None
+                or self.prompt_action_rerank_multiplier is not None
+                or self.prompt_action_bounded_mode is not None
+                or self.prompt_action_full_joint
+                or ranking_value_arm not in {
+                    "top32", "mid32", "bottom32", "random32", "top96_random32"
+                }
+            ):
+                raise RuntimeError("invalid L11 Ranking Value fixed-K selector configuration")
         if rank_bin is not None:
             rank_bin = int(rank_bin)
             if (
@@ -981,6 +1120,7 @@ class PromptAttentionSHRInference(STSHRCDInference):
         rerank_meta = {}
         bounded_meta = {}
         full_joint_meta = {}
+        gt_region_meta = {}
         if self.complement_arm is not None:
             masks = construct_prompt_action_masks(attention_scores, action_attention_scores, m)
             spec = masks[self.complement_arm]
@@ -1089,18 +1229,93 @@ class PromptAttentionSHRInference(STSHRCDInference):
                 "full_joint_subset_of_candidate_pool": set(selected).issubset(spec["candidates"]),
             }
         elif self.selector_mode == "prompt_attention":
-            if rank_bin is None:
+            gt_region_mode = getattr(self, "region_mask_mode", None)
+            if gt_region_mode is not None:
+                if gt_region_mode not in {"target_enriched", "target_sparing"}:
+                    raise RuntimeError(f"unknown GT region mask mode: {gt_region_mode}")
+                if self.selection_count is not None or self.selection_budget_schedule is not None:
+                    raise RuntimeError("GT region controls require the dynamic Matched budget")
+                overlap_raw = getattr(self, "_region_patch_overlap", None)
+                if overlap_raw is None:
+                    raise RuntimeError("GT region control received no current segmentation overlap")
+                overlap_map = np.asarray(overlap_raw, dtype=np.float32)
+                if overlap_map.shape != (N_VISUAL,) or not np.isfinite(overlap_map).all():
+                    raise RuntimeError("GT region control requires a finite 256-patch overlap map")
+                if np.any((overlap_map < 0.0) | (overlap_map > 1.0)):
+                    raise RuntimeError("GT patch overlap values must be in [0,1]")
+                target_pool = np.flatnonzero(overlap_map > 0.0).astype(np.int64).tolist()
+                non_target_pool = np.flatnonzero(overlap_map <= 0.0).astype(np.int64).tolist()
+                if not target_pool or len(non_target_pool) < m:
+                    raise RuntimeError(
+                        f"invalid target/non-target support: target={len(target_pool)}, "
+                        f"non_target={len(non_target_pool)}, m={m}"
+                    )
+                l11_order = np.lexsort((np.arange(N_VISUAL), -np.asarray(attention_scores, dtype=np.float64)))
+                target_set = set(target_pool)
+                if gt_region_mode == "target_enriched":
+                    selected = [int(i) for i in l11_order if int(i) in target_set][:m]
+                    selected_set = set(selected)
+                    selected.extend(
+                        int(i) for i in l11_order
+                        if int(i) not in target_set and int(i) not in selected_set
+                    )
+                    selected = selected[:m]
+                else:
+                    selected = [int(i) for i in l11_order if int(i) not in target_set][:m]
+                selected = sorted(selected)
+                if len(selected) != m or len(set(selected)) != m:
+                    raise RuntimeError(f"GT region selector failed exact Matched count: {len(selected)} != {m}")
+                selected_overlap = overlap_map[np.asarray(selected, dtype=np.int64)]
+                gt_region_meta = {
+                    "gt_region_mask_mode": gt_region_mode,
+                    "gt_target_patch_count": len(target_pool),
+                    "gt_target_overlap_fraction": float(overlap_map.sum() / N_VISUAL),
+                    "gt_selected_target_patch_count": int(np.count_nonzero(selected_overlap > 0.0)),
+                    "gt_selected_target_overlap_sum": float(selected_overlap.sum()),
+                    "gt_selected_target_pixel_fraction": float(selected_overlap.sum() / m),
+                    "gt_region_map_sha256": hashlib.sha256(np.ascontiguousarray(overlap_map).tobytes()).hexdigest(),
+                }
+                random_seed = None
+            elif ranking_value_arm is not None:
+                order = np.lexsort((np.arange(N_VISUAL), -np.asarray(attention_scores, dtype=np.float64)))
+                if ranking_value_arm == "top32":
+                    selected = sorted(int(index) for index in order[:32])
+                elif ranking_value_arm == "mid32":
+                    selected = sorted(int(index) for index in order[96:128])
+                elif ranking_value_arm == "bottom32":
+                    selected = sorted(int(index) for index in order[224:256])
+                else:
+                    task_key = str(getattr(self, "ranking_value_task_key", task_description))
+                    seed_text = (
+                        f"L11_RANKING_VALUE_V1\\0{task_key}\\0{int(self._episode_seed)}"
+                        f"\\0{int(self._selector_step)}\\0{ranking_value_arm}"
+                    )
+                    random_seed = int.from_bytes(
+                        hashlib.sha256(seed_text.encode("utf-8")).digest()[:8], "big"
+                    )
+                    candidates = order[:96] if ranking_value_arm == "top96_random32" else np.arange(N_VISUAL)
+                    selected = sorted(int(index) for index in np.random.default_rng(random_seed).choice(
+                        candidates, size=32, replace=False
+                    ))
+            elif rank_bin is None:
                 if attention_scores is None:
                     raise RuntimeError("Prompt-Attn mask selection requires L11 attention scores")
-                selected, random_seed = select_mask(
-                    mask_selector,
-                    attention_scores,
-                    geometry_scores,
-                    m,
-                    task_index=self.task_index,
-                    episode_seed=self._episode_seed,
-                    control_step=len(self._episode_trace),
-                )
+                if mask_selector == "kmeans_matched":
+                    # Use the exact matched entity-cluster union already
+                    # computed by the canonical budget path.  Its cardinality
+                    # defines m, so this changes only token ranking/selection.
+                    selected = sorted(set(int(index) for index in reference))
+                    random_seed = None
+                else:
+                    selected, random_seed = select_mask(
+                        mask_selector,
+                        attention_scores,
+                        geometry_scores,
+                        m,
+                        task_index=self.task_index,
+                        episode_seed=self._episode_seed,
+                        control_step=len(self._episode_trace),
+                    )
             else:
                 if mask_selector != "l11":
                     raise RuntimeError("rank-bin selection cannot be combined with a mask selector")
@@ -1124,25 +1339,102 @@ class PromptAttentionSHRInference(STSHRCDInference):
         if len(selected) != m or len(set(selected)) != m:
             raise RuntimeError("selector failed exact requested coverage")
 
-        h_negative = h.copy()
-        reconstructed = harmonic_reconstruct(h, np.asarray(selected, dtype=np.int64), beta=0.0)
+        intervention_location = getattr(self, "intervention_location", "projector")
+        if intervention_location == "projector":
+            intervention_base = h
+        elif intervention_location in {"layer5", "layer11"}:
+            layer_index = 5 if intervention_location == "layer5" else 11
+            clean_token_ids_for_layer = clean_scores.argmax(dim=-1)
+            _, clean_layer = guided_layer_intervention_scores(
+                self.vla, inputs, clean_token_ids_for_layer, layer_index
+            )
+            intervention_base = clean_layer.numpy().astype(np.float32)
+        else:
+            raise ValueError(f"unknown intervention location: {intervention_location}")
+
+        constructor = str(getattr(self, "counterfactual_constructor", "harmonic"))
+        if constructor == "harmonic":
+            reconstructed = harmonic_reconstruct(
+                intervention_base, np.asarray(selected, dtype=np.int64), beta=0.0
+            )
+        elif constructor == "zero":
+            reconstructed = np.zeros((len(selected), intervention_base.shape[1]), dtype=np.float32)
+        elif constructor == "clean_global_mean":
+            selected_mask = np.zeros(N_VISUAL, dtype=bool)
+            selected_mask[np.asarray(selected, dtype=np.int64)] = True
+            context = intervention_base[~selected_mask]
+            if len(context) == 0:
+                raise RuntimeError("global-mean reconstruction requires clean context tokens")
+            reconstructed = np.repeat(
+                context.mean(axis=0, keepdims=True), len(selected), axis=0
+            ).astype(np.float32)
+        elif constructor == "local_neighbor_mean":
+            selected_set = set(int(index) for index in selected)
+            rows = []
+            for token in selected:
+                row, col = divmod(int(token), 16)
+                neighbors = []
+                # 3x3, 5x5, ... windows; if necessary widen to the full grid.
+                for radius in range(1, 16):
+                    r0, r1 = max(0, row - radius), min(15, row + radius)
+                    c0, c1 = max(0, col - radius), min(15, col + radius)
+                    neighbors = [
+                        rr * 16 + cc
+                        for rr in range(r0, r1 + 1)
+                        for cc in range(c0, c1 + 1)
+                        if rr * 16 + cc not in selected_set
+                    ]
+                    if neighbors:
+                        break
+                if not neighbors:
+                    raise RuntimeError(f"no clean neighbor exists for visual token {token}")
+                rows.append(intervention_base[np.asarray(neighbors, dtype=np.int64)].mean(axis=0))
+            reconstructed = np.asarray(rows, dtype=np.float32)
+        else:
+            raise ValueError(f"unknown counterfactual constructor: {constructor}")
+
+        if reconstructed.shape != (len(selected), intervention_base.shape[1]) or not np.isfinite(reconstructed).all():
+            raise FloatingPointError(
+                f"invalid {constructor} reconstruction shape={reconstructed.shape}"
+            )
+        h_negative = intervention_base.copy()
         h_negative[selected] = reconstructed
         outside = np.asarray([index for index in range(N_VISUAL) if index not in set(selected)])
-        non_target_equal = bool(np.array_equal(h_negative[outside], h[outside]))
+        non_target_equal = bool(np.array_equal(h_negative[outside], intervention_base[outside]))
         if not non_target_equal or not np.isfinite(h_negative).all():
-            raise RuntimeError("harmonic reconstruction audit failed")
+            raise RuntimeError("counterfactual reconstruction audit failed")
 
         clean_token_ids = clean_scores.argmax(dim=-1)
-        with projector_merge_intervention(
-            self.vla, torch.from_numpy(h_negative).unsqueeze(0)
-        ) as negative_trace:
-            negative_scores = guided_forward_scores(
-                self.vla, inputs, clean_token_ids, visual.shape[1]
+        if intervention_location == "projector":
+            with projector_merge_intervention(
+                self.vla, torch.from_numpy(h_negative).unsqueeze(0)
+            ) as negative_trace:
+                negative_scores = guided_forward_scores(
+                    self.vla, inputs, clean_token_ids, visual.shape[1]
+                )
+            if negative_trace["before"] is None or not torch.equal(visual, negative_trace["before"]):
+                raise RuntimeError("negative projector input differs from clean features")
+            intervention_feature_equal = True
+        else:
+            layer_index = 5 if intervention_location == "layer5" else 11
+            negative_scores, _ = guided_layer_intervention_scores(
+                self.vla, inputs, clean_token_ids, layer_index,
+                selected_token_ids=selected,
+                replacement_features=reconstructed,
+                expected_clean_features=intervention_base,
             )
-        if negative_trace["before"] is None or not torch.equal(visual, negative_trace["before"]):
-            raise RuntimeError("negative projector input differs from clean features")
+            intervention_feature_equal = True
 
-        final_scores, guidance_meta = self._combine_action_scores(clean_scores, negative_scores)
+        execution = str(getattr(self, "guidance_execution", "contrast"))
+        if execution == "contrast":
+            final_scores, guidance_meta = self._combine_action_scores(clean_scores, negative_scores)
+        elif execution in {"negative_only", "hard_intervention_only"}:
+            # Execute the altered-visual branch directly; do not use its
+            # difference from the clean response as a contrastive residual.
+            final_scores = negative_scores
+            guidance_meta = {"guidance_execution": execution}
+        else:
+            raise ValueError(f"unknown guidance execution mode: {execution}")
         # EOS is explicitly excluded during fixed-length action decoding.  CD
         # combines its two suppressed (-inf) logits as -inf - (-inf), which is
         # NaN although it is outside the action vocabulary.  Replace only that
@@ -1177,7 +1469,9 @@ class PromptAttentionSHRInference(STSHRCDInference):
             - np.asarray(clean_decoded, dtype=np.float64)
         ))
         overlap = len(set(selected) & set(reference))
-        if self.selector_difference_eta is not None:
+        if getattr(self, "region_mask_mode", None) is not None:
+            correct_prompt_selected = stable_top_m(attention_scores, m)
+        elif self.selector_difference_eta is not None:
             correct_prompt_selected = stable_top_m(p, m)
         elif self.complement_arm is not None:
             correct_prompt_selected = complement_meta["original_prompt_token_ids"]
@@ -1191,10 +1485,21 @@ class PromptAttentionSHRInference(STSHRCDInference):
             correct_prompt_selected = selected
         correct_prompt_overlap = len(set(selected) & set(correct_prompt_selected))
         component_count, isolated_token_ratio = mask_spatial_stats(selected)
-        perturbation = h_negative - h
+        perturbation = h_negative - intervention_base
+        ranking_value_order = None
+        ranking_value_rank_by_token = None
+        if ranking_value_arm is not None:
+            ranking_value_order = np.lexsort((np.arange(N_VISUAL), -np.asarray(attention_scores, dtype=np.float64)))
+            ranking_value_rank_by_token = np.empty(N_VISUAL, dtype=np.int16)
+            ranking_value_rank_by_token[ranking_value_order] = np.arange(1, N_VISUAL + 1, dtype=np.int16)
         meta = {
             "selection_mode": self.selector_mode,
             "mask_selector": mask_selector,
+            "ranking_value_arm": ranking_value_arm,
+            "selected_attention_ranks": (
+                sorted(int(ranking_value_rank_by_token[index]) for index in selected)
+                if ranking_value_rank_by_token is not None else None
+            ),
             "instruction": task_description,
             "selected_entities": list(self._entities),
             "selected_group_ids": entity_groups,
@@ -1244,8 +1549,13 @@ class PromptAttentionSHRInference(STSHRCDInference):
             ),
             "region_label": self.region_label,
             "region_aux": dict(self.region_aux) if self.region_aux else None,
+            **gt_region_meta,
             "random_seed": random_seed,
-            "random_rule": "SeedSequence([task_index, episode_seed, control_step, 0x50A77E11])",
+            "random_rule": (
+                "SHA256(protocol, task, episode_seed, control_step, arm) then PCG64"
+                if ranking_value_arm in {"random32", "top96_random32"}
+                else "SeedSequence([task_index, episode_seed, control_step, 0x50A77E11])"
+            ),
             "l11_score_sha256": hashlib.sha256(
                 np.ascontiguousarray(attention_scores).tobytes()
             ).hexdigest() if attention_scores is not None else None,
@@ -1257,6 +1567,9 @@ class PromptAttentionSHRInference(STSHRCDInference):
             "kmeans_K": int(self.kmeans_K),
             "kmeans_seed": int(self.kmeans_seed),
             "beta": 0.0,
+            "intervention_location": intervention_location,
+            "counterfactual_constructor": constructor,
+            "guidance_execution": execution,
             "lambda": float(self.lambd),
             "feature_equal": True,
             "non_target_bit_identical": non_target_equal,
@@ -1264,7 +1577,7 @@ class PromptAttentionSHRInference(STSHRCDInference):
             "feature_perturbation_norm": float(np.linalg.norm(perturbation)),
             "D_feat": float(np.linalg.norm(perturbation)),
             "feature_perturbation_relative": float(
-                np.linalg.norm(perturbation) / (np.linalg.norm(h) + EPS)
+                np.linalg.norm(perturbation) / (np.linalg.norm(intervention_base) + EPS)
             ),
             "centered_logit_residual_norm": float(torch.linalg.vector_norm(centered).item()),
             "D_res": logit_residual_norm,
@@ -1301,10 +1614,31 @@ class PromptAttentionSHRInference(STSHRCDInference):
                 else np.zeros(N_VISUAL, dtype=np.float32)
             ),
         }
+        if ranking_value_arm is not None:
+            record.update({
+                "guided": _action_logits(self, final_scores),
+                "full_ranking_token_ids": ranking_value_order.astype(np.int16),
+                "rank_by_token": ranking_value_rank_by_token,
+                "selected_token_ids": np.asarray(selected, dtype=np.int16),
+                "selected_mask_grid": np.isin(np.arange(N_VISUAL), selected).astype(np.uint8).reshape(16, 16),
+                "selected_source_features": intervention_base[np.asarray(selected, dtype=np.int64)].astype(np.float16),
+                "selected_harmonic_features": np.asarray(reconstructed, dtype=np.float32).astype(np.float16),
+                "per_token_reconstruction_dose": np.linalg.norm(
+                    np.asarray(reconstructed, dtype=np.float32) - intervention_base[np.asarray(selected, dtype=np.int64)],
+                    axis=-1,
+                ).astype(np.float32),
+                "ranking_attention": np.asarray(attention_scores, dtype=np.float32),
+                "step_index": np.asarray(self._selector_step, dtype=np.int32),
+            })
         if attention_scores is not None and self.save_prompt_attention:
             record["prompt_attention"] = attention_scores.astype(np.float32)
         if resized_rgb_sha256 is not None:
             record["geometry_scores"] = geometry_scores.astype(np.float32)
+            # Preserve the exact processor-aligned image used for the first
+            # selector invocation.  A separate observation fetch is not a
+            # valid audit source for stochastic/offscreen renderers.
+            if not self._episode_logits:
+                record["processor_rgb_224_first_step"] = resized_rgb.copy()
             if self.selector_difference_eta is not None:
                 record["correct_attention_probability"] = p
                 record["contrast_attention_probability"] = q

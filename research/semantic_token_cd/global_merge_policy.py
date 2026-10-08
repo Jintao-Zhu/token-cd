@@ -152,6 +152,103 @@ def guided_forward_scores(
     return output.logits[:, action_queries].detach().float()[0]  # [n, vocab] cuda
 
 
+@torch.inference_mode()
+def guided_layer_intervention_scores(
+    model: Any,
+    inputs: dict[str, torch.Tensor],
+    clean_token_ids: torch.Tensor,
+    layer_index: int,
+    *,
+    selected_token_ids: list[int] | None = None,
+    replacement_features: np.ndarray | torch.Tensor | None = None,
+    expected_clean_features: np.ndarray | torch.Tensor | None = None,
+    visual_count: int = VISUAL_TOKEN_COUNT,
+) -> tuple[torch.Tensor, torch.Tensor]:
+    """Teacher-force the clean action prefix and capture/intervene on block output.
+
+    ``layer_index`` is zero based. Selected visual rows are replaced immediately
+    after the decoder block returns, before the next block consumes its input.
+    The returned representation is the clean or intervened block output at the
+    image placeholder positions, respectively.
+    """
+    import numpy as np
+    from research.ar_token_counterfactual.intervention import ensure_empty_action_token
+
+    if selected_token_ids is None and replacement_features is not None:
+        raise ValueError("replacement features require selected visual token ids")
+    if selected_token_ids is not None and replacement_features is None:
+        raise ValueError("selected visual token ids require replacement features")
+    input_ids = inputs["input_ids"]
+    attention_mask = inputs["attention_mask"]
+    base_ids, base_mask = ensure_empty_action_token(input_ids, attention_mask)
+    prefix = clean_token_ids[:-1].unsqueeze(0)
+    teacher_ids = torch.cat([base_ids, prefix], dim=1)
+    teacher_mask = torch.cat([
+        base_mask,
+        torch.ones_like(prefix, dtype=base_mask.dtype, device=base_mask.device),
+    ], dim=1)
+    # OpenVLA's multimodal wrapper inserts the 256 projected image rows after
+    # the BOS row; the text-side input_ids themselves contain no image token id.
+    # This is the same visual-key layout audited by prompt_query_layout.
+    if int(input_ids.shape[0]) != 1:
+        raise RuntimeError("layer intervention currently requires batch size one")
+    visual_pos = torch.arange(1, 1 + visual_count, device=input_ids.device, dtype=torch.long)
+
+    try:
+        block = model.language_model.model.layers[int(layer_index)]
+    except (AttributeError, IndexError, TypeError) as exc:
+        raise RuntimeError("cannot resolve requested language decoder block") from exc
+    captured: dict[str, torch.Tensor] = {}
+
+    def hook(_module, _args, output):
+        if not isinstance(output, (tuple, list)) or not output or not torch.is_tensor(output[0]):
+            raise RuntimeError("decoder block output is not a tuple with hidden states at index 0")
+        hidden = output[0]
+        if hidden.ndim != 3 or hidden.shape[0] != 1:
+            raise RuntimeError(f"unexpected decoder hidden shape {tuple(hidden.shape)}")
+        clean_visual = hidden[0].index_select(0, visual_pos)
+        if expected_clean_features is not None:
+            expected = torch.as_tensor(expected_clean_features, dtype=torch.float32).cpu()
+            actual = clean_visual.detach().float().cpu()
+            if not torch.equal(actual, expected):
+                raise RuntimeError("clean decoder-layer features changed between paired forwards")
+        if selected_token_ids is None:
+            captured["features"] = clean_visual.detach().float().cpu()
+            return output
+        ids = torch.as_tensor(selected_token_ids, dtype=torch.long, device=hidden.device)
+        repl = torch.as_tensor(replacement_features, dtype=hidden.dtype, device=hidden.device)
+        if repl.ndim == 3 and repl.shape[0] == 1:
+            repl = repl[0]
+        if repl.shape != (ids.numel(), hidden.shape[-1]):
+            raise RuntimeError(f"replacement shape {tuple(repl.shape)} incompatible with selected rows")
+        new_visual = clean_visual.clone()
+        new_visual.index_copy_(0, ids, repl)
+        new_hidden = hidden.clone()
+        new_hidden[0].index_copy_(0, visual_pos, new_visual)
+        captured["features"] = new_visual.detach().float().cpu()
+        if isinstance(output, tuple):
+            return (new_hidden, *output[1:])
+        return [new_hidden, *output[1:]]
+
+    handle = block.register_forward_hook(hook)
+    try:
+        output = model(
+            input_ids=teacher_ids,
+            attention_mask=teacher_mask,
+            pixel_values=inputs["pixel_values"],
+            use_cache=False,
+            return_dict=True,
+        )
+    finally:
+        handle.remove()
+    if "features" not in captured:
+        raise RuntimeError("decoder output hook did not capture visual rows")
+    n_actions = int(clean_token_ids.shape[0])
+    action_queries = [visual_count + base_ids.shape[1] - 1 + offset for offset in range(n_actions)]
+    scores = output.logits[:, action_queries].detach().float()[0]
+    return scores, captured["features"]
+
+
 def _action_query_start(inputs: dict[str, torch.Tensor], visual_count: int) -> int:
     input_ids = inputs["input_ids"]
     appended_empty = int(not torch.all(input_ids[:, -1] == 29871))
