@@ -29,18 +29,18 @@ The model's `config.json` contains the OpenVLA normalization statistics, includi
 From the source machine, copy the checkpoint directory to a destination path using SSH/rsync. The helper does not delete destination files:
 
 ```bash
-deployment/real_robot_transfer/tools/copy_checkpoint.sh \\
-  /home/leju-suzhou/zjt_ws/pcd_openvla_simpler_box_31b027e/source/pretrained/openvla-7b \\
+deployment/real_robot_transfer/tools/copy_checkpoint.sh \
+  /home/leju-suzhou/zjt_ws/pcd_openvla_simpler_box_31b027e/source/pretrained/openvla-7b \
   user@robot-host:/models/openvla-7b
 ```
 
 Generate a manifest on the source, copy that small manifest alongside the weights, then verify it on the destination:
 
 ```bash
-deployment/real_robot_transfer/tools/checkpoint_manifest.sh create \\
+deployment/real_robot_transfer/tools/checkpoint_manifest.sh create \
   /home/leju-suzhou/zjt_ws/pcd_openvla_simpler_box_31b027e/source/pretrained/openvla-7b
 # On the destination, after copying the generated SHA256SUMS file:
-deployment/real_robot_transfer/tools/checkpoint_manifest.sh verify \\
+deployment/real_robot_transfer/tools/checkpoint_manifest.sh verify \
   /models/openvla-7b /models/openvla-7b/SHA256SUMS
 ```
 
