@@ -1,4 +1,4 @@
-# L11 matched-budget causal pilot
+# VTCG budget causal pilot
 
 Seeds 100–124, four tasks. Matched is reused; 700 candidate episodes are newly run.
 

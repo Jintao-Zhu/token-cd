@@ -62,7 +62,7 @@ matched 应保持 SIMPLER 上的正向收益，整体成功率高于 vanilla。
 # 实验 3：官方协议正式 matched vs vanilla
 
 ## 实验目的
-在标准 LIBERO-Spatial 协议下比较 current L11 matched 和 vanilla。
+在标准 LIBERO-Spatial 协议下比较 VTCG 和 vanilla。
 
 ## 预期结果
 若方法有效，matched 应该高于 vanilla；若迁移失败，matched 低于 vanilla。
@@ -71,7 +71,7 @@ matched 应保持 SIMPLER 上的正向收益，整体成功率高于 vanilla。
 | Arm | Success |
 |---|---:|
 | Vanilla | 423 / 500 |
-| Current L11 matched | 410 / 500 |
+| VTCG | 410 / 500 |
 
 逐任务：
 
