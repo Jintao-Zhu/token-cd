@@ -1,4 +1,4 @@
-"""Minimal OpenVLA inference base used by the existing L11-Matched policy.
+"""Minimal OpenVLA inference base used by the existing VTCG policy.
 
 The research policy normally inherits through SIMPLER's OpenVLA wrapper. This
 base supplies the same methods without importing a simulator or robot driver.

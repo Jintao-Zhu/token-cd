@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Sync this checkout and run a full L11-Matched LIBERO-Spatial rollout in Docker.
+# Sync this checkout and run a full VTCG LIBERO-Spatial rollout in Docker.
 # Pass normal libero_matched_rollout.py arguments, e.g. --task TASK --episodes 0-9.
 set -euo pipefail
 

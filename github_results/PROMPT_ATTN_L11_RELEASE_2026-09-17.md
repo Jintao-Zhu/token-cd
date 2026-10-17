@@ -6,7 +6,7 @@ This release archives the experiment code and lightweight result records develop
 
 - Prompt-to-visual attention diagnostics and all-layer selection scans.
 - L11 matched-budget, fixed-count, Top-p, and Top-p90 comparisons.
-- Nine-task, 300-seed L11-Matched evaluation.
+- Nine-task, 300-seed VTCG evaluation.
 - Dense guidance-strength (`lambda`) scans on all nine tasks.
 - Adaptive-lambda, risk-gate, static-router, and lookahead investigations.
 - L11/L14 spatial diagnosis and exhaustive L11 partner-layer scans.

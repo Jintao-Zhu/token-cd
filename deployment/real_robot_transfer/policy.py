@@ -1,4 +1,4 @@
-"""Construct the exact simulation L11-Matched policy for camera inference."""
+"""Construct the exact simulation VTCG policy for camera inference."""
 from __future__ import annotations
 
 import os
@@ -64,7 +64,7 @@ def infer(policy, image: np.ndarray, instruction: str) -> tuple[dict, dict]:
     with torch.inference_mode():
         raw_action, _, trace = policy.step(image, task_description=instruction)
     if trace.get("coverage_exact") is not True or trace.get("guided_prefix") is not True:
-        raise RuntimeError("L11-Matched policy audit failed")
+        raise RuntimeError("VTCG policy audit failed")
     if trace.get("feature_equal") is not True or trace.get("non_target_bit_identical") is not True:
         raise RuntimeError("projector intervention audit failed")
     if trace["positive_token_ids"][6] != trace["final_token_ids"][6]:

@@ -1,8 +1,8 @@
-# L11-Matched full canonical evaluation: 9 tasks x 300 seeds
+# VTCG full canonical evaluation: 9 tasks x 300 seeds
 
 All 2,700 episodes use the same canonical snapshot and pass the canonical/state/RGB hash checks.
 
-| Task | Vanilla | SHR | L11-Matched | L11 vs Vanilla net | L11 vs SHR net |
+| Task | Vanilla | SHR | VTCG | L11 vs Vanilla net | L11 vs SHR net |
 |---|---:|---:|---:|---:|---:|
 | google_robot_open_drawer | 71/300 (23.7%) | 138/300 (46.0%) | 144/300 (48.0%) | +73 | +6 |
 | google_robot_close_drawer | 154/300 (51.3%) | 209/300 (69.7%) | 230/300 (76.7%) | +76 | +21 |

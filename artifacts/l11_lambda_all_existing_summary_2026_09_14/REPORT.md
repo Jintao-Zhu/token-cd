@@ -2,7 +2,7 @@
 
 Date: 2026-09-14
 
-## 1. Main Pure L11-Matched Fixed-Lambda Sweep
+## 1. Main Pure VTCG Fixed-Lambda Sweep
 
 Same four tasks, canonical seeds 0--99, 100 episodes per task and arm.
 
@@ -23,7 +23,7 @@ Same four tasks, canonical seeds 0--99, 100 episodes per task and arm.
 
 Nine tasks, seeds 0--299, 300 episodes per task.
 
-| Task | Vanilla | SHR | L11-Matched lambda=.50 |
+| Task | Vanilla | SHR | VTCG lambda=.50 |
 |---|---:|---:|---:|
 | open_drawer | 71/300 | 138/300 | 144/300 |
 | close_drawer | 154/300 | 209/300 | 230/300 |
@@ -61,9 +61,9 @@ Tasks are close_drawer, pick_coke_can, move_near, and carrot_on_plate; seeds 0--
 - Neither adaptive arm beat fixed lambda=.50 overall.
 - A stopped confirmation attempt left 55 incomplete close_drawer episode files: 27 EMA and 28 fixed-.25. They are not a valid balanced result and should not enter the paper table.
 
-## 4. DTP-Positive + L11-Matched-Negative Lambda Sweep
+## 4. DTP-Positive + VTCG-Negative Lambda Sweep
 
-This is a different positive branch and must not be merged with the pure L11-Matched curve.
+This is a different positive branch and must not be merged with the pure VTCG curve.
 
 | Task | lambda=.10 | lambda=.25 | lambda=.50 | lambda=.60 | lambda=.75 |
 |---|---:|---:|---:|---:|---:|
@@ -78,7 +78,7 @@ This is a different positive branch and must not be merged with the pure L11-Mat
 
 ## 5. Early Non-Matched Semantic Selector Sweep
 
-This predates the current L11-Matched selector and is not directly comparable. It used semantic_hard K8, layers 8--15, move_near only, seeds 100--199.
+This predates the current VTCG selector and is not directly comparable. It used semantic_hard K8, layers 8--15, move_near only, seeds 100--199.
 
 | Arm | Success |
 |---|---:|
@@ -101,8 +101,8 @@ These are not lambda sweeps:
 
 ## 7. Counts and Paper Interpretation
 
-- Main current pure L11-Matched sweep: five lambda values, 2,000 comparable outcomes on the four-task development set.
-- Pure L11-Matched fixed-lambda unique outcomes including the full nine-task lambda=.50 evaluation: 4,300. The 400 lambda=.50 development outcomes are already contained in the 2,700 full evaluation and are counted only once here.
+- Main current pure VTCG sweep: five lambda values, 2,000 comparable outcomes on the four-task development set.
+- Pure VTCG fixed-lambda unique outcomes including the full nine-task lambda=.50 evaluation: 4,300. The 400 lambda=.50 development outcomes are already contained in the 2,700 full evaluation and are counted only once here.
 - Temporal adaptive complete outcomes: 800 dynamic-arm episodes; fixed-.25 references overlap the fixed sweep.
 - DTP-positive lambda family: 2,000 outcomes, reported separately because the positive branch changed.
 - Early non-matched semantic sweep: 500 guided outcomes plus 100 Vanilla outcomes, reported only as historical evidence.

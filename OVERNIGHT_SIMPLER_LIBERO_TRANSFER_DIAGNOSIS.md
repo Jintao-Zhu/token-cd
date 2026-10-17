@@ -1,13 +1,13 @@
 # SIMPLER → LIBERO transfer diagnosis
 
-**Status: PARTIALLY SUPPORTED.** The frozen L11-Matched recipe has clear historical SIMPLER gains, but no clear average gain on the available paired LIBERO evaluations. Current evidence localizes the failure to the *action value of the intervention being heterogeneous across episodes and task stages*; it does not isolate whether selector, matched budget, or harmonic negative construction is the primary cause. Mild-view guidance-direction stability, as the candidate reliability signal, does not explain Rescue/Harm on the LIBERO sample.
+**Status: PARTIALLY SUPPORTED.** The frozen VTCG recipe has clear historical SIMPLER gains, but no clear average gain on the available paired LIBERO evaluations. Current evidence localizes the failure to the *action value of the intervention being heterogeneous across episodes and task stages*; it does not isolate whether selector, matched budget, or harmonic negative construction is the primary cause. Mild-view guidance-direction stability, as the candidate reliability signal, does not explain Rescue/Harm on the LIBERO sample.
 
 ## Evidence at a glance
 
 | Evidence | Result | What it establishes |
 |---|---|---|
-| Historical SIMPLER four-task result | L11-Matched 213/400 (53.2%) | The historical method has a positive benchmark result. |
-| LIBERO frozen SIMPLER-config, five tasks | Vanilla 184/250 (73.6%), L11-Matched 182/250 (72.8%); 32 Rescue / 34 Harm; paired difference −0.8 pp, 95% CI [−7.2, +5.6], exact McNemar p=.902 | There is no clear average benefit or harm in this subset; both beneficial and harmful episode effects occur. |
+| Historical SIMPLER four-task result | VTCG 213/400 (53.2%) | The historical method has a positive benchmark result. |
+| LIBERO frozen SIMPLER-config, five tasks | Vanilla 184/250 (73.6%), VTCG 182/250 (72.8%); 32 Rescue / 34 Harm; paired difference −0.8 pp, 95% CI [−7.2, +5.6], exact McNemar p=.902 | There is no clear average benefit or harm in this subset; both beneficial and harmful episode effects occur. |
 | LIBERO Spatial, audited 500 pairs | Vanilla 423/500, Matched 410/500; 44 Rescue / 57 Harm; net −13 | A larger, separate paired evaluation also does not show an aggregate gain. The original report had rescue/harm reversed and the wrong net sign; use the raw-pair audit. |
 | Mild-view continuous direction stability | 66 LIBERO discordant episodes (32/34), 3,913 states. Primary episode AUC .451 (95% CI [.313, .593]); late AUC .420; task-macro AUC .495 (CI [.313, .663]). | Sign stability under ±5% brightness/contrast and gamma .95/1.05 does not predict Rescue on this sample. |
 | Stricter all-six-view agreement | Overall AUC .557 (CI [.414, .699]); task-macro .615 (CI [.413, .814]) | Weakly positive point estimates, but uncertain and inconsistent by task; not validated evidence for a gate. |

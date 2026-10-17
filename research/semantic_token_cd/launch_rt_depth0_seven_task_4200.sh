@@ -8,7 +8,7 @@ RUN="$ROOT/research/semantic_token_cd/run_rt_depth0_seven_task_paired.py"
 LOG="$OUT/logs"
 mkdir -p "$LOG"
 
-echo "[$(date -Is)] PRE-FLIGHT: 7 task x seed 0, paired Vanilla/L11-Matched" | tee -a "$LOG/launcher.log"
+echo "[$(date -Is)] PRE-FLIGHT: 7 task x seed 0, paired Vanilla/VTCG" | tee -a "$LOG/launcher.log"
 
 # Parallel smoke cases across only GPUs 1-3. Their seed-0 outputs are part of
 # the locked 0-299 cohort and will be skipped by the formal shards below.

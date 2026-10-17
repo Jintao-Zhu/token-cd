@@ -10,7 +10,7 @@
 - Seeds: 100–199 for reused source trajectories and paired region arms; fresh seeds 300–499 for reconstruction arms.
 - Renderer: RT full, depth 8, for Open/Close Drawer; RT depth 0 for Pick Coke Can/Move Near. 32 spp with denoiser.
 - Compute allocation: GPUs 1, 2, and 3 only; three tmux workers per GPU.
-- Source full arm: L11-Matched, harmonic projector reconstruction, lambda 0.5.
+- Source full arm: VTCG, harmonic projector reconstruction, lambda 0.5.
 
 ## Planned phases
 

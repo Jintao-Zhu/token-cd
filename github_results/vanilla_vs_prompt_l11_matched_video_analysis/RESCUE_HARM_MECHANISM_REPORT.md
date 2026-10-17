@@ -1,4 +1,4 @@
-# Prompt-L11-Matched 的 Rescue/Harm 机制诊断
+# VTCG 的 Rescue/Harm 机制诊断
 
 ## 结论
 
@@ -7,7 +7,7 @@
 1. **Drawer：后期持续/过强的动作修正。** 成功与 Rescue 轨迹中的 guidance 通常随过程推进而减弱；Harm 中 guidance 在中后期仍然频繁改变动作，甚至继续增强，导致不能形成或维持有效拉/推动作。
 2. **Pick Coke：错误方向或错误阶段动作。** 多数 Harm 不是 guidance 更强，而是接近方向错误、转向干扰物或接近后失去目标；另有少数已经抓住但没有完成抬升。因此单纯降低统一 lambda 不能解决这类 Harm。
 
-这说明 Prompt-L11-Matched 的主要问题不是“始终选错 mask”或“始终干预太强”，而是：**固定的正向 contrastive guidance 没有判断当前修正方向是否有利，也没有区分接近、接触和持续操作阶段。**
+这说明 VTCG 的主要问题不是“始终选错 mask”或“始终干预太强”，而是：**固定的正向 contrastive guidance 没有判断当前修正方向是否有利，也没有区分接近、接触和持续操作阶段。**
 
 ## 全部 0–99 配对数据
 

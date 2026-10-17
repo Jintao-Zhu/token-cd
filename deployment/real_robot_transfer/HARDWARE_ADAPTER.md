@@ -15,7 +15,7 @@ The current checked-in rollout is for SIMPLER. A real-robot adapter should keep 
 2. Apply the exact crop/resize/color convention expected by the OpenVLA processor.
 3. Construct the exact prompt template and task instruction.
 4. Read the robot state required by the selected OpenVLA policy/action head.
-5. Call the L11-Matched policy and retain the clean and guided diagnostics for each replan.
+5. Call the VTCG policy and retain the clean and guided diagnostics for each replan.
 
 `observe()` returns `Observation(rgb, timestamp_s, robot_state)`, where
 `rgb` is `[H,W,3]` `uint8` in RGB channel order. Record the camera name,

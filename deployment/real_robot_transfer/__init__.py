@@ -1,1 +1,1 @@
-"""Hardware-independent OpenVLA L11-Matched transfer entry point."""
+"""Hardware-independent OpenVLA VTCG transfer entry point."""

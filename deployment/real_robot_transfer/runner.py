@@ -39,7 +39,7 @@ def load_adapter(spec: str):
 
 
 def main() -> None:
-    parser = argparse.ArgumentParser(description="OpenVLA L11-Matched robot transfer")
+    parser = argparse.ArgumentParser(description="OpenVLA VTCG robot transfer")
     parser.add_argument("--checkpoint", required=True, help="Complete local OpenVLA checkpoint directory")
     parser.add_argument("--unnorm-key", required=True, help="Embodiment-matched action statistics key")
     parser.add_argument("--instruction", required=True, help="Exact task prompt")

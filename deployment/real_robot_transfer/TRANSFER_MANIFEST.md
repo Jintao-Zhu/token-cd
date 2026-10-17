@@ -23,7 +23,7 @@ These files are already tracked by the repository and arrive with the branch:
 - `deployment/real_robot_transfer/runner.py`, `adapter.py`, `example_adapter.py` — offline and hardware entry points.
 - `deployment/real_robot_transfer/METHOD.md` — step-by-step algorithm and equations.
 
-Current method settings to preserve for the first physical pilot:
+VTCG method settings to preserve for the first physical pilot:
 
 | Setting | Value |
 |---|---|

@@ -1,6 +1,6 @@
-# OpenVLA L11-Matched：真机迁移交接
+# OpenVLA VTCG：真机迁移交接
 
-本目录提供 **相机图像 → OpenVLA → L11-Matched → 真机适配器** 的运行入口。算法复用 `research/semantic_token_cd/prompt_attn_shr_policy.py`，与仿真实验是同一实现。现有结果来自仿真；这里尚无特定机械臂的驱动、标定文件或真机结果。接手者可先在真实相机图像上离线推理，再实现其设备的观察和执行接口。
+本目录提供 **相机图像 → OpenVLA → VTCG → 真机适配器** 的运行入口。算法复用 `research/semantic_token_cd/prompt_attn_shr_policy.py`，与仿真实验是同一实现。现有结果来自仿真；这里尚无特定机械臂的驱动、标定文件或真机结果。接手者可先在真实相机图像上离线推理，再实现其设备的观察和执行接口。
 
 ## 方法概览
 
@@ -30,7 +30,7 @@ python -m deployment.real_robot_transfer.runner \
   --unnorm-key bridge_orig \
   --instruction "put the carrot on the plate" \
   --image /data/camera_frame.png \
-  --log /data/l11_matched_offline.jsonl
+  --log /data/vtcg_offline.jsonl
 ```
 
 这里 `bridge_orig` 仅说明参数格式。实际实验须核对 embodiment。输入从文件解码成 RGB，再用 OpenCV `INTER_AREA` 缩放到 224×224，并交由 checkpoint 自带 processor。英语指令需采用规则实体提取器可识别的命令形式。JSONL 包含图像哈希、七维反归一化动作、预算、所选 token、各分支 token 及审计字段。
@@ -44,11 +44,11 @@ python -m deployment.real_robot_transfer.runner \
   --instruction "put the carrot on the plate" \
   --adapter your_package.robot_adapter:RobotAdapter \
   --steps 20 --interval-s 1.0 \
-  --log /data/l11_matched_dry_run.jsonl
+  --log /data/vtcg_dry_run.jsonl
 ```
 
 5. 核对图像、状态、七维动作和经限幅的命令，并确认坐标系、单位、夹爪方向、延迟和急停。只有在设备侧完成这些准备后，增加 `--execute` 才会调用适配器的 `send_command()`。每次发送前先记录命令提议，发送后记录发送事件。现场应额外保存原始视频、机器人反馈、任务结果和失败原因。
 
 ## 可复现范围
 
-同一 checkpoint、processor、运行库、指令和图像下，本入口固定仿真中的算法设置并输出可核对的 trace。真实轨迹还取决于相机标定、动作统计、机械臂接口、频率、场景与安全流程，这些必须由真机合作者另行锁定。建议做 Vanilla OpenVLA 与 L11-Matched 同场景对照，记录逐步日志和成功率。现有仿真成功率不能作为真机效果。
+同一 checkpoint、processor、运行库、指令和图像下，本入口固定仿真中的算法设置并输出可核对的 trace。真实轨迹还取决于相机标定、动作统计、机械臂接口、频率、场景与安全流程，这些必须由真机合作者另行锁定。建议做 Vanilla OpenVLA 与 VTCG 同场景对照，记录逐步日志和成功率。现有仿真成功率不能作为真机效果。

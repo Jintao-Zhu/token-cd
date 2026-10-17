@@ -8,7 +8,7 @@
 
 - Cases: 60/60; spatial ablations: 290.
 - Snapshot / RGB tolerance / source-mask gate: PASS.
-- Every comparison restores the same simulator state, changes only one spatial subset of the first L11 mask, then uses the same L11-Matched continuation for five actions.
+- Every comparison restores the same simulator state, changes only one spatial subset of the first L11 mask, then uses the same VTCG continuation for five actions.
 
 ## Pooled causal effect
 

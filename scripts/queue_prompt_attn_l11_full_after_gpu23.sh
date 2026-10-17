@@ -51,7 +51,7 @@ PY
   sleep 30
 done
 
-echo "$(date -Is) GPU2/3 free; starting L11-Matched canonical seeds 100-299"
+echo "$(date -Is) GPU2/3 free; starting VTCG canonical seeds 100-299"
 export HF_HUB_OFFLINE=1
 export TOKENIZERS_PARALLELISM=false
 export PYTHONPATH="$repo:/home/leju-suzhou/zjt_ws/pcd_openvla_simpler_box_31b027e/source:${PYTHONPATH:-}"
