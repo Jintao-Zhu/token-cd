@@ -1,6 +1,6 @@
 # Current Best Answer
 
-The leading explanation is that L11-Matched transfers poorly because its counterfactual action correction has episode- and task-dependent value in LIBERO: it rescues some runs and harms nearly as many, while the existing evidence does not yet identify whether harmonic reconstruction or downstream action guidance causes that variability.
+The leading explanation is that VTCG transfers poorly because its counterfactual action correction has episode- and task-dependent value in LIBERO: it rescues some runs and harms nearly as many, while the existing evidence does not yet identify whether harmonic reconstruction or downstream action guidance causes that variability.
 
 ## Confidence
 
@@ -15,7 +15,7 @@ This is not a causal identification of either candidate. SIMPLER and LIBERO also
 
 ## Evidence Chain
 
-**Observation** → SIMPLER historical L11-Matched succeeds in 213/400 (53.2%); LIBERO yields 32 Rescue / 34 Harm in the 250-pair five-task study and 44 Rescue / 57 Harm in the audited 500-pair Spatial study.
+**Observation** → SIMPLER historical VTCG succeeds in 213/400 (53.2%); LIBERO yields 32 Rescue / 34 Harm in the 250-pair five-task study and 44 Rescue / 57 Harm in the audited 500-pair Spatial study.
 
 **Mechanism candidate** → In LIBERO, the negative branch's effect on the clean winner-versus-runner-up margin varies across episodes. On historical trace-valid states, the harmonic guidance-margin Rescue-higher AUC is .698 (95% episode-bootstrap CI [.550,.831]); the clean-pair flip fraction instead associates with Harm (Rescue-higher AUC .261 [.135,.402]). These describe association, not whether the intervention caused the whole episode outcome.
 
@@ -27,7 +27,7 @@ This is not a causal identification of either candidate. SIMPLER and LIBERO also
 
 | Component | SIMPLER | LIBERO | Bottleneck? | Evidence |
 |---|---|---|---|---|
-| L11 selector | Historical ablations report selector contribution. | L11-Matched has Rescue and Harm, but no same-`m`/same-negative selector replacement establishes selector failure. | UNRESOLVED | Relevance evidence does not establish action value. |
+| L11 selector | Historical ablations report selector contribution. | VTCG has Rescue and Harm, but no same-`m`/same-negative selector replacement establishes selector failure. | UNRESOLVED | Relevance evidence does not establish action value. |
 | Matched budget | Historical ablations report a matched-budget contribution. | Frozen recipe gives 182/250 vs Vanilla 184/250; budget itself was not isolated in the transfer comparison. | UNRESOLVED | No controlled budget-only test. |
 | Harmonic negative | Effective as part of the historical SIMPLER recipe. | One local feature-kNN negative replacement changes some negative logits but scarcely moves the action margin; no closed-loop benefit shown. | UNRESOLVED | Constrained offline alternative only; not proof harmonic is irrelevant. |
 | Action guidance | Historical recipe has clear aggregate gain. | Rescue/Harm are frequent and action-margin effects associate with outcome in trace-valid historical states. | UNRESOLVED | Strongest proximal candidate, but observational and replay-sensitive. |
@@ -36,7 +36,7 @@ This is not a causal identification of either candidate. SIMPLER and LIBERO also
 
 ## Rejected Hypotheses
 
-- **“L11-Matched has no effect in LIBERO.”** Rejected: LIBERO contains substantial Rescue and Harm discordance.
+- **“VTCG has no effect in LIBERO.”** Rejected: LIBERO contains substantial Rescue and Harm discordance.
 - **“Full RT harm is simply caused by continuing intervention late.”** Not supported by the tested Full/Depth0 Early/Late ablation.
 - **“A single visible robot surface swap or arena-diffuse component explains the relative Full/Depth0 gain.”** Not supported by the tested swap and renderer ablation results.
 - **“One rank-1 renderer nuisance direction can be removed to recover L11 benefit.”** Not supported: removal degraded Vanilla and L11 together.
@@ -55,4 +55,4 @@ The strongest variable-isolation probe so far is the 53-case paired offline nega
 
 ## Next research decision
 
-**KEEP L11-Matched as a fixed baseline and improve trace-faithful negative/action-value diagnosis.** Do not train a stability gate or replace harmonic reconstruction based on the current local-kNN result. The next causal pilot should wait until one alternative negative produces a clear held-out offline prediction—reduce harmful margin changes while retaining rescue-like changes—then compare only that negative against harmonic in a 30–50 paired closed-loop pilot with all per-step states, RGB hashes, masks, logits, actions, TCP/gripper/object state, and success events logged.
+**KEEP VTCG as a fixed baseline and improve trace-faithful negative/action-value diagnosis.** Do not train a stability gate or replace harmonic reconstruction based on the current local-kNN result. The next causal pilot should wait until one alternative negative produces a clear held-out offline prediction—reduce harmful margin changes while retaining rescue-like changes—then compare only that negative against harmonic in a 30–50 paired closed-loop pilot with all per-step states, RGB hashes, masks, logits, actions, TCP/gripper/object state, and success events logged.

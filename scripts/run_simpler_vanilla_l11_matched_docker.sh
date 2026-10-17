@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Run paired SIMPLER vanilla and L11-Matched episodes in dev_zjt_container.
+# Run paired SIMPLER vanilla and VTCG episodes in dev_zjt_container.
 set -euo pipefail
 
 SCRIPT_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"

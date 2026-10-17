@@ -2,7 +2,7 @@
 
 Snapshot/hash identity: **PASS**
 
-| Task | L11-Matched | Ungated-0.5 | Gated-0.4 |
+| Task | VTCG | Ungated-0.5 | Gated-0.4 |
 |---|---:|---:|---:|
 | open_drawer | 44/100 | 36/100 | 34/100 |
 | close_drawer | 76/100 | 62/100 | 72/100 |

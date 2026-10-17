@@ -1,6 +1,6 @@
-# DTP-Fixed positive + L11-Matched negative lambda sweep
+# DTP-Fixed positive + VTCG negative lambda sweep
 
-| Task | Vanilla | DTP-Fixed | L11-Matched | lambda=.10 | lambda=.25 | lambda=.50 |
+| Task | Vanilla | DTP-Fixed | VTCG | lambda=.10 | lambda=.25 | lambda=.50 |
 |---|---:|---:|---:|---:|---:|---:|
 | open_drawer | 27/100 | 23/100 | 50/100 | 38/100 | 40/100 | 48/100 |
 | close_drawer | 56/100 | 52/100 | 82/100 | 52/100 | 71/100 | 76/100 |

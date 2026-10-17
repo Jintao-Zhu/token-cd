@@ -1,6 +1,6 @@
-# Vanilla vs Prompt-L11-Matched：扩展配对视频索引
+# Vanilla vs VTCG：扩展配对视频索引
 
-每段视频均为同一初始场景的同步并排回放：左侧 Vanilla，右侧 Prompt-L11-Matched。
+每段视频均为同一初始场景的同步并排回放：左侧 Vanilla，右侧 VTCG。
 
 - `Rescue`：Vanilla 失败，Prompt 成功。
 - `Harm`：Vanilla 成功，Prompt 失败。

@@ -7,8 +7,8 @@
 ## Design and integrity
 
 - Same-state snapshots: 48/48; restore gate: PASS.
-- Strength branches apply dynamic L11-Matched for 10 actions at lambda 0.5, 0.25, or 0.
-- Token branches alter only the first decision's locked mask, then all return to dynamic L11-Matched lambda 0.5.
+- Strength branches apply dynamic VTCG for 10 actions at lambda 0.5, 0.25, or 0.
+- Token branches alter only the first decision's locked mask, then all return to dynamic VTCG lambda 0.5.
 - Positive delta means more task-native physical progress than the corresponding baseline.
 
 ## Phase-specific strength result

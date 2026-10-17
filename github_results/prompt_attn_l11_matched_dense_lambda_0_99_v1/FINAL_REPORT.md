@@ -1,4 +1,4 @@
-# Pure L11-Matched Dense Lambda Sweep
+# Pure VTCG Dense Lambda Sweep
 
 Same four tasks, canonical seeds 0--99, 100 paired episodes per task and lambda.
 
