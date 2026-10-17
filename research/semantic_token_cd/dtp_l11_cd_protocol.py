@@ -1,4 +1,4 @@
-"""Locked DTP-Fixed positive + L11-Matched harmonic negative protocol."""
+"""Locked DTP-Fixed positive + VTCG harmonic negative protocol."""
 from __future__ import annotations
 
 from research.semantic_token_cd.prompt_action_rerank_protocol import (

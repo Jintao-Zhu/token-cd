@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Run historical Vanilla / dynamic L11-Matched on SIMPLER RT path depth 8.
+"""Run historical Vanilla / dynamic VTCG on SIMPLER RT path depth 8.
 
 This thin wrapper deliberately reuses the audited depth-0 rollout implementation
 so policy, action decoding, snapshot restore, logging, and matched-budget logic

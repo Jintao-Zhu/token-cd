@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Replay canonical OpenVLA trajectories and extract independent GT object area.
 
-This reads actions from the completed L11-Matched Full runs, restores the exact
+This reads actions from the completed VTCG Full runs, restores the exact
 canonical snapshot, and records simulator instance-segmentation area at two
 deterministic intervention states per episode. It does not load a policy or
 generate new actions.

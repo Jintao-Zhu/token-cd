@@ -1,4 +1,4 @@
-"""Resumable 4-worker extension of L11-Matched to canonical seeds 100-299.
+"""Resumable 4-worker extension of VTCG to canonical seeds 100-299.
 
 Runs only the frozen ``prompt_single`` arm (L11 Prompt Attention, Standard-SHR
 KMeans coverage).  Seeds 0-99 already exist in the original layer-selection
@@ -249,7 +249,7 @@ def main() -> None:
     failed_path = ROOT / "FAILED.json"
     if failed_path.exists():
         failed_path.unlink()
-    (ROOT / "COMPLETE").write_text("1800/1800 L11-Matched canonical seeds 100-299 episodes complete\n")
+    (ROOT / "COMPLETE").write_text("1800/1800 VTCG canonical seeds 100-299 episodes complete\n")
     persist()
     print(json.dumps({"complete": True, "new_episodes": 1800, "completed_jobs": finished}), flush=True)
 

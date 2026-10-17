@@ -1,7 +1,7 @@
 """Phase A: frozen-state counterfactual response curve over the L11 matched budget.
 
 For each sampled state we take the state's OWN L11 ranking and only slide the
-cutoff m.  Everything else is the frozen L11-Matched configuration.  No
+cutoff m.  Everything else is the frozen VTCG configuration.  No
 environment.step() is ever driven by the evaluated policy: the trajectory is
 replayed with actions saved by the completed matched rollout.
 

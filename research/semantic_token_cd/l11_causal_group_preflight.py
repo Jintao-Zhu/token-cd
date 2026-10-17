@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Audit historical canonical L11-Matched against its saved first-step records.
+"""Audit historical canonical VTCG against its saved first-step records.
 
 This deliberately calls PromptAttentionSHRInference.step() directly.  It does
 not construct or import the task-conditioned policy and does not implement the

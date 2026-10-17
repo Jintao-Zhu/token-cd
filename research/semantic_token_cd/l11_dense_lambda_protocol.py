@@ -1,4 +1,4 @@
-"""Locked protocol for the pure L11-Matched dense lambda sweep."""
+"""Locked protocol for the pure VTCG dense lambda sweep."""
 from __future__ import annotations
 
 from pathlib import Path

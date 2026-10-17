@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Canonical paired LIBERO rollout with online L11-Matched action-value traces."""
+"""Canonical paired LIBERO rollout with online VTCG action-value traces."""
 from __future__ import annotations
 import argparse, hashlib, json, os, time, traceback
 from pathlib import Path

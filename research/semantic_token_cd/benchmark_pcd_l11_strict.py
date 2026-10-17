@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Same-host, same-OpenVLA, same-observation PCD vs L11-Matched latency audit.
+"""Same-host, same-OpenVLA, same-observation PCD vs VTCG latency audit.
 
 The end-to-end boundary is: RGB+segmentation observation available -> decoded,
 postprocessed action returned. Simulator rendering/step and model initialization

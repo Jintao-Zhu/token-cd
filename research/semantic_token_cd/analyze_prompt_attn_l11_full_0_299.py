@@ -1,4 +1,4 @@
-"""Analyze L11-Matched on the full canonical 9-task, 0-299 evaluation."""
+"""Analyze VTCG on the full canonical 9-task, 0-299 evaluation."""
 from __future__ import annotations
 
 import csv
@@ -148,11 +148,11 @@ def main() -> None:
         return f'{values["successes"][arm]}/{values["n"]} ({100 * values["success_rate"][arm]:.1f}%)'
 
     lines = [
-        "# L11-Matched full canonical evaluation: 9 tasks x 300 seeds",
+        "# VTCG full canonical evaluation: 9 tasks x 300 seeds",
         "",
         "All 2,700 episodes use the same canonical snapshot and pass the canonical/state/RGB hash checks.",
         "",
-        "| Task | Vanilla | SHR | L11-Matched | L11 vs Vanilla net | L11 vs SHR net |",
+        "| Task | Vanilla | SHR | VTCG | L11 vs Vanilla net | L11 vs SHR net |",
         "|---|---:|---:|---:|---:|---:|",
     ]
     for task in (*TASKS, "overall"):

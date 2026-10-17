@@ -1,4 +1,4 @@
-"""Final paired report for PA-Rerank-L11-Matched v1."""
+"""Final paired report for PA-Rerank-VTCG v1."""
 from __future__ import annotations
 
 import json
@@ -133,12 +133,12 @@ def main() -> None:
     atomic_json(ARTIFACT / "FINAL_RESULTS.json", result)
 
     labels = {
-        "vanilla": "Vanilla", "shr_harmonic": "SHR", "l11_matched": "L11-Matched",
+        "vanilla": "Vanilla", "shr_harmonic": "SHR", "l11_matched": "VTCG",
         "hh": "HH", ARM: "PA-Rerank",
     }
     lines = [
-        "# PA-Rerank-L11-Matched v1", "", "## Success rate", "",
-        "| Task | Vanilla | SHR | L11-Matched | HH | PA-Rerank |",
+        "# PA-Rerank-VTCG v1", "", "## Success rate", "",
+        "| Task | Vanilla | SHR | VTCG | HH | PA-Rerank |",
         "|---|---:|---:|---:|---:|---:|",
     ]
     for task in (*TASKS, "overall"):

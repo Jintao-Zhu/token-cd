@@ -101,20 +101,20 @@ def main() -> None:
                            "vanilla_rate": total_v / total_episodes * 2,
                            "l11_matched_rate": total_m / total_episodes * 2}}
     (root / "FINAL_RESULTS.json").write_text(json.dumps(payload, indent=2, sort_keys=True) + "\n")
-    lines = ["# SIMPLER RT-depth0: 7-task Vanilla vs L11-Matched", "",
+    lines = ["# SIMPLER RT-depth0: 7-task Vanilla vs VTCG", "",
              f"Protocol: `{PROTOCOL}`  ", f"Renderer: `{RENDERER}`  ",
              "Seeds: 0–299 per task; 7 tasks; 4,200 paired-arm episodes.", "",
-             "| Task | Vanilla | L11-Matched | Rescue | Harm | Net |",
+             "| Task | Vanilla | VTCG | Rescue | Harm | Net |",
              "|---|---:|---:|---:|---:|---:|"]
     for task, values in task_rows.items():
         lines.append(f"| {task} | {values['vanilla_successes']}/300 ({values['vanilla_rate']:.1%}) | "
                      f"{values['l11_matched_successes']}/300 ({values['l11_matched_rate']:.1%}) | "
                      f"{values['rescue']} | {values['harm']} | {values['paired_net']:+d} |")
     lines += ["", f"Total: Vanilla {total_v}/2100 ({total_v/2100:.1%}); "
-              f"L11-Matched {total_m}/2100 ({total_m/2100:.1%}); "
+              f"VTCG {total_m}/2100 ({total_m/2100:.1%}); "
               f"Rescue {total_rescue}; Harm {total_harm}; paired net {total_rescue-total_harm:+d}.",
               "", "Pairwise snapshot, simulator-state, and initial-RGB hashes match for every task/seed/arm pair. "
-              "Every L11-Matched episode has exact matched coverage and lambda 0.5.", ""]
+              "Every VTCG episode has exact matched coverage and lambda 0.5.", ""]
     (root / "FINAL_RESULTS.md").write_text("\n".join(lines))
     print(f"FINALIZE PASS: validated {total_episodes} episodes; report at {root / 'FINAL_RESULTS.md'}")
 

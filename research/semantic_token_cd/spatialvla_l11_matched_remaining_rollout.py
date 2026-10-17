@@ -1,4 +1,4 @@
-"""Paired SpatialVLA Vanilla / L11-Matched rollout on remaining SIMPLER tasks."""
+"""Paired SpatialVLA Vanilla / VTCG rollout on remaining SIMPLER tasks."""
 from __future__ import annotations
 
 import argparse

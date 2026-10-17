@@ -19,7 +19,7 @@ def main():
         result["tasks"][task]={"n":n,"full_joint_success":s,"l11_success":bs,"rescue":r,"harm":h,"net":r-h,"p_exact":pexact(r,h)}
         for i,z in enumerate((n,s,bs,r,h)): totals[i]+=z
     n,s,bs,r,h=totals; result["overall"]={"n":n,"full_joint_success":s,"l11_success":bs,"rescue":r,"harm":h,"net":r-h,"p_exact":pexact(r,h)}; atomic_json(ARTIFACT/"FINAL_RESULTS.json",result)
-    lines=["# PA-Full-Joint-Top2K", "", "| Task | L11-Matched | Full-Joint | Delta | Rescue | Harm |", "|---|---:|---:|---:|---:|---:|"]
+    lines=["# PA-Full-Joint-Top2K", "", "| Task | VTCG | Full-Joint | Delta | Rescue | Harm |", "|---|---:|---:|---:|---:|---:|"]
     for task in TASKS:
         x=result["tasks"][task]; lines.append(f"| {task.removeprefix('google_robot_')} | {x['l11_success']}/100 | {x['full_joint_success']}/100 | {x['net']:+d} | {x['rescue']} | {x['harm']} |")
     lines.append(f"| overall | {bs}/400 | {s}/400 | {r-h:+d} | {r} | {h} |"); lines.append(f"\nExact paired p={result['overall']['p_exact']:.4g}.\n"); (ARTIFACT/"FINAL_REPORT.md").write_text("\n".join(lines)); print(json.dumps(result,indent=2))

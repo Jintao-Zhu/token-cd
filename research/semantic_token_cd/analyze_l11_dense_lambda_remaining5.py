@@ -101,7 +101,7 @@ def main() -> None:
 
     labels = [f"{value:g}" for value in ALL_LAMBDAS]
     lines = [
-        "# Remaining Five Tasks: Pure L11-Matched Lambda Sweep", "",
+        "# Remaining Five Tasks: Pure VTCG Lambda Sweep", "",
         "Same canonical seeds 0--99, 100 paired episodes per task and lambda.", "",
         "| Task | " + " | ".join(f"λ={label}" for label in labels) + " | Best |",
         "|---|" + "---:|" * (len(labels) + 1),

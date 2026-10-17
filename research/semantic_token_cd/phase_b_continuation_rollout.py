@@ -1,7 +1,7 @@
 """Phase B: does m-dagger have closed-loop meaning?
 
 For each selected frozen state: restore it exactly, run ONE control step with a
-tested budget m, then hand control back to the standard L11-Matched policy for
+tested budget m, then hand control back to the standard VTCG policy for
 the remainder of the episode.  Only the tested step differs.
 """
 from __future__ import annotations
