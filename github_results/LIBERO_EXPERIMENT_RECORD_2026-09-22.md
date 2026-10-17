@@ -38,7 +38,7 @@ Source/target-only diagnostic on T1/T2/T4, custom 300-step:
 | Arm | Success |
 |---|---:|
 | Vanilla | 423 / 500 |
-| Current L11 matched | 410 / 500 |
+| VTCG | 410 / 500 |
 
 Per task:
 

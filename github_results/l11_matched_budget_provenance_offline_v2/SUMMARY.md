@@ -1,4 +1,4 @@
-# L11 Matched Budget Provenance: Offline Audit
+# VTCG Budget Provenance: Offline Audit
 
 同一60个保存状态；不跑环境闭环，不使用动作指标。所有 arm 使用同一条 L11 排名，只改变预算来源。
 

@@ -1,4 +1,4 @@
-# What does the L11 matched budget encode?
+# What does the VTCG budget encode?
 
 生成日期：2026-09-14。该报告完全离线；未运行新 OpenVLA forward，未控制环境。
 
