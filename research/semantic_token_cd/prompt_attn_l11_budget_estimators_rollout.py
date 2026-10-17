@@ -1,7 +1,7 @@
 """Closed-loop test of Relative and Spectral L11 intervention budgets.
 
 The token ranking, harmonic reconstruction, lambda, prompt branch, and positive
-branch are shared with L11-Matched.  The only arm-specific variable is the
+branch are shared with VTCG.  The only arm-specific variable is the
 per-state coverage ``m_t``:
   * relative: count of L11 visual attention above gamma / 256
   * spectral: number of visual-feature principal directions needed for tau energy

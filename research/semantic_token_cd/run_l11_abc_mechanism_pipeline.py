@@ -306,7 +306,7 @@ def launch_b_formal() -> None:
             reference[(task, seed)] = json.loads((FULL / "episodes" / task / "full" / f"episode_{seed:03d}_summary.json").read_text())
             for arm in arms:
                 arms[arm][(task, seed)] = json.loads((artifact / "episodes" / task / arm / f"episode_{seed:03d}_summary.json").read_text())
-    report = paired_report(reference, arms, TASKS, range(100, 200), artifact / "paired_results_vs_full.json", "GT target controls vs canonical Full L11-Matched")
+    report = paired_report(reference, arms, TASKS, range(100, 200), artifact / "paired_results_vs_full.json", "GT target controls vs canonical Full VTCG")
     log("B_RESULTS " + json.dumps(report["overall"], sort_keys=True))
     log("B_FINAL_PASS: 4 tasks x 100 seeds x 2 new arms; paired with existing Full")
 

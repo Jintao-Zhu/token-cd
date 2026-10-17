@@ -709,7 +709,7 @@ class PromptAttentionSHRInference(STSHRCDInference):
     region_aux: dict | None = None
     # GT-segmentation mechanism controls. The rollout supplies a 256-vector of
     # visible target-patch overlap immediately before each step; these modes
-    # preserve the canonical L11-Matched count and rank tokens by L11 within
+    # preserve the canonical VTCG count and rank tokens by L11 within
     # the allowed target/non-target pool.
     region_mask_mode: str | None = None
     _region_patch_overlap: np.ndarray | None = None

@@ -1,4 +1,4 @@
-"""Paired vanilla and canonical L11-Matched closed-loop SIMPLER evaluation."""
+"""Paired vanilla and canonical VTCG closed-loop SIMPLER evaluation."""
 from __future__ import annotations
 
 import argparse

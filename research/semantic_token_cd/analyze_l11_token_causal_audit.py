@@ -182,7 +182,7 @@ def main() -> None:
              f"**{decision}**", "", "## Integrity", "",
              f"- Cases: {len(files)}/{len(manifest)}; spatial ablations: {len(rows)}.",
              f"- Snapshot / RGB tolerance / source-mask gate: {'PASS' if all(integrity) else 'FAIL'}.",
-             "- Every comparison restores the same simulator state, changes only one spatial subset of the first L11 mask, then uses the same L11-Matched continuation for five actions.",
+             "- Every comparison restores the same simulator state, changes only one spatial subset of the first L11 mask, then uses the same VTCG continuation for five actions.",
              "", "## Pooled causal effect", ""]
     for category in ("rescue", "harm"):
         subset = [x for x in rows if x["category"] == category]

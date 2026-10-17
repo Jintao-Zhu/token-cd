@@ -1,4 +1,4 @@
-"""Offline Fig. 4a support-scale analysis from the completed Full L11-Matched runs."""
+"""Offline Fig. 4a support-scale analysis from the completed Full VTCG runs."""
 from __future__ import annotations
 
 import csv

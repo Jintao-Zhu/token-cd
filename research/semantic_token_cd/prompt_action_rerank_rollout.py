@@ -1,4 +1,4 @@
-"""Closed-loop worker for PA-Rerank-L11-Matched v1 (one new arm only)."""
+"""Closed-loop worker for PA-Rerank-VTCG v1 (one new arm only)."""
 from __future__ import annotations
 
 import argparse

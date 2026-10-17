@@ -1,4 +1,4 @@
-"""Conservative risk-gated lambda controller for L11-Matched Prompt-Attn SHR."""
+"""Conservative risk-gated lambda controller for VTCG Prompt-Attn SHR."""
 from __future__ import annotations
 
 from dataclasses import dataclass

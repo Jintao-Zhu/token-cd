@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Regenerate paired Vanilla / historical L11-Matched baselines under RT."""
+"""Regenerate paired Vanilla / historical VTCG baselines under RT."""
 from __future__ import annotations
 
 import argparse

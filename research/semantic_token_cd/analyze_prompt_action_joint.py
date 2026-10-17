@@ -1,4 +1,4 @@
-"""Final paired report for PA-A10 and PA-Joint10 against L11-Matched."""
+"""Final paired report for PA-A10 and PA-Joint10 against VTCG."""
 from __future__ import annotations
 
 import json
@@ -75,7 +75,7 @@ def main():
     result = {"complete": True, "new_episodes": 800, "success": success,
               "paired": paired, "diagnostics": diagnostics}
     atomic_json(ARTIFACT / "FINAL_RESULTS.json", result)
-    lines = ["# PA-Constrained Joint L11 v1", "", "| Task | L11-Matched | PA-A10 | PA-Joint10 |",
+    lines = ["# PA-Constrained Joint L11 v1", "", "| Task | VTCG | PA-A10 | PA-Joint10 |",
              "|---|---:|---:|---:|"]
     for task in (*TASKS, "overall"):
         n = 400 if task == "overall" else 100

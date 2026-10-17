@@ -1,4 +1,4 @@
-"""Locked protocol for PA-Rerank-L11-Matched v1."""
+"""Locked protocol for PA-Rerank-VTCG v1."""
 from __future__ import annotations
 
 import json

@@ -44,7 +44,7 @@ def main() -> None:
     checkpoint = str(PCD_SOURCE / "pretrained/openvla-7b")
     base = OpenVLAInference(**get_policy_config("openvla", checkpoint, TASK, {}, False))
     # The imported PA-Rerank builder enables full rerank; disable it to obtain
-    # the exact historical L11-Matched path for this audit.
+    # the exact historical VTCG path for this audit.
     baseline_policy = build_baseline(base, TASK)
     baseline_policy.prompt_action_rerank_multiplier = None
     baseline_trace, baseline_record = run(baseline_policy, image, instruction)

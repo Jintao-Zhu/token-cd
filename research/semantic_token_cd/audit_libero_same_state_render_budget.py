@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
-"""Measure render-reset sensitivity of L11-Matched on one fixed LIBERO state.
+"""Measure render-reset sensitivity of VTCG on one fixed LIBERO state.
 
 This is a diagnostic, not a policy rollout: it creates the same initial state
 three times, verifies the simulator-state hash, runs the frozen current
-L11-Matched inference once per captured RGB, and records RGB/mask/budget data.
+VTCG inference once per captured RGB, and records RGB/mask/budget data.
 """
 from __future__ import annotations
 

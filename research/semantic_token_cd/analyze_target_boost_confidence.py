@@ -1,4 +1,4 @@
-"""Final paired analysis against reused held-out L11-Matched."""
+"""Final paired analysis against reused held-out VTCG."""
 from __future__ import annotations
 import json
 from scipy.stats import binomtest
@@ -33,7 +33,7 @@ def main():
  result["overall"]["gate_vs_ungated"]=paired(all_values["positive_boost_0p5"],all_values["confidence_gate_0p4"])
  (ARTIFACT/"FINAL_RESULTS.json").write_text(json.dumps(result,indent=2)+"\n")
  lines=["# Confidence-Gated Target Positive-Boost","",f"Snapshot/hash identity: **{'PASS' if result['identity_pass'] else 'FAIL'}**","",
-  "| Task | L11-Matched | Ungated-0.5 | Gated-0.4 |","|---|---:|---:|---:|"]
+  "| Task | VTCG | Ungated-0.5 | Gated-0.4 |","|---|---:|---:|---:|"]
  for task in TASKS:
   x=result["tasks"][task];lines.append(f"| {task.removeprefix('google_robot_')} | {x['l11_matched_success']}/100 | {x['arms']['positive_boost_0p5']['success']}/100 | {x['arms']['confidence_gate_0p4']['success']}/100 |")
  o=result["overall"];lines.append(f"| **Overall** | **{o['l11_matched_success']}/400** | **{o['arms']['positive_boost_0p5']['success']}/400** | **{o['arms']['confidence_gate_0p4']['success']}/400** |")

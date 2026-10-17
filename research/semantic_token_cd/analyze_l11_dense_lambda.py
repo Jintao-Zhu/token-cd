@@ -1,4 +1,4 @@
-"""Analyze the complete pure L11-Matched fixed-lambda response curve."""
+"""Analyze the complete pure VTCG fixed-lambda response curve."""
 from __future__ import annotations
 
 import csv
@@ -112,7 +112,7 @@ def main() -> None:
 
     labels = [f"{lambd:g}" for lambd in lambdas]
     lines = [
-        "# Pure L11-Matched Dense Lambda Sweep",
+        "# Pure VTCG Dense Lambda Sweep",
         "",
         "Same four tasks, canonical seeds 0--99, 100 paired episodes per task and lambda.",
         "",

@@ -111,15 +111,15 @@ def main() -> None:
     (out / 'FINAL_RESULTS.json').write_text(json.dumps(result, indent=2, sort_keys=True) + '\n')
     lines = [
         '# SIMPLER RT-depth0 Open/Close Drawer: 300 paired seeds', '',
-        'Renderer: SAPIEN RT depth0, 32 spp, denoiser enabled. Seeds 0–299 per task; same historical Vanilla and L11-Matched protocols; paired canonical snapshots.', '',
-        '| Task | Vanilla | L11-Matched | Rescue | Harm | Net |',
+        'Renderer: SAPIEN RT depth0, 32 spp, denoiser enabled. Seeds 0–299 per task; same historical Vanilla and VTCG protocols; paired canonical snapshots.', '',
+        '| Task | Vanilla | VTCG | Rescue | Harm | Net |',
         '|---|---:|---:|---:|---:|---:|'
     ]
     for task, x in result['per_task'].items():
         label = task.replace('google_robot_', '').replace('_', ' ').title()
         lines.append(f"| {label} | {x['vanilla_successes']}/300 ({x['vanilla_rate']:.1%}) | {x['l11_matched_successes']}/300 ({x['l11_matched_rate']:.1%}) | {x['rescue']} | {x['harm']} | {x['paired_net']:+d} |")
     x = result['overall']
-    lines += ['', f"**Both tasks:** Vanilla {x['vanilla_successes']}/600 ({x['vanilla_rate']:.1%}); L11-Matched {x['l11_matched_successes']}/600 ({x['l11_matched_rate']:.1%}); Rescue {x['rescue']}, Harm {x['harm']}, net {x['paired_net']:+d}.", '', 'All 1,200 episode summaries passed renderer, snapshot, state, paired-RGB, protocol, and historical-seed identity checks.']
+    lines += ['', f"**Both tasks:** Vanilla {x['vanilla_successes']}/600 ({x['vanilla_rate']:.1%}); VTCG {x['l11_matched_successes']}/600 ({x['l11_matched_rate']:.1%}); Rescue {x['rescue']}, Harm {x['harm']}, net {x['paired_net']:+d}.", '', 'All 1,200 episode summaries passed renderer, snapshot, state, paired-RGB, protocol, and historical-seed identity checks.']
     (out / 'FINAL_RESULTS.md').write_text('\n'.join(lines) + '\n')
     print(json.dumps(result, indent=2))
 

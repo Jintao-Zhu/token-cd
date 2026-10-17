@@ -1,4 +1,4 @@
-"""Canonical four-task rollout for L11-Matched Adaptive-lambda controllers."""
+"""Canonical four-task rollout for VTCG Adaptive-lambda controllers."""
 from __future__ import annotations
 
 import argparse

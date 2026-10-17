@@ -58,9 +58,9 @@ Protocol: `{PROTOCOL}`
 
 ## Question and hypothesis
 
-The audited SIMPLER L11-Matched evaluation uses pretrained base `openvla-7b`; the current LIBERO action-value and N=50 cohorts use a LIBERO90-finetuned OpenVLA checkpoint. The same-defined episode-level guidance score predicts Rescue in opposite directions across SIMPLER and LIBERO. This cohort changes only the model checkpoint within the same LIBERO task/state/rendering condition.
+The audited SIMPLER VTCG evaluation uses pretrained base `openvla-7b`; the current LIBERO action-value and N=50 cohorts use a LIBERO90-finetuned OpenVLA checkpoint. The same-defined episode-level guidance score predicts Rescue in opposite directions across SIMPLER and LIBERO. This cohort changes only the model checkpoint within the same LIBERO task/state/rendering condition.
 
-**Hypothesis:** checkpoint fine-tuning changes the action geometry through which the frozen L11-Matched counterfactual acts. Therefore, running the SIMPLER base checkpoint on the same LIBERO states will shift the Rescue-versus-Harm relationship of episode-median G toward the SIMPLER direction (lower G in Rescue than Harm), while the existing fine-tuned checkpoint provides the reference.
+**Hypothesis:** checkpoint fine-tuning changes the action geometry through which the frozen VTCG counterfactual acts. Therefore, running the SIMPLER base checkpoint on the same LIBERO states will shift the Rescue-versus-Harm relationship of episode-median G toward the SIMPLER direction (lower G in Rescue than Harm), while the existing fine-tuned checkpoint provides the reference.
 
 **Prediction:** compare base-checkpoint and existing LIBERO90-finetuned checkpoint on identical 50 task/init/seed pairs. If the base checkpoint moves the G/Rescue association toward SIMPLER (Rescue-higher AUC below .5), while successes remain sufficiently discordant, checkpoint is a causal contributor. If the relation remains Rescue-higher or the cohort has too few discordant episodes, checkpoint alone does not explain the contrast.
 

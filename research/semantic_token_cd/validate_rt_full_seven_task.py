@@ -92,16 +92,16 @@ def main() -> None:
                     "paired_net": total_rescue - total_harm},
     }
     (out / "FINAL_RESULTS.json").write_text(json.dumps(payload, indent=2, sort_keys=True) + "\n")
-    lines = ["# SIMPLER RT-full: 7-task Vanilla vs L11-Matched", "",
+    lines = ["# SIMPLER RT-full: 7-task Vanilla vs VTCG", "",
              f"Protocol: `{PROTOCOL}`  ", f"Renderer: `{RENDERER}`  ",
              "Seeds: 0–299 per task; 7 tasks; 4,200 paired-arm episodes.", "",
-             "| Task | Vanilla | L11-Matched | Rescue | Harm | Net |", "|---|---:|---:|---:|---:|---:|"]
+             "| Task | Vanilla | VTCG | Rescue | Harm | Net |", "|---|---:|---:|---:|---:|---:|"]
     for task, row in per_task.items():
         lines.append(f"| {task} | {row['vanilla_successes']}/300 ({row['vanilla_rate']:.1%}) | "
                      f"{row['l11_matched_successes']}/300 ({row['l11_matched_rate']:.1%}) | "
                      f"{row['rescue']} | {row['harm']} | {row['paired_net']:+d} |")
     lines += ["", f"Overall: Vanilla {total_v}/2100 ({total_v/2100:.1%}); "
-              f"L11-Matched {total_m}/2100 ({total_m/2100:.1%}); Rescue {total_rescue}; "
+              f"VTCG {total_m}/2100 ({total_m/2100:.1%}); Rescue {total_rescue}; "
               f"Harm {total_harm}; paired net {total_rescue-total_harm:+d}.",
               "", "All RT-full arms are paired on identical task/seed snapshots, simulator states, and initial RGB. "
               "Across renderer comparison, canonical snapshot and simulator-state hashes match RT-depth0; RGB differs as expected.", ""]

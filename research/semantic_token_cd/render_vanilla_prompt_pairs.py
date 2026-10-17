@@ -1,4 +1,4 @@
-"""Render fixed-order Vanilla vs Prompt-L11-Matched paired outcome cases.
+"""Render fixed-order Vanilla vs VTCG paired outcome cases.
 
 This script does no model inference. It restores each canonical snapshot and
 replays the exact actions saved by the completed experiments. It writes raw arm
@@ -121,7 +121,7 @@ def replay(env, task, seed, arm, snap, actions, saved_success):
     for t in range(len(actions) + 1):
         st = status(task, u, info); trace.append({"t": t, **st})
         image = get_image_from_maniskill2_obs_dict(env, obs)
-        frames.append(label_frame(image, "Vanilla" if arm == "vanilla" else "Prompt-L11-Matched",
+        frames.append(label_frame(image, "Vanilla" if arm == "vanilla" else "VTCG",
                                   seed, TASK_SHORT[task], t, st, saved_success))
         if t == len(actions): break
         obs, _r, _term, _trunc, info = env.step(np.nan_to_num(actions[t].astype(np.float64)))

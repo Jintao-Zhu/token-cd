@@ -20,7 +20,7 @@ class DTPPositiveL11NegativeInference(PromptAttentionSHRInference):
     """Literal heterogeneous CD requested by the protocol.
 
     Positive logits come from the paper-style fixed DTP mask.  Negative logits
-    come from the full (unpruned) visual stream after L11-Matched harmonic
+    come from the full (unpruned) visual stream after VTCG harmonic
     reconstruction and are teacher-forced on the DTP-positive prefix.
     """
 
@@ -53,7 +53,7 @@ class DTPPositiveL11NegativeInference(PromptAttentionSHRInference):
         if not torch.equal(reference_ids, dtp_clean_ids):
             raise RuntimeError("DTP internal clean generation differs from audited clean generation")
 
-        # Historical L11-Matched selection: raw L11 prompt ranking, with the
+        # Historical VTCG selection: raw L11 prompt ranking, with the
         # own-state KMeans semantic selector supplying only the count m_t.
         labels, _, per_entity_score = self._semantic_clusters(features)
         entity_groups = self._entity_groups(features, labels)
@@ -61,7 +61,7 @@ class DTPPositiveL11NegativeInference(PromptAttentionSHRInference):
             int(index) for group in entity_groups for index in np.flatnonzero(labels == group)
         ))
         if not reference:
-            raise RuntimeError("L11-Matched reference selector returned an empty region")
+            raise RuntimeError("VTCG reference selector returned an empty region")
         selected = stable_top_m(prompt_per_layer[DTP_LAYER], len(reference))
         reconstructed = features.copy()
         reconstructed[selected] = harmonic_reconstruct(

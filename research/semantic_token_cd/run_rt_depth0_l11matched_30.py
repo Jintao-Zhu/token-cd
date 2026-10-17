@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Run canonical historical L11-Matched on SIMPLER RT depth-0, seeds 100-129."""
+"""Run canonical historical VTCG on SIMPLER RT depth-0, seeds 100-129."""
 from __future__ import annotations
 
 import argparse

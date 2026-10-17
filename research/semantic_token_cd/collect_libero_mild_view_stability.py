@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Compute mild-view L11-Matched action logits on saved LIBERO trajectories.
+"""Compute mild-view VTCG action logits on saved LIBERO trajectories.
 
 This performs offline policy inference on frames from historical matched-arm
 videos. It does not step the environment or create new episodes. The same

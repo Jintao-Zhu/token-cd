@@ -1,4 +1,4 @@
-"""Locked protocol for the remaining-five-task L11-Matched lambda sweep."""
+"""Locked protocol for the remaining-five-task VTCG lambda sweep."""
 from __future__ import annotations
 
 from pathlib import Path

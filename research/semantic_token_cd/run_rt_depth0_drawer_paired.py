@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Paired Vanilla / historical dynamic L11-Matched rollouts on RT depth 0."""
+"""Paired Vanilla / historical dynamic VTCG rollouts on RT depth 0."""
 from __future__ import annotations
 
 import argparse

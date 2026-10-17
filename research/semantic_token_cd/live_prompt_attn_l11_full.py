@@ -105,7 +105,7 @@ def collect() -> tuple[dict, list[dict]]:
 
 def render_markdown(payload: dict) -> str:
     lines = [
-        "# L11-Matched full run: live results",
+        "# VTCG full run: live results",
         "",
         f"Updated: **{payload['last_updated']}**",
         f"Completed: **{payload['completed_episodes']}/1800**",

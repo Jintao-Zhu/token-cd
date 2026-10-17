@@ -1,4 +1,4 @@
-"""CPU-only selector invariants for PA-Rerank-L11-Matched v1."""
+"""CPU-only selector invariants for PA-Rerank-VTCG v1."""
 import numpy as np
 
 from research.semantic_token_cd.prompt_attn_shr_policy import (

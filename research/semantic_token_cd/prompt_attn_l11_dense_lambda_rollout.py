@@ -1,4 +1,4 @@
-"""Closed-loop rollout for the pure L11-Matched dense lambda sweep."""
+"""Closed-loop rollout for the pure VTCG dense lambda sweep."""
 from __future__ import annotations
 
 import argparse

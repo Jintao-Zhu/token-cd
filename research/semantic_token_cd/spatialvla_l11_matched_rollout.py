@@ -1,4 +1,4 @@
-"""Paired SpatialVLA Vanilla / L11-Matched rollout on SIMPLER Google Robot."""
+"""Paired SpatialVLA Vanilla / VTCG rollout on SIMPLER Google Robot."""
 from __future__ import annotations
 
 import argparse

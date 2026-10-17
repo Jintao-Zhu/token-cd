@@ -352,7 +352,7 @@ def main() -> None:
             "guided_dimensions": [0, 1, 2, 3, 4, 5],
             "gripper": "clean positive branch", "sampling": False,
         },
-        "m_t_coupling": "compute the L11-Matched own-state m_t tape on arm A; freeze and reuse it by control-step index in B/C/D",
+        "m_t_coupling": "compute the VTCG own-state m_t tape on arm A; freeze and reuse it by control-step index in B/C/D",
         "random": "SeedSequence([task_index, episode_seed, control_step, 0x50A77E11])",
         "code": {
             "git_commit": commit_label,
@@ -421,7 +421,7 @@ def main() -> None:
                                 (task_out / arm / f"episode_{seed:03d}_summary.json").read_text()
                             )["selector_trace"]]
                         else:
-                            raise RuntimeError("L11-Matched arm must run first to establish shared m_t")
+                            raise RuntimeError("VTCG arm must run first to establish shared m_t")
                     policy.selection_budget_schedule = tuple(budget_tape)
 
                 existing = all_existing[arm]
@@ -521,7 +521,7 @@ def main() -> None:
                 }), flush=True)
 
             if budget_tape is None:
-                raise RuntimeError("L11-Matched failed to produce the shared budget tape")
+                raise RuntimeError("VTCG failed to produce the shared budget tape")
             initial_hashes = {
                 arm: (summaries[arm]["initial_state_sha256"], summaries[arm]["initial_rgb_sha256"])
                 for arm in ARMS

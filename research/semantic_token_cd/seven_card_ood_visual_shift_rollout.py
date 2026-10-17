@@ -88,7 +88,7 @@ def main() -> None:
         "texture": "deterministic 256x256 procedural held-out grain blended 0.55 on arena-only pixels identified by Segmentation actor id; arena mesh material has no effective UVs on this renderer",
         "distractor": "render-only 24px checker patch anchored at the highest-arena-fraction corner from baseline segmentation; each frame composites only pixels still segmented as arena, preserving any foreground robot/object that later passes over the fixed screen-space patch",
         "texture_asset": str(texture_path),
-        "pairing": "for each task/seed/shift require exact simulator-state and shifted-RGB hashes between Vanilla and L11-Matched; seed snapshot must match canonical RT task reference state",
+        "pairing": "for each task/seed/shift require exact simulator-state and shifted-RGB hashes between Vanilla and VTCG; seed snapshot must match canonical RT task reference state",
         "selector": "clean positive post-softmax zero-based L11 prompt-to-visual attention; canonical dynamic Matched budget",
         "counterfactual": "canonical beta=0 harmonic, lambda=0.5, clean-prefix contrastive guidance, dimensions 0-5, clean gripper",
     }
@@ -191,7 +191,7 @@ def main() -> None:
                     )
                     trace = list(getattr(policy, "_episode_trace", []))
                     if arm == "l11_matched" and not trace:
-                        raise RuntimeError("L11-Matched produced an empty selector trace")
+                        raise RuntimeError("VTCG produced an empty selector trace")
                     if arm == "l11_matched":
                         audit["policy_trace_technical_pass"] = all(
                             x.get("feature_equal") is True
@@ -201,7 +201,7 @@ def main() -> None:
                             for x in trace
                         )
                         if not audit["policy_trace_technical_pass"]:
-                            raise RuntimeError(f"L11-Matched technical audit failed: {args.task}:{seed}:{shift}")
+                            raise RuntimeError(f"VTCG technical audit failed: {args.task}:{seed}:{shift}")
                     out.mkdir(parents=True, exist_ok=True)
                     logits = getattr(policy, "_episode_logits", [])
                     write_arrays(arrays_path, logits, actions)

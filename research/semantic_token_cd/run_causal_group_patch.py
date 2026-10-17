@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Canonical L11-Matched fork-state spatial-group patch study.
+"""Canonical VTCG fork-state spatial-group patch study.
 
 Each worker owns a fixed modulo shard of the frozen episode manifest. The only
 selector used here is PromptAttentionSHRInference.step(selection_budget_source=

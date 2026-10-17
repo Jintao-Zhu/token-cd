@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Paired Vanilla vs canonical complete historical L11-Matched on SIMPLER RT depth 0."""
+"""Paired Vanilla vs canonical complete historical VTCG on SIMPLER RT depth 0."""
 from __future__ import annotations
 
 import argparse

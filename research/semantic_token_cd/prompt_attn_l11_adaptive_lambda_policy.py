@@ -1,4 +1,4 @@
-"""Temporal-consistency Adaptive-lambda controller for L11-Matched Prompt-Attn SHR."""
+"""Temporal-consistency Adaptive-lambda controller for VTCG Prompt-Attn SHR."""
 from __future__ import annotations
 
 import numpy as np
@@ -36,7 +36,7 @@ def lambda_from_similarity(similarity: float) -> float:
 
 
 class AdaptiveLambdaPromptAttentionSHRInference(PromptAttentionSHRInference):
-    """L11-Matched selector with fixed-low, raw-cosine, or EMA-cosine lambda."""
+    """VTCG selector with fixed-low, raw-cosine, or EMA-cosine lambda."""
 
     controller_mode: str = "adaptive_raw"
 

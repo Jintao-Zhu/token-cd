@@ -77,8 +77,8 @@ def main() -> None:
         p["vs_l11_p_exact"] = exact_p(p["vs_l11_rescue"], p["vs_l11_harm"])
         result["overall"][arm] = p
     atomic_json(ARTIFACT / "FINAL_RESULTS.json", result)
-    lines = ["# DTP-Fixed positive + L11-Matched negative lambda sweep", "",
-             "| Task | Vanilla | DTP-Fixed | L11-Matched | lambda=.10 | lambda=.25 | lambda=.50 |",
+    lines = ["# DTP-Fixed positive + VTCG negative lambda sweep", "",
+             "| Task | Vanilla | DTP-Fixed | VTCG | lambda=.10 | lambda=.25 | lambda=.50 |",
              "|---|---:|---:|---:|---:|---:|---:|"]
     for task in TASKS:
         x = result["tasks"][task]
