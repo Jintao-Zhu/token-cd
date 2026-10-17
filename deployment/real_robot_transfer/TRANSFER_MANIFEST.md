@@ -6,6 +6,7 @@
 - Transfer branch: `real-robot-transfer`
 - Base implementation at bundle creation: `5fff4f061` (`main` before this branch's transfer documents)
 - Clone the branch rather than copying an arbitrary working tree.
+- The runnable, simulator-free inference entry is `deployment/real_robot_transfer/runner.py`.
 
 ## Method files
 
@@ -17,6 +18,10 @@ These files are already tracked by the repository and arrive with the branch:
 - `research/semantic_token_cd/global_merge_policy.py` — model-forward/intervention hooks.
 - `research/semantic_token_cd/distractor_policy.py` — OpenVLA action-logit and token decode helpers.
 - `research/ar_token_counterfactual/intervention.py` — projector intervention primitives.
+- `deployment/real_robot_transfer/openvla_runtime.py` — minimal OpenVLA wrapper without SIMPLER imports.
+- `deployment/real_robot_transfer/policy.py` — canonical settings and fail-closed trace checks.
+- `deployment/real_robot_transfer/runner.py`, `adapter.py`, `example_adapter.py` — offline and hardware entry points.
+- `deployment/real_robot_transfer/METHOD.md` — step-by-step algorithm and equations.
 
 Current method settings to preserve for the first physical pilot:
 

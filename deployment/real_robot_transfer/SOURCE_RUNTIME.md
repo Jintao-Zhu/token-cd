@@ -18,4 +18,6 @@ The source environment directory is about 7.6 GB. Do not copy it as a portable e
 
 Simulation-specific pieces that can usually be omitted from a physical inference host include SAPIEN, SIMPLER assets, RT shaders, Vulkan/EGL configuration, snapshots, and rollout artifacts. Keep the OpenVLA model code, tokenizer/processor, model weights, action normalization statistics, and the L11-Matched implementation.
 
-The repository currently has no robot-specific driver, calibration, or deployment adapter. Those must be supplied for the actual arm/camera before hardware evaluation.
+This branch now contains a simulator-free inference runtime and a generic adapter
+protocol. The robot-specific driver, calibration, action mapping, and safety
+implementation must still be supplied for the actual arm/camera.

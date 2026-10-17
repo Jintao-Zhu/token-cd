@@ -5,7 +5,12 @@ import numpy as np
 import torch
 from sklearn.cluster import KMeans
 
-from contrast_policies.openvla_contrast import OpenVLAContrastInference
+import os
+
+if os.environ.get("TOKEN_CD_REAL_ROBOT") == "1":
+    from deployment.real_robot_transfer.openvla_runtime import OpenVLAContrastInference
+else:
+    from contrast_policies.openvla_contrast import OpenVLAContrastInference
 from research.ar_token_counterfactual.intervention import projector_intervention
 from research.semantic_token_cd.rollout_policy import SemanticEntityCDInference
 
