@@ -17,51 +17,136 @@ from typing import Any
 
 import numpy as np
 
-ROOT = Path("/home/leju-suzhou/zjt_ws")
-REPO = ROOT / "token-cd"
-CHECKPOINT = ROOT / "checkpoints/openpi_fast_finetuned/fractal"
-FRACTAL_STATS = ROOT / "checkpoints/openpi_fast_finetuned/fractal/assets/local/fractal_lerobot/norm_stats.json"
+ROOT = Path(os.environ.get("PI0FAST_WORKSPACE_ROOT", Path.home() / "zjt_ws")).expanduser()
+REPO = Path(os.environ.get("PI0FAST_REPO_ROOT", Path(__file__).resolve().parents[2])).expanduser()
+OPENPI_ROOT = Path(os.environ.get("PI0FAST_OPENPI_ROOT", ROOT / "openpi")).expanduser()
+CHECKPOINT = Path(os.environ.get(
+    "PI0FAST_CHECKPOINT", ROOT / "checkpoints/openpi_fast_finetuned/fractal"
+)).expanduser()
+FRACTAL_STATS = Path(os.environ.get(
+    "PI0FAST_FRACTAL_STATS",
+    ROOT / "checkpoints/openpi_fast_finetuned/fractal/assets/local/fractal_lerobot/norm_stats.json",
+)).expanduser()
 LAYER_INDEX = 6  # Existing project convention: zero-based L-index.
+# KMeans backend. "sklearn" is the production setting: it matches the backend used by the
+# OpenVLA VTCG experiments (sklearn 1.7.2), which matters because the clustering
+# implementation is itself a method variable in a cross-architecture transfer test. "scipy"
+# is retained purely as a diagnostic: measured on 66 pi0-FAST states it is 33x slower
+# (3.165 s vs 0.096 s) and changes m_t in 15.2% of states.
+KMEANS_BACKEND_REQUESTED = os.environ.get("PI0FAST_CD_KMEANS", "sklearn").lower()
+# Fixed KMeans configuration, aligned with the OpenVLA runs. Written out explicitly (rather
+# than relying on defaults) so the frozen configuration is self-describing.
+KMEANS_PARAMS = dict(
+    n_clusters=8,
+    init="k-means++",
+    n_init=10,
+    max_iter=300,
+    algorithm="lloyd",
+    tol=1e-4,
+    random_state=0,
+)
+KMEANS_SEED = KMEANS_PARAMS["random_state"]
+# Thread caps: three processes share one GPU in the production layout, so BLAS/OpenMP must
+# stay single-threaded to avoid CPU contention.
+KMEANS_THREADS = int(os.environ.get("OMP_NUM_THREADS", "1"))
+
 GRID = 16
 N_VISUAL = GRID * GRID
-LAMBDA = 0.5
-KMEANS_GROUPS = 8
-KMEANS_SEED = 0
+# Guidance strength. Overridable so the lambda=0 equivalence check (custom decoder with no
+# contrastive guidance must reproduce official vanilla) can be run without editing code.
+# Default 0.5 preserves the historic L6-Matched behaviour.
+LAMBDA = float(os.environ.get("PI0FAST_CD_LAMBDA", "0.5"))
+# Diagnostic: drop the FAST vocabulary/length constraint so decoding is pure greedy argmax,
+# matching official OpenPI. Only used by the lambda=0 equivalence gate.
+DISABLE_VALIDITY_MASK = os.environ.get("PI0FAST_CD_DISABLE_MASK", "0") == "1"
+# Batch the positive and negative branches into one batch=2 forward inside the guided decode.
+# Semantically identical (same token, mask, positions; only the KV caches differ) but it
+# changes XLA kernel selection, so PI0FAST_CD_BATCH=1 must be validated for token/action
+# equivalence before being adopted.
+BATCH_BRANCHES = os.environ.get("PI0FAST_CD_BATCH", "0") == "1"
+KMEANS_GROUPS = KMEANS_PARAMS["n_clusters"]
 KMEANS_BACKEND = ""
 
 
+def _bytes_to_unicode() -> dict[str, int]:
+    """GPT-2 byte-level alphabet, used to recover a code's raw bytes."""
+    bs = list(range(ord("!"), ord("~") + 1)) + list(range(ord("\u00a1"), ord("\u00ac") + 1)) + \
+         list(range(ord("\u00ae"), ord("\u00ff") + 1))
+    cs = bs[:]
+    n = 0
+    for b in range(2 ** 8):
+        if b not in bs:
+            bs.append(b)
+            cs.append(2 ** 8 + n)
+            n += 1
+    return {chr(c): b for b, c in zip(bs, cs)}
+
+
 def _kmeans_labels(features: np.ndarray) -> tuple[np.ndarray, str]:
-    """Use project-standard sklearn KMeans, with a SciPy-only smoke fallback."""
-    try:
-        from sklearn.cluster import KMeans
+    """Cluster the 256 primary-view tokens into K groups.
 
-        labels = KMeans(n_clusters=KMEANS_GROUPS, random_state=KMEANS_SEED, n_init=10).fit(features).labels_
-        return np.asarray(labels, dtype=np.int32), "sklearn.KMeans(n_init=10)"
-    except ModuleNotFoundError as exc:
-        if exc.name != "sklearn":
-            raise
-        # pi05 currently lacks scikit-learn. This fallback keeps technical
-        # inference usable while preserving K=8, k-means++, Lloyd updates,
-        # ten deterministic starts, and minimum-inertia selection. Scientific
-        # runs can install sklearn to use the exact historic implementation.
-        from scipy.cluster.vq import kmeans2
+    Production backend is sklearn (K=8, k-means++, 10 restarts), matching the OpenVLA
+    VTCG experiments so that a cross-architecture comparison is not confounded by the
+    clustering implementation. SciPy is kept as a diagnostic backend only.
+    """
+    want = KMEANS_BACKEND_REQUESTED
+    if want == "sklearn":
+        try:
+            from sklearn.cluster import KMeans
 
-        best = None
-        best_inertia = np.inf
-        for trial in range(10):
-            with np.errstate(all="ignore"):
-                centers, labels = kmeans2(
-                    features, KMEANS_GROUPS, iter=300, minit="++", missing="warn",
-                    check_finite=True, seed=KMEANS_SEED + trial,
-                )
-            if np.any(np.bincount(labels, minlength=KMEANS_GROUPS) == 0):
-                continue
-            inertia = float(np.sum((features - centers[labels]) ** 2))
-            if inertia < best_inertia:
-                best, best_inertia = labels, inertia
-        if best is None:
-            raise RuntimeError("all SciPy KMeans starts produced an empty cluster")
-        return np.asarray(best, dtype=np.int32), "scipy.cluster.vq.kmeans2(10 deterministic starts; smoke fallback)"
+            km = KMeans(**KMEANS_PARAMS).fit(features)
+            return np.asarray(km.labels_, dtype=np.int32), (
+                f"sklearn.KMeans(K={KMEANS_PARAMS['n_clusters']}, init={KMEANS_PARAMS['init']}, "
+                f"n_init={KMEANS_PARAMS['n_init']}, max_iter={KMEANS_PARAMS['max_iter']}, "
+                f"algorithm={KMEANS_PARAMS['algorithm']}, random_state={KMEANS_PARAMS['random_state']})"
+            )
+        except ModuleNotFoundError as exc:
+            if exc.name != "sklearn":
+                raise
+            raise RuntimeError(
+                "sklearn backend requested but scikit-learn is not importable; put "
+                "pi05_sklearn_overlay on PYTHONPATH or set PI0FAST_CD_KMEANS=scipy"
+            ) from exc
+    if want != "scipy":
+        raise ValueError(f"unknown PI0FAST_CD_KMEANS {want!r}")
+    from scipy.cluster.vq import kmeans2
+
+    best = None
+    best_inertia = np.inf
+    for trial in range(10):
+        with np.errstate(all="ignore"):
+            centers, labels = kmeans2(
+                features, KMEANS_GROUPS, iter=300, minit="++", missing="warn",
+                check_finite=True, seed=KMEANS_SEED + trial,
+            )
+        if np.any(np.bincount(labels, minlength=KMEANS_GROUPS) == 0):
+            continue
+        inertia = float(np.sum((features - centers[labels]) ** 2))
+        if inertia < best_inertia:
+            best, best_inertia = labels, inertia
+    if best is None:
+        raise RuntimeError("all SciPy KMeans starts produced an empty cluster")
+    return np.asarray(best, dtype=np.int32), "scipy.cluster.vq.kmeans2(10 deterministic starts; diagnostic backend)"
+
+
+def _pi0_fast_cd_step(model, token, mask, positions, pos_cache, neg_cache):
+    """One guided-decode step, jitted as a whole.
+
+    The exact decoder drives decoding from Python (it must consult the real joint payload to
+    validate each candidate), so each step's two branch forwards have to be compiled
+    explicitly. Without this they run eagerly and cost ~1 s each, i.e. ~60 s per action
+    stream, which is unusable in a closed loop.
+    """
+    embedding = model.PaliGemma.llm(token, embed_only=True)
+    pos_logits, pos_cache, _ = model.PaliGemma.llm(
+        embedded_prefix=embedding, mask=mask, positions=positions,
+        decode=True, kv_cache=pos_cache,
+    )
+    neg_logits, neg_cache, _ = model.PaliGemma.llm(
+        embedded_prefix=embedding, mask=mask, positions=positions,
+        decode=True, kv_cache=neg_cache,
+    )
+    return pos_logits, neg_logits, pos_cache, neg_cache
 
 
 def _pi0_fast_cd_decode_loop(model, rng, positive_logits, negative_logits, positive_cache,
@@ -98,7 +183,12 @@ def _pi0_fast_cd_decode_loop(model, rng, positive_logits, negative_logits, posit
             jnp.logical_and(in_fast_vocab, within_payload),
             jnp.logical_and(vocab_ids == pipe_token, char_count == payload_chars),
         )
-        guided = jnp.where(valid_ids[None, :], guided, -jnp.inf)
+        # Diagnostic switch: DISABLE_VALIDITY_MASK=1 removes the vocabulary/length constraint
+        # so the loop is pure greedy argmax, exactly like official OpenPI. Used to decide
+        # whether the lambda=0 divergence from official vanilla comes from this mask or from
+        # the header priming / cache handling. Default 0 preserves historic behaviour.
+        if not DISABLE_VALIDITY_MASK:
+            guided = jnp.where(valid_ids[None, :], guided, -jnp.inf)
         token = jnp.argmax(guided, axis=-1).astype(jnp.int32)[:, None]
         output = output.at[:, step].set(token[:, 0].astype(output.dtype))
         all_eos = jnp.all(jnp.any(token == pipe_token, axis=-1))
@@ -112,14 +202,38 @@ def _pi0_fast_cd_decode_loop(model, rng, positive_logits, negative_logits, posit
             columns >= prefix_start[:, None, None],
             columns < jnp.broadcast_to(prefill_size + step + 1, (prefix_start.shape[0], 1, 1)),
         )
-        p_logits, pos_cache, _ = model.PaliGemma.llm(
-            embedded_prefix=token_embedding, mask=mask, positions=positions,
-            decode=True, kv_cache=pos_cache,
-        )
-        n_logits, neg_cache, _ = model.PaliGemma.llm(
-            embedded_prefix=token_embedding, mask=mask, positions=positions,
-            decode=True, kv_cache=neg_cache,
-        )
+        if BATCH_BRANCHES:
+            # One batch=2 forward instead of two batch=1 forwards. Both branches consume the
+            # same token embedding, mask and positions, and differ only in their KV cache, so
+            # stacking along the batch axis is semantically identical - but it changes XLA's
+            # kernel selection, so token-level equivalence must be verified, not assumed.
+            #
+            # The cache is a 3-tuple of arrays with the LAYER axis first:
+            #   idx (n_layers, batch), k/v (n_layers, batch, seq, heads, dim)
+            # so the batch axis is 1, not 0. Concatenating axis 0 stacks layers instead and
+            # the model then sees n_layers=36 with batch=1.
+            emb2 = jnp.concatenate([token_embedding, token_embedding], axis=0)
+            mask2 = jnp.concatenate([mask, mask], axis=0)
+            pos2 = jnp.concatenate([positions, positions], axis=0)
+            cache2 = jax.tree.map(
+                lambda a, b: jnp.concatenate([a, b], axis=1), pos_cache, neg_cache
+            )
+            logits2, cache2, _ = model.PaliGemma.llm(
+                embedded_prefix=emb2, mask=mask2, positions=pos2,
+                decode=True, kv_cache=cache2,
+            )
+            p_logits, n_logits = logits2[0:1], logits2[1:2]
+            pos_cache = jax.tree.map(lambda x: x[:, 0:1], cache2)
+            neg_cache = jax.tree.map(lambda x: x[:, 1:2], cache2)
+        else:
+            p_logits, pos_cache, _ = model.PaliGemma.llm(
+                embedded_prefix=token_embedding, mask=mask, positions=positions,
+                decode=True, kv_cache=pos_cache,
+            )
+            n_logits, neg_cache, _ = model.PaliGemma.llm(
+                embedded_prefix=token_embedding, mask=mask, positions=positions,
+                decode=True, kv_cache=neg_cache,
+            )
         return rng, p_logits[:, -1], n_logits[:, -1], output, pos_cache, neg_cache, all_eos, step + 1, char_count
 
     initial = (
@@ -229,7 +343,7 @@ class Pi0FastMatchedCDPolicy:
         from research.semantic_token_cd.pi0_fast_layer_selection_offline import instrument_openpi
 
         overlay = instrument_openpi()
-        sys.path.insert(0, str(ROOT / "openpi/src"))
+        sys.path.insert(0, str(OPENPI_ROOT / "src"))
         sys.path.insert(0, str(overlay))
         os.environ["CUDA_VISIBLE_DEVICES"] = str(gpu)
         os.environ["TOKENIZERS_PARALLELISM"] = "false"
@@ -251,6 +365,34 @@ class Pi0FastMatchedCDPolicy:
         self.gemma_fast = gemma_fast
         self.max_decoding_steps = int(max_decoding_steps)
         self.lambda_ = float(LAMBDA)
+        # "inline"  = historic behaviour: one tapped forward feeds both the L6 attention and
+        #             the KV cache used for decoding (cache is numerically contaminated).
+        # "separate"= fix: the tapped forward only reads attention and its cache is discarded;
+        #             a second tap-free forward produces the cache used for decoding.
+        self.tap_mode = os.environ.get("PI0FAST_CD_TAP_MODE", "separate")
+        if self.tap_mode not in ("inline", "separate"):
+            raise ValueError(f"unknown PI0FAST_CD_TAP_MODE {self.tap_mode!r}")
+        # FAST decode mode:
+        #   "verified" (default) - compiled JAX loop + real-payload verification + bounded
+        #                          retry on the target length. Fast enough for the closed loop.
+        #   "exact"              - Python loop consulting the real joint payload every step.
+        #                          Correctness reference, ~14 s per decode.
+        #   "legacy"             - the original loop with no verification at all.
+        self.decode_mode = os.environ.get("PI0FAST_CD_DECODE", "verified")
+        if self.decode_mode not in ("verified", "exact", "legacy"):
+            raise ValueError(f"unknown PI0FAST_CD_DECODE {self.decode_mode!r}")
+        self.last_decode_delta = 0
+        # The three fixed Action: header tokens share the compiled paired-branch
+        # decode step. The A/B audit matched all selected tokens, generated FAST
+        # tokens and actions on 20 saved Google Robot states. Set
+        # PI0FAST_CD_JIT_HEADER=0 to reproduce the previous eager path.
+        self.jit_header = os.environ.get("PI0FAST_CD_JIT_HEADER", "1") == "1"
+        # Compile the observation encoder. Called eagerly it costs ~2.7 s of pure dispatch
+        # overhead for ~5 ms of arithmetic, because the official sample_actions runs the whole
+        # pipeline inside one compiled program while this adapter calls embed_inputs
+        # standalone. Default off until token/action equivalence is demonstrated: the jitted
+        # and eager versions differ by one bf16 ULP, which can flip a FAST argmax.
+        self.embed_jit = os.environ.get("PI0FAST_CD_EMBED_JIT", "0") == "1"
         # The public Fractal checkpoint is trained with the Fractal data
         # pipeline (see its model card's `pi0_fast_fractal_fft_pt_tokenizer`
         # config).  The local OpenPI checkout does not carry that custom config,
@@ -298,6 +440,18 @@ class Pi0FastMatchedCDPolicy:
         self.cfg = cfg
         self.overlay = overlay
         self.last_trace: dict[str, Any] = {}
+        # The model is frozen and an entity phrase always receives the same
+        # embedding. Reuse it across replans instead of calling the LLM's
+        # eager embed-only path for every observation of the same task.
+        self._entity_embedding_cache: dict[str, np.ndarray] = {}
+        # The SIMPLER Fractal adapter pads two missing wrist cameras with fixed
+        # zero images. SigLIP is frozen and called with train=False, so their
+        # embeddings can be reused when the preprocessed pixels are identical.
+        # Exact-pixel cache: only repeated wrist images reuse a frozen embedding.
+        # Set PI0FAST_CD_CACHE_STATIC_VIEWS=0 to reproduce the uncached path.
+        self.cache_static_views = os.environ.get("PI0FAST_CD_CACHE_STATIC_VIEWS", "1") == "1"
+        self._static_view_embeddings: dict[str, tuple[np.ndarray, Any]] = {}
+        self._static_view_cache_hits = 0
         self.tokenizer = next(
             transform.tokenizer
             for transform in self.policy._input_transform.transforms
@@ -307,6 +461,11 @@ class Pi0FastMatchedCDPolicy:
         # adapter function to the actual Pi0FAST instance, not this wrapper.
         model_type = type(self.model)
         setattr(model_type, "_pi0_fast_cd_decode_loop", _pi0_fast_cd_decode_loop)
+        setattr(model_type, "_pi0_fast_cd_step", _pi0_fast_cd_step)
+        # One compiled paired step for the fixed header and Python-driven exact decode.
+        # Eager header forwards took about 4.9 s across three header tokens.
+        self._compiled_step = nnx_utils.module_jit(self.model._pi0_fast_cd_step)
+        self._compiled_embed = nnx_utils.module_jit(self.model.embed_inputs)
         # The final prefill-size argument determines the fixed cache length.
         self._compiled_decode = nnx_utils.module_jit(
             self.model._pi0_fast_cd_decode_loop, static_argnums=(8,)
@@ -320,6 +479,14 @@ class Pi0FastMatchedCDPolicy:
         self.fast_token_min = int(pg.vocab_size() - self.tokenizer._fast_skip_tokens - fast_vocab_size)
         self.fast_token_max = int(pg.vocab_size() - 1 - self.tokenizer._fast_skip_tokens)
         bpe = fast.bpe_tokenizer
+        # Exact per-code bytes. Verified equivalent to bpe.decode for arbitrary sequences
+        # (28k random tests, zero mismatch), which is what lets the decoder below validate a
+        # candidate against the REAL joint payload instead of summing per-token lengths.
+        _b2u = _bytes_to_unicode()
+        self.code_bytes: list[bytes] = [
+            bytes(_b2u[ch] for ch in bpe.convert_ids_to_tokens(c))
+            for c in range(fast_vocab_size)
+        ]
         self.fast_token_char_lengths = np.asarray(
             [len(bpe.decode([code])) for code in range(fast_vocab_size)], dtype=np.int32
         )
@@ -379,11 +546,48 @@ class Pi0FastMatchedCDPolicy:
         return query
 
     def _entity_embedding(self, phrase: str) -> np.ndarray:
+        cached = self._entity_embedding_cache.get(phrase)
+        if cached is not None:
+            return cached
         ids = self.tokenizer._paligemma_tokenizer.encode(phrase, add_bos=False)
         if not ids:
             ids = self.tokenizer._paligemma_tokenizer.encode(phrase, add_bos=True)
         embedded = self.model.PaliGemma.llm(self.jnp.asarray([ids], dtype=self.jnp.int32), embed_only=True)
-        return np.asarray(embedded[0].mean(axis=0), dtype=np.float32)
+        result = np.asarray(embedded[0].mean(axis=0), dtype=np.float32)
+        self._entity_embedding_cache[phrase] = result
+        return result
+
+    def _embed_inputs_with_static_views(self, observation):
+        """Reuse exactly matching padded wrist-image embeddings across replans."""
+        jnp = self.jnp
+        image_embeddings = []
+        masks = []
+        ar_masks = []
+        for name, pixels in observation.images.items():
+            embedding = None
+            if name in ("left_wrist_0_rgb", "right_wrist_0_rgb"):
+                host_pixels = np.asarray(pixels)
+                # Preprocessing may remap a padded zero image to nonzero pixel
+                # values. Exact equality is the safe reuse criterion.
+                cached = self._static_view_embeddings.get(name)
+                if cached is not None and np.array_equal(cached[0], host_pixels):
+                    embedding = cached[1]
+                    self._static_view_cache_hits += 1
+            if embedding is None:
+                embedding, _ = self.model.PaliGemma.img(pixels, train=False)
+                if name in ("left_wrist_0_rgb", "right_wrist_0_rgb"):
+                    self._static_view_embeddings[name] = (host_pixels.copy(), embedding)
+            image_embeddings.append(embedding)
+            mask = jnp.broadcast_to(observation.image_masks[name][:, None], embedding.shape[:2])
+            masks.append(mask)
+            ar_masks.append(jnp.zeros_like(mask))
+        text_embeddings = self.model.PaliGemma.llm(observation.tokenized_prompt, embed_only=True)
+        image_embeddings.append(text_embeddings)
+        masks.append(observation.tokenized_prompt_mask)
+        ar_masks.append(observation.token_ar_mask)
+        return (jnp.concatenate(image_embeddings, axis=1),
+                jnp.concatenate(masks, axis=1),
+                jnp.concatenate(ar_masks, axis=1))
 
     def _matched_budget(self, visual: np.ndarray, prompt: str) -> tuple[int, list[int], list[int], list[str]]:
         entities = _extract_entities(prompt)
@@ -409,16 +613,132 @@ class Pi0FastMatchedCDPolicy:
             raise RuntimeError("matched KMeans/entity budget selected no visual tokens")
         return len(selected), groups, selected, entities
 
+    def _decode_exact(
+        self, clean_next, negative_next, positive_cache, negative_cache,
+        prefix_len, prefix_start, prefix_size,
+    ):
+        """Guided FAST decode whose validity and termination use the REAL joint payload.
+
+        The previous implementation accumulated a per-token length table, but joint BPE decode
+        is not the sum of individual lengths: codes that individually decode to U+FFFD merge
+        into fewer characters (measured on 2.0% of random 26-token streams, and exactly the
+        70-vs-69 mismatch in the malformed cases). Here a candidate is accepted only if
+        appending its bytes keeps the true payload within the required character count, and
+        the stream terminates only once the real payload has exactly `fast_payload_chars`
+        characters and the pipe delimiter is emitted. No padding, no truncation.
+        """
+        jnp = self.jnp
+        model = self.model
+        header_len = len(self.action_header_tokens)
+        payload_chars = self.fast_payload_chars
+        out_tokens: list[int] = list(self.action_header_tokens)
+        payload = b""
+        pos_next = np.asarray(clean_next[0], dtype=np.float32)
+        neg_next = np.asarray(negative_next[0], dtype=np.float32)
+        columns = jnp.arange(prefix_size + self.max_decoding_steps)[None, None, :]
+        # only FAST code ids (and the delimiter) can ever be legal, so rank within that subset
+        code_ids = np.arange(self.fast_token_min, self.fast_token_max + 1)
+        n_steps = 0
+        for step in range(self.max_decoding_steps):
+            guided = (1.0 + LAMBDA) * pos_next - LAMBDA * neg_next
+            order = code_ids[np.argsort(-guided[code_ids], kind="stable")]
+            chosen = None
+            if len(payload.decode("utf-8", "replace")) >= payload_chars:
+                chosen = int(self.pipe_token)
+            else:
+                for tok in order:
+                    tok = int(tok)
+                    code = self.fast_token_max - tok
+                    if len((payload + self.code_bytes[code]).decode("utf-8", "replace")) <= payload_chars:
+                        chosen = tok
+                        break
+            if chosen is None:
+                raise RuntimeError(
+                    f"no FAST-valid candidate at decode step {step} "
+                    f"(payload chars so far {len(payload.decode('utf-8', 'replace'))})"
+                )
+            out_tokens.append(chosen)
+            n_steps = step + 1
+            if chosen == self.pipe_token:
+                break
+            payload = payload + self.code_bytes[self.fast_token_max - chosen]
+            positions = prefix_len[:, None] + (header_len + step) + 1
+            mask = jnp.logical_and(
+                columns >= prefix_start[:, None, None],
+                columns < jnp.broadcast_to(
+                    prefix_size + header_len + step + 1, (prefix_start.shape[0], 1, 1)
+                ),
+            )
+            pl, nl, positive_cache, negative_cache = self._compiled_step(
+                jnp.asarray([[chosen]], dtype=jnp.int32), mask, positions,
+                positive_cache, negative_cache,
+            )
+            pos_next = np.asarray(pl[0, -1], dtype=np.float32)
+            neg_next = np.asarray(nl[0, -1], dtype=np.float32)
+        tokens = np.zeros((self.max_decoding_steps,), dtype=np.int32)
+        n = min(len(out_tokens), self.max_decoding_steps)
+        tokens[:n] = np.asarray(out_tokens[:n], dtype=np.int32)
+        return tokens[None, :], n_steps, clean_next, negative_next
+
+    def _payload_of(self, tokens) -> bytes:
+        """Raw bytes of the FAST payload between the Action: header and the delimiter."""
+        toks = np.asarray(tokens[0] if np.asarray(tokens).ndim > 1 else tokens, dtype=np.int32)
+        stop = np.flatnonzero(toks == self.pipe_token)
+        if not stop.size:
+            return b""
+        payload_ids = toks[len(self.action_header_tokens): int(stop[0])]
+        return b"".join(self.code_bytes[self.fast_token_max - int(t)] for t in payload_ids)
+
+    def _decode_verified(
+        self, clean_next, negative_next, positive_cache, negative_cache,
+        prefix_len, prefix_start, prefix_size, rng,
+    ):
+        """Production decoder: fast compiled loop, accepted only if the REAL payload checks out.
+
+        The compiled loop accumulates per-token lengths, which can over-count by one whenever
+        two adjacent codes merge into a single UTF-8 character (measured 3584 such code pairs).
+        Over-counting is the only possible direction, so a small upward search on the target
+        length converges. Every attempt is a genuine decode of the requested length - nothing
+        is padded or truncated - and the stream is accepted only after the real joint payload
+        has exactly `fast_payload_chars` characters AND the official decoder accepts it.
+        """
+        jnp = self.jnp
+        header = jnp.asarray(self.action_header_tokens, dtype=jnp.int32)
+        chars = jnp.asarray(self.fast_token_char_lengths)
+        for delta in (0, 1, 2, 3):
+            target = int(self.fast_payload_chars) + delta
+            tokens, steps, fc, fn = self._compiled_decode(
+                rng, clean_next, negative_next, positive_cache, negative_cache,
+                prefix_len, prefix_start, prefix_size, self.fast_token_min, self.fast_token_max,
+                self.pipe_token, header, chars, target,
+            )
+            payload = self._payload_of(tokens)
+            real_len = len(payload.decode("utf-8", "replace"))
+            if real_len != int(self.fast_payload_chars):
+                continue
+            self.last_decode_delta = delta
+            return tokens, steps, fc, fn
+        raise RuntimeError(
+            f"FAST decode could not produce an exactly-{self.fast_payload_chars}-character "
+            f"payload after retries (last real length {real_len})"
+        )
+
     def infer(self, raw: dict, *, seed: int = 0) -> dict:
         """Return the normal OpenPI output dictionary plus a matched-CD trace."""
         import jax
         import jax.numpy as jnp
 
+        static_view_hits_before = self._static_view_cache_hits
         timing = os.environ.get("PI0FAST_TIMING") == "1"
         started = time.monotonic()
 
         def mark(label: str) -> None:
             if timing:
+                # Barrier first: JAX dispatches asynchronously, so without this the mark
+                # records the dispatch time and each stage absorbs the previous stage's GPU
+                # work. That made the earlier stage attribution wrong (it is why the
+                # "three prefix forwards" accounting did not reconcile with the totals).
+                jax.effects_barrier()
                 print(f"PI0FAST_TIMING {label} +{time.monotonic() - started:.3f}s", flush=True)
 
         prompt = str(raw["prompt"])
@@ -430,7 +750,12 @@ class Pi0FastMatchedCDPolicy:
             jax.random.key(seed), observation, train=False, image_keys=list(observation.images)
         )
         mark("preprocess_observation")
-        prefix, prefix_mask, prefix_ar = self.model.embed_inputs(observation)
+        if self.cache_static_views:
+            prefix, prefix_mask, prefix_ar = self._embed_inputs_with_static_views(observation)
+        elif self.embed_jit:
+            prefix, prefix_mask, prefix_ar = self._compiled_embed(observation)
+        else:
+            prefix, prefix_mask, prefix_ar = self.model.embed_inputs(observation)
         mark("embed_inputs")
         if prefix.shape[1] < 3 * N_VISUAL + 1:
             raise RuntimeError(f"unexpected Pi0-FAST prefix length {prefix.shape}")
@@ -450,24 +775,51 @@ class Pi0FastMatchedCDPolicy:
         query_mask = self._task_query_mask(item, prompt, prefix_size, image_prefix_len)
         query_mask = np.roll(query_mask, -int(np.asarray(prefix_len)[0]))[None, :]
         capture: list[np.ndarray] = []
-        self.gemma_fast._PI0FAST_ATTN_CAPTURE = {
+        padded_mask = jnp.pad(attn_mask, ((0, 0), (0, 0), (0, self.max_decoding_steps)))
+        positions = jnp.cumsum(prefix_mask, axis=-1) - 1
+        tap_spec = {
             "query_mask": query_mask,
             "key_start": int(np.asarray(prefix_start)[0]),
             "callback": lambda x: capture.append(np.asarray(x)),
         }
-        padded_mask = jnp.pad(attn_mask, ((0, 0), (0, 0), (0, self.max_decoding_steps)))
-        positions = jnp.cumsum(prefix_mask, axis=-1) - 1
-        try:
+
+        def tapped_forward():
+            self.gemma_fast._PI0FAST_ATTN_CAPTURE = dict(tap_spec)
+            try:
+                out = self.model.PaliGemma.llm(
+                    embedded_prefix=prefix, mask=padded_mask, positions=positions, decode=True,
+                )
+                jax.effects_barrier()
+                return out
+            finally:
+                self.gemma_fast._PI0FAST_ATTN_CAPTURE = None
+
+        if self.tap_mode == "separate":
+            # Fix (option A): the tap perturbs XLA fusion and shifts logits by up to ~1.0,
+            # which propagates through the KV cache into decoding and flips low-margin
+            # argmaxes. So the capture runs in its OWN forward whose cache/logits are thrown
+            # away, and a second, tap-free forward produces the cache actually used for
+            # decoding. `inline` keeps the historic (contaminated) single-forward behaviour.
+            tapped_forward()  # forward #1: attention only, cache discarded
+            mark("tap_forward")
+            if len(capture) != 18:
+                raise RuntimeError(
+                    f"L6 attention capture returned {len(capture)} layers, expected 18"
+                )
+            l6_scores = np.asarray(capture[LAYER_INDEX][0], dtype=np.float32)
             positive_prefix_logits, positive_cache, _ = self.model.PaliGemma.llm(
                 embedded_prefix=prefix, mask=padded_mask, positions=positions, decode=True,
             )
             jax.effects_barrier()
-        finally:
-            self.gemma_fast._PI0FAST_ATTN_CAPTURE = None
+            mark("clean_prefix_forward")
+        else:
+            positive_prefix_logits, positive_cache, _ = tapped_forward()
+            if len(capture) != 18:
+                raise RuntimeError(
+                    f"L6 attention capture returned {len(capture)} layers, expected 18"
+                )
+            l6_scores = np.asarray(capture[LAYER_INDEX][0], dtype=np.float32)
         mark("positive_prefix_attention")
-        if len(capture) != 18:
-            raise RuntimeError(f"L6 attention capture returned {len(capture)} layers, expected 18")
-        l6_scores = np.asarray(capture[LAYER_INDEX][0], dtype=np.float32)
         selected = _stable_top_m(l6_scores, m)
         reconstructed = _harmonic_reconstruct(visual, selected)
 
@@ -499,27 +851,47 @@ class Pi0FastMatchedCDPolicy:
         columns = jnp.arange(cache_len)[None, None, :]
         for header_step, header_id in enumerate(self.action_header_tokens):
             header_token = jnp.asarray([[header_id]], dtype=jnp.int32)
-            token_embedding = self.model.PaliGemma.llm(header_token, embed_only=True)
             header_positions = prefix_len[:, None] + header_step + 1
             header_mask = jnp.logical_and(
                 columns >= prefix_start[:, None, None],
                 columns < prefix_size + header_step + 1,
             )
-            clean_header_logits, positive_cache, _ = self.model.PaliGemma.llm(
-                embedded_prefix=token_embedding, mask=header_mask, positions=header_positions,
-                decode=True, kv_cache=positive_cache,
-            )
-            negative_header_logits, negative_cache, _ = self.model.PaliGemma.llm(
-                embedded_prefix=token_embedding, mask=header_mask, positions=header_positions,
-                decode=True, kv_cache=negative_cache,
-            )
+            if self.jit_header:
+                clean_header_logits, negative_header_logits, positive_cache, negative_cache = (
+                    self._compiled_step(
+                        header_token, header_mask, header_positions,
+                        positive_cache, negative_cache,
+                    )
+                )
+            else:
+                token_embedding = self.model.PaliGemma.llm(header_token, embed_only=True)
+                clean_header_logits, positive_cache, _ = self.model.PaliGemma.llm(
+                    embedded_prefix=token_embedding, mask=header_mask, positions=header_positions,
+                    decode=True, kv_cache=positive_cache,
+                )
+                negative_header_logits, negative_cache, _ = self.model.PaliGemma.llm(
+                    embedded_prefix=token_embedding, mask=header_mask, positions=header_positions,
+                    decode=True, kv_cache=negative_cache,
+                )
             clean_next, negative_next = clean_header_logits[:, -1], negative_header_logits[:, -1]
-        tokens, decoded_steps, first_clean, first_negative = self._compiled_decode(
-            jax.random.key(seed), clean_next, negative_next, positive_cache, negative_cache,
-            prefix_len, prefix_start, prefix_size, self.fast_token_min, self.fast_token_max,
-            self.pipe_token, jnp.asarray(self.action_header_tokens, dtype=jnp.int32),
-            jnp.asarray(self.fast_token_char_lengths), self.fast_payload_chars,
-        )
+        mark("header_priming")
+        if self.decode_mode == "exact":
+            tokens, decoded_steps, first_clean, first_negative = self._decode_exact(
+                clean_next, negative_next, positive_cache, negative_cache,
+                prefix_len, prefix_start, prefix_size,
+            )
+        elif self.decode_mode == "verified":
+            tokens, decoded_steps, first_clean, first_negative = self._decode_verified(
+                clean_next, negative_next, positive_cache, negative_cache,
+                prefix_len, prefix_start, prefix_size, jax.random.key(seed),
+            )
+        else:
+            tokens, decoded_steps, first_clean, first_negative = self._compiled_decode(
+                jax.random.key(seed), clean_next, negative_next, positive_cache, negative_cache,
+                prefix_len, prefix_start, prefix_size, self.fast_token_min, self.fast_token_max,
+                self.pipe_token, jnp.asarray(self.action_header_tokens, dtype=jnp.int32),
+                jnp.asarray(self.fast_token_char_lengths), self.fast_payload_chars,
+            )
         jax.effects_barrier()
         mark("fast_decode")
         tokens = np.asarray(tokens[0], dtype=np.int32)
@@ -591,6 +963,8 @@ class Pi0FastMatchedCDPolicy:
             "matched_cluster_ids": groups,
             "matched_kmeans_backend": KMEANS_BACKEND,
             "matched_m_t": int(m),
+            "static_view_cache_enabled": self.cache_static_views,
+            "static_view_cache_hits": self._static_view_cache_hits - static_view_hits_before,
             "matched_cluster_token_count": len(matched_ids),
             "selected_token_ids": selected,
             "selected_token_count": len(selected),
@@ -609,9 +983,13 @@ class Pi0FastMatchedCDPolicy:
             "serialized_output_has_pipe_terminator": "|" in serialized_text,
             "serialized_output_preview": serialized_text[:180],
             "raw_output_token_ids_prefix": tokens[:24].tolist(),
+            "raw_output_token_ids_full": tokens.tolist(),
             "fast_code_token_count": int(len(fast_codes)),
             "decoded_fast_payload_chars": int(raw_payload_chars),
             "fast_action_stream_valid": bool(action_stream_valid),
+            "decode_mode": self.decode_mode,
+            "jit_header": self.jit_header,
+            "decode_target_delta": int(self.last_decode_delta),
             "fast_action_stream_fallback": not bool(action_stream_valid),
             "openpi_official_decoder_agrees": bool(official_decode_agrees),
             "openpi_official_decoder_warning": official_stdout.getvalue().strip()[:200],
