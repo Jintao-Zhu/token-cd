@@ -1,0 +1,414 @@
+{
+  "generated_at": "2026-10-16T15:44:57+0800",
+  "generator": "scripts/analyze_openvla_k10_study.py",
+  "conditions": {
+    "050": {
+      "lambda": 0.5,
+      "arm": "matched_k10_l050",
+      "coverage": {
+        "close_drawer": 100,
+        "open_drawer": 100,
+        "pick_coke_can": 100,
+        "move_near": 100
+      },
+      "complete": true,
+      "expected_per_task": 100,
+      "arm_successes": 198,
+      "arm_total": 400,
+      "arm_mean_m_t": {
+        "google_robot_close_drawer": 24.850530973451328,
+        "google_robot_open_drawer": 27.03035398230088,
+        "google_robot_pick_coke_can": 21.296625000000002,
+        "google_robot_move_near": 26.88025
+      },
+      "contrasts": {
+        "matched": {
+          "n_pairs": 400,
+          "both_success": 151,
+          "both_failure": 148,
+          "rescue_by_arm": 47,
+          "harm_to_arm": 54,
+          "net": -7,
+          "arm_successes": 198,
+          "reference_successes": 205,
+          "arm_rate": 0.495,
+          "reference_rate": 0.5125,
+          "diff_pp": -1.75,
+          "mcnemar_exact_p": 0.5507089135982715,
+          "bootstrap": {
+            "observed_pp": -1.7499999999999987,
+            "ci_low_pp": -8.25,
+            "ci_high_pp": 4.750000000000002,
+            "draws": 10000
+          },
+          "reference": "matched",
+          "reference_arm": "matched_l050",
+          "reference_successes_total": 400,
+          "reference_mean_m_t": {
+            "google_robot_close_drawer": 33.88769911504424,
+            "google_robot_open_drawer": 36.78380530973452,
+            "google_robot_pick_coke_can": 28.81825,
+            "google_robot_move_near": 36.90025000000001
+          },
+          "per_task": {
+            "close_drawer": {
+              "n_pairs": 100,
+              "both_success": 66,
+              "both_failure": 18,
+              "rescue_by_arm": 11,
+              "harm_to_arm": 5,
+              "net": 6,
+              "arm_successes": 77,
+              "reference_successes": 71,
+              "arm_rate": 0.77,
+              "reference_rate": 0.71,
+              "diff_pp": 6.0,
+              "mcnemar_exact_p": 0.210113525390625
+            },
+            "open_drawer": {
+              "n_pairs": 100,
+              "both_success": 34,
+              "both_failure": 40,
+              "rescue_by_arm": 10,
+              "harm_to_arm": 16,
+              "net": -6,
+              "arm_successes": 44,
+              "reference_successes": 50,
+              "arm_rate": 0.44,
+              "reference_rate": 0.5,
+              "diff_pp": -6.0,
+              "mcnemar_exact_p": 0.32693958282470703
+            },
+            "pick_coke_can": {
+              "n_pairs": 100,
+              "both_success": 18,
+              "both_failure": 54,
+              "rescue_by_arm": 14,
+              "harm_to_arm": 14,
+              "net": 0,
+              "arm_successes": 32,
+              "reference_successes": 32,
+              "arm_rate": 0.32,
+              "reference_rate": 0.32,
+              "diff_pp": 0.0,
+              "mcnemar_exact_p": 1.0
+            },
+            "move_near": {
+              "n_pairs": 100,
+              "both_success": 33,
+              "both_failure": 36,
+              "rescue_by_arm": 12,
+              "harm_to_arm": 19,
+              "net": -7,
+              "arm_successes": 45,
+              "reference_successes": 52,
+              "arm_rate": 0.45,
+              "reference_rate": 0.52,
+              "diff_pp": -7.0,
+              "mcnemar_exact_p": 0.28104151505976915
+            }
+          },
+          "holm_p": 0.5507089135982715,
+          "holm_family_size": 2
+        },
+        "fixed016": {
+          "n_pairs": 400,
+          "both_success": 118,
+          "both_failure": 155,
+          "rescue_by_arm": 80,
+          "harm_to_arm": 47,
+          "net": 33,
+          "arm_successes": 198,
+          "reference_successes": 165,
+          "arm_rate": 0.495,
+          "reference_rate": 0.4125,
+          "diff_pp": 8.25,
+          "mcnemar_exact_p": 0.004330818115086333,
+          "bootstrap": {
+            "observed_pp": 8.250000000000002,
+            "ci_low_pp": 1.7500000000000002,
+            "ci_high_pp": 14.750000000000002,
+            "draws": 10000
+          },
+          "reference": "fixed016",
+          "reference_arm": "fixed016_l050",
+          "reference_successes_total": 400,
+          "reference_mean_m_t": {
+            "google_robot_close_drawer": 16.0,
+            "google_robot_open_drawer": 16.0,
+            "google_robot_pick_coke_can": 16.0,
+            "google_robot_move_near": 16.0
+          },
+          "per_task": {
+            "close_drawer": {
+              "n_pairs": 100,
+              "both_success": 54,
+              "both_failure": 16,
+              "rescue_by_arm": 23,
+              "harm_to_arm": 7,
+              "net": 16,
+              "arm_successes": 77,
+              "reference_successes": 61,
+              "arm_rate": 0.77,
+              "reference_rate": 0.61,
+              "diff_pp": 16.0,
+              "mcnemar_exact_p": 0.005222879350185395
+            },
+            "open_drawer": {
+              "n_pairs": 100,
+              "both_success": 21,
+              "both_failure": 41,
+              "rescue_by_arm": 23,
+              "harm_to_arm": 15,
+              "net": 8,
+              "arm_successes": 44,
+              "reference_successes": 36,
+              "arm_rate": 0.44,
+              "reference_rate": 0.36,
+              "diff_pp": 8.0,
+              "mcnemar_exact_p": 0.2558750795433298
+            },
+            "pick_coke_can": {
+              "n_pairs": 100,
+              "both_success": 12,
+              "both_failure": 55,
+              "rescue_by_arm": 20,
+              "harm_to_arm": 13,
+              "net": 7,
+              "arm_successes": 32,
+              "reference_successes": 25,
+              "arm_rate": 0.32,
+              "reference_rate": 0.25,
+              "diff_pp": 7.0,
+              "mcnemar_exact_p": 0.296206368599087
+            },
+            "move_near": {
+              "n_pairs": 100,
+              "both_success": 31,
+              "both_failure": 43,
+              "rescue_by_arm": 14,
+              "harm_to_arm": 12,
+              "net": 2,
+              "arm_successes": 45,
+              "reference_successes": 43,
+              "arm_rate": 0.45,
+              "reference_rate": 0.43,
+              "diff_pp": 2.0,
+              "mcnemar_exact_p": 0.8450189828872681
+            }
+          },
+          "holm_p": 0.008661636230172666,
+          "holm_family_size": 2
+        }
+      },
+      "arm_rate": 0.495
+    },
+    "100": {
+      "lambda": 1.0,
+      "arm": "matched_k10_l100",
+      "coverage": {
+        "close_drawer": 100,
+        "open_drawer": 100,
+        "pick_coke_can": 100,
+        "move_near": 100
+      },
+      "complete": true,
+      "expected_per_task": 100,
+      "arm_successes": 186,
+      "arm_total": 400,
+      "arm_mean_m_t": {
+        "google_robot_close_drawer": 25.01849557522123,
+        "google_robot_open_drawer": 27.029557522123895,
+        "google_robot_pick_coke_can": 20.826125,
+        "google_robot_move_near": 26.332375
+      },
+      "contrasts": {
+        "matched": {
+          "n_pairs": 400,
+          "both_success": 133,
+          "both_failure": 146,
+          "rescue_by_arm": 53,
+          "harm_to_arm": 68,
+          "net": -15,
+          "arm_successes": 186,
+          "reference_successes": 201,
+          "arm_rate": 0.465,
+          "reference_rate": 0.5025,
+          "diff_pp": -3.75,
+          "mcnemar_exact_p": 0.20292429055143718,
+          "bootstrap": {
+            "observed_pp": -3.749999999999998,
+            "ci_low_pp": -9.999999999999998,
+            "ci_high_pp": 2.500000000000002,
+            "draws": 10000
+          },
+          "reference": "matched",
+          "reference_arm": "matched_l100",
+          "reference_successes_total": 400,
+          "reference_mean_m_t": {
+            "google_robot_close_drawer": 35.2387610619469,
+            "google_robot_open_drawer": 36.98504424778761,
+            "google_robot_pick_coke_can": 29.288624999999996,
+            "google_robot_move_near": 33.311875
+          },
+          "per_task": {
+            "close_drawer": {
+              "n_pairs": 100,
+              "both_success": 75,
+              "both_failure": 12,
+              "rescue_by_arm": 4,
+              "harm_to_arm": 9,
+              "net": -5,
+              "arm_successes": 79,
+              "reference_successes": 84,
+              "arm_rate": 0.79,
+              "reference_rate": 0.84,
+              "diff_pp": -5.0,
+              "mcnemar_exact_p": 0.266845703125
+            },
+            "open_drawer": {
+              "n_pairs": 100,
+              "both_success": 21,
+              "both_failure": 39,
+              "rescue_by_arm": 21,
+              "harm_to_arm": 19,
+              "net": 2,
+              "arm_successes": 42,
+              "reference_successes": 40,
+              "arm_rate": 0.42,
+              "reference_rate": 0.4,
+              "diff_pp": 2.0,
+              "mcnemar_exact_p": 0.8746293123804207
+            },
+            "pick_coke_can": {
+              "n_pairs": 100,
+              "both_success": 11,
+              "both_failure": 56,
+              "rescue_by_arm": 15,
+              "harm_to_arm": 18,
+              "net": -3,
+              "arm_successes": 26,
+              "reference_successes": 29,
+              "arm_rate": 0.26,
+              "reference_rate": 0.29,
+              "diff_pp": -3.0,
+              "mcnemar_exact_p": 0.7283324808813632
+            },
+            "move_near": {
+              "n_pairs": 100,
+              "both_success": 26,
+              "both_failure": 39,
+              "rescue_by_arm": 13,
+              "harm_to_arm": 22,
+              "net": -9,
+              "arm_successes": 39,
+              "reference_successes": 48,
+              "arm_rate": 0.39,
+              "reference_rate": 0.48,
+              "diff_pp": -9.0,
+              "mcnemar_exact_p": 0.175465248990804
+            }
+          },
+          "holm_p": 0.20292429055143718,
+          "holm_family_size": 2
+        },
+        "fixed016": {
+          "n_pairs": 400,
+          "both_success": 130,
+          "both_failure": 138,
+          "rescue_by_arm": 56,
+          "harm_to_arm": 76,
+          "net": -20,
+          "arm_successes": 186,
+          "reference_successes": 206,
+          "arm_rate": 0.465,
+          "reference_rate": 0.515,
+          "diff_pp": -5.0,
+          "mcnemar_exact_p": 0.09781221450141901,
+          "bootstrap": {
+            "observed_pp": -4.999999999999999,
+            "ci_low_pp": -11.25,
+            "ci_high_pp": 1.4999999999999987,
+            "draws": 10000
+          },
+          "reference": "fixed016",
+          "reference_arm": "fixed016_l100",
+          "reference_successes_total": 400,
+          "reference_mean_m_t": {
+            "google_robot_close_drawer": 16.0,
+            "google_robot_open_drawer": 16.0,
+            "google_robot_pick_coke_can": 16.0,
+            "google_robot_move_near": 16.0
+          },
+          "per_task": {
+            "close_drawer": {
+              "n_pairs": 100,
+              "both_success": 69,
+              "both_failure": 12,
+              "rescue_by_arm": 10,
+              "harm_to_arm": 9,
+              "net": 1,
+              "arm_successes": 79,
+              "reference_successes": 78,
+              "arm_rate": 0.79,
+              "reference_rate": 0.78,
+              "diff_pp": 1.0,
+              "mcnemar_exact_p": 1.0
+            },
+            "open_drawer": {
+              "n_pairs": 100,
+              "both_success": 21,
+              "both_failure": 34,
+              "rescue_by_arm": 21,
+              "harm_to_arm": 24,
+              "net": -3,
+              "arm_successes": 42,
+              "reference_successes": 45,
+              "arm_rate": 0.42,
+              "reference_rate": 0.45,
+              "diff_pp": -3.0,
+              "mcnemar_exact_p": 0.765991824244793
+            },
+            "pick_coke_can": {
+              "n_pairs": 100,
+              "both_success": 14,
+              "both_failure": 52,
+              "rescue_by_arm": 12,
+              "harm_to_arm": 22,
+              "net": -10,
+              "arm_successes": 26,
+              "reference_successes": 36,
+              "arm_rate": 0.26,
+              "reference_rate": 0.36,
+              "diff_pp": -10.0,
+              "mcnemar_exact_p": 0.12144948495551944
+            },
+            "move_near": {
+              "n_pairs": 100,
+              "both_success": 26,
+              "both_failure": 40,
+              "rescue_by_arm": 13,
+              "harm_to_arm": 21,
+              "net": -8,
+              "arm_successes": 39,
+              "reference_successes": 47,
+              "arm_rate": 0.39,
+              "reference_rate": 0.47,
+              "diff_pp": -8.0,
+              "mcnemar_exact_p": 0.22948101302608848
+            }
+          },
+          "holm_p": 0.19562442900283802,
+          "holm_family_size": 2
+        }
+      },
+      "arm_rate": 0.465
+    }
+  },
+  "caveats": [
+    "K=10 is evaluated on the same seeds 200-299 as the reference, and was chosen after seeing the probe: this is an exploratory hyper-parameter check, not a pre-registered confirmatory test.",
+    "K changes the matched union size, so this run changes the budget as well as the clustering; the measured m_t columns quantify how much budget was given away.",
+    "Non-significance is not equivalence: every contrast is reported with its observed difference and a task-stratified paired bootstrap interval.",
+    "The fixed016 contrast is a secondary, descriptive reference for the under-budget regime; the primary contrast is against matched K8 at the same lambda."
+  ]
+}

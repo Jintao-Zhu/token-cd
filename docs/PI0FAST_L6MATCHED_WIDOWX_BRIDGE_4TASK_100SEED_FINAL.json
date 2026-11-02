@@ -1,0 +1,433 @@
+{
+  "run": "runs/pi0fast_bridge_widowx_4task_100seed",
+  "generated": "2026-10-14 12:18:24",
+  "protocol": {
+    "experiment": "pi0fast_bridge_widowx_4task_100seed",
+    "protocol_id": "PI0FAST_L6MATCHED_WIDOWX_BRIDGE_RTFULL_4TASK_0_99_V1",
+    "checkpoint": "/home/leju-suzhou/zjt_ws/checkpoints/openpi_fast_finetuned/bridge",
+    "norm_stats": "checkpoint's own assets/local/bridge_lerobot/norm_stats.json",
+    "tasks": [
+      "widowx_carrot_on_plate",
+      "widowx_put_eggplant_in_basket",
+      "widowx_spoon_on_towel",
+      "widowx_stack_cube"
+    ],
+    "seeds": [
+      0,
+      99
+    ],
+    "arms": [
+      "vanilla",
+      "l6_matched_025",
+      "l6_matched_050",
+      "l6_matched_075",
+      "l6_matched_100",
+      "l6_matched_125",
+      "l6_matched_150"
+    ],
+    "episodes": 2800,
+    "shards": [
+      147,
+      147,
+      150,
+      150,
+      150,
+      150,
+      150,
+      150,
+      147,
+      146,
+      146,
+      146,
+      146,
+      146,
+      146,
+      146,
+      146,
+      149
+    ],
+    "widowx_state_layout": "[x,y,z,roll,pitch,yaw,PAD(0),gripper] with R_topdown conjugation (PI0FAST_WIDOWX_LAYOUT=bridge)",
+    "action_postprocessing": "clip dims 0-5 to training q01/q99; gripper binarised to {-1,+1}",
+    "renderer": {
+      "shader_dir": "rt",
+      "rt_max_path_depth": 8,
+      "rt_samples_per_pixel": 32,
+      "rt_use_denoiser": true
+    },
+    "servers": "6 (2 per GPU on GPU 1/2/3), ports 8101/8111, 8102/8112, 8103/8113",
+    "workers": "18 (6 per GPU, 3 per server)",
+    "resplit": {
+      "when": "2026-10-13 ~16:40 local",
+      "why": "GPU 1/2/3 were latency-bound (SM% single-digit) with 12 workers; user approved 6/GPU",
+      "from": "12 shards / seed-block split (manifests/)",
+      "to": "18 shards over the REMAINING episodes only (manifests18/)",
+      "remaining_episodes_at_resplit": 2658,
+      "rule": "shard a (task, seed) group to the least-loaded shard; workers still skip status==complete files",
+      "dir": "manifests18/"
+    }
+  },
+  "coverage": {
+    "expected": 2800,
+    "files": 2800,
+    "status": {
+      "complete": 2800
+    },
+    "duplicates": 0,
+    "unreadable": 0,
+    "per_arm": {
+      "l6_matched_050": 400,
+      "l6_matched_125": 400,
+      "l6_matched_025": 400,
+      "l6_matched_075": 400,
+      "l6_matched_150": 400,
+      "vanilla": 400,
+      "l6_matched_100": 400
+    },
+    "renderer_variants": {
+      "(8, 32, True)": 2800
+    },
+    "guided_fallback_replans": 81,
+    "guided_fallback_episodes": 78,
+    "runtime_seconds": {
+      "mean": 397.9,
+      "median": 385.8
+    }
+  },
+  "matched_units": 400,
+  "matched_seeds_per_task": {
+    "widowx_carrot_on_plate": 100,
+    "widowx_put_eggplant_in_basket": 100,
+    "widowx_spoon_on_towel": 100,
+    "widowx_stack_cube": 100
+  },
+  "tables": {
+    "matched_all": {
+      "units": 400,
+      "cells": {
+        "widowx_carrot_on_plate": {
+          "vanilla": [
+            15,
+            100
+          ],
+          "l6_matched_025": [
+            23,
+            100
+          ],
+          "l6_matched_050": [
+            22,
+            100
+          ],
+          "l6_matched_075": [
+            25,
+            100
+          ],
+          "l6_matched_100": [
+            24,
+            100
+          ],
+          "l6_matched_125": [
+            25,
+            100
+          ],
+          "l6_matched_150": [
+            24,
+            100
+          ]
+        },
+        "widowx_put_eggplant_in_basket": {
+          "vanilla": [
+            41,
+            100
+          ],
+          "l6_matched_025": [
+            38,
+            100
+          ],
+          "l6_matched_050": [
+            34,
+            100
+          ],
+          "l6_matched_075": [
+            36,
+            100
+          ],
+          "l6_matched_100": [
+            46,
+            100
+          ],
+          "l6_matched_125": [
+            44,
+            100
+          ],
+          "l6_matched_150": [
+            50,
+            100
+          ]
+        },
+        "widowx_spoon_on_towel": {
+          "vanilla": [
+            7,
+            100
+          ],
+          "l6_matched_025": [
+            32,
+            100
+          ],
+          "l6_matched_050": [
+            27,
+            100
+          ],
+          "l6_matched_075": [
+            26,
+            100
+          ],
+          "l6_matched_100": [
+            31,
+            100
+          ],
+          "l6_matched_125": [
+            19,
+            100
+          ],
+          "l6_matched_150": [
+            24,
+            100
+          ]
+        },
+        "widowx_stack_cube": {
+          "vanilla": [
+            3,
+            100
+          ],
+          "l6_matched_025": [
+            13,
+            100
+          ],
+          "l6_matched_050": [
+            13,
+            100
+          ],
+          "l6_matched_075": [
+            13,
+            100
+          ],
+          "l6_matched_100": [
+            14,
+            100
+          ],
+          "l6_matched_125": [
+            12,
+            100
+          ],
+          "l6_matched_150": [
+            12,
+            100
+          ]
+        }
+      },
+      "paired_vs_vanilla": {
+        "l6_matched_025": {
+          "rescue": 70,
+          "harm": 30,
+          "net": 40,
+          "p": 7.85013964559367e-05
+        },
+        "l6_matched_050": {
+          "rescue": 61,
+          "harm": 31,
+          "net": 30,
+          "p": 0.0023146015214254912
+        },
+        "l6_matched_075": {
+          "rescue": 65,
+          "harm": 31,
+          "net": 34,
+          "p": 0.0006747185703333388
+        },
+        "l6_matched_100": {
+          "rescue": 70,
+          "harm": 21,
+          "net": 49,
+          "p": 2.50908697624006e-07
+        },
+        "l6_matched_125": {
+          "rescue": 59,
+          "harm": 25,
+          "net": 34,
+          "p": 0.00026645108697203517
+        },
+        "l6_matched_150": {
+          "rescue": 63,
+          "harm": 19,
+          "net": 44,
+          "p": 1.1467543245820193e-06
+        }
+      }
+    },
+    "lambda_pairwise": {
+      "l6_matched_025_vs_l6_matched_050": {
+        "net_for_second": -10,
+        "p": 0.22881
+      },
+      "l6_matched_025_vs_l6_matched_075": {
+        "net_for_second": -6,
+        "p": 0.53858
+      },
+      "l6_matched_025_vs_l6_matched_100": {
+        "net_for_second": 9,
+        "p": 0.32108
+      },
+      "l6_matched_025_vs_l6_matched_125": {
+        "net_for_second": -6,
+        "p": 0.51896
+      },
+      "l6_matched_025_vs_l6_matched_150": {
+        "net_for_second": 4,
+        "p": 0.71223
+      },
+      "l6_matched_050_vs_l6_matched_075": {
+        "net_for_second": 4,
+        "p": 0.694
+      },
+      "l6_matched_050_vs_l6_matched_100": {
+        "net_for_second": 19,
+        "p": 0.03695
+      },
+      "l6_matched_050_vs_l6_matched_125": {
+        "net_for_second": 4,
+        "p": 0.72395
+      },
+      "l6_matched_050_vs_l6_matched_150": {
+        "net_for_second": 14,
+        "p": 0.10342
+      },
+      "l6_matched_075_vs_l6_matched_100": {
+        "net_for_second": 15,
+        "p": 0.09592
+      },
+      "l6_matched_075_vs_l6_matched_125": {
+        "net_for_second": 0,
+        "p": 1.0
+      },
+      "l6_matched_075_vs_l6_matched_150": {
+        "net_for_second": 10,
+        "p": 0.25285
+      },
+      "l6_matched_100_vs_l6_matched_125": {
+        "net_for_second": -15,
+        "p": 0.05344
+      },
+      "l6_matched_100_vs_l6_matched_150": {
+        "net_for_second": -5,
+        "p": 0.59664
+      },
+      "l6_matched_125_vs_l6_matched_150": {
+        "net_for_second": 10,
+        "p": 0.25285
+      }
+    },
+    "per_task_best": {
+      "widowx_carrot_on_plate": {
+        "vanilla": [
+          15,
+          100
+        ],
+        "best_lambda": "l6_matched_125",
+        "best": [
+          25,
+          100
+        ],
+        "runner_up": "l6_matched_075",
+        "delta_net": 10,
+        "rescue": 16,
+        "harm": 6
+      },
+      "widowx_put_eggplant_in_basket": {
+        "vanilla": [
+          41,
+          100
+        ],
+        "best_lambda": "l6_matched_150",
+        "best": [
+          50,
+          100
+        ],
+        "runner_up": "l6_matched_100",
+        "delta_net": 9,
+        "rescue": 20,
+        "harm": 11
+      },
+      "widowx_spoon_on_towel": {
+        "vanilla": [
+          7,
+          100
+        ],
+        "best_lambda": "l6_matched_025",
+        "best": [
+          32,
+          100
+        ],
+        "runner_up": "l6_matched_100",
+        "delta_net": 25,
+        "rescue": 27,
+        "harm": 2
+      },
+      "widowx_stack_cube": {
+        "vanilla": [
+          3,
+          100
+        ],
+        "best_lambda": "l6_matched_100",
+        "best": [
+          14,
+          100
+        ],
+        "runner_up": "l6_matched_075",
+        "delta_net": 11,
+        "rescue": 11,
+        "harm": 0
+      }
+    },
+    "matched_excluding_fallback": {
+      "units": 357,
+      "paired_vs_vanilla": {
+        "l6_matched_025": {
+          "rescue": 58,
+          "harm": 30,
+          "net": 28,
+          "p": 0.00375
+        },
+        "l6_matched_050": {
+          "rescue": 56,
+          "harm": 31,
+          "net": 25,
+          "p": 0.00967
+        },
+        "l6_matched_075": {
+          "rescue": 60,
+          "harm": 30,
+          "net": 30,
+          "p": 0.00206
+        },
+        "l6_matched_100": {
+          "rescue": 57,
+          "harm": 20,
+          "net": 37,
+          "p": 3e-05
+        },
+        "l6_matched_125": {
+          "rescue": 51,
+          "harm": 24,
+          "net": 27,
+          "p": 0.00244
+        },
+        "l6_matched_150": {
+          "rescue": 54,
+          "harm": 19,
+          "net": 35,
+          "p": 5e-05
+        }
+      }
+    }
+  }
+}

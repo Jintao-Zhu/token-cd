@@ -5,6 +5,7 @@ import argparse
 import copy
 import cv2
 import json
+import numpy as np
 import os
 import pickle
 import time
@@ -238,8 +239,10 @@ def gt_target_patch_overlap(env, obs, task: str, instruction: str) -> np.ndarray
     mask = np.isin(seg[..., 1], target_ids).astype(np.float32)
     resized = cv2.resize(mask, (224, 224), interpolation=cv2.INTER_AREA)
     overlap = resized.reshape(16, 14, 16, 14).mean(axis=(1, 3)).reshape(256).astype(np.float32)
-    if not np.isfinite(overlap).all() or not np.any(overlap > 0):
-        raise RuntimeError(f"empty/non-finite GT target support for {task}: {instruction}")
+    if not np.isfinite(overlap).all():
+        raise RuntimeError(f"non-finite GT target support for {task}: {instruction}")
+    # A target can be fully occluded or leave the camera view after contact.
+    # In that frame, both controls reduce to the global L11 top-m mask.
     return overlap
 
 
@@ -343,6 +346,7 @@ def main() -> None:
                 "target_definition": "drawer instruction-selected link; coke can actor; Move Near source and target union",
                 "model_view_mapping": "instance mask INTER_AREA-resized to 224x224 then patch fractional overlap on 16x16x14x14 grid",
                 "target_patch_membership": "any positive fractional overlap",
+                "no_visible_target_policy": "if target support is empty in a frame, both controls use the same global L11 top-m mask; retain the episode and record zero target patches",
                 "inference_time_gt": False,
             }
         })

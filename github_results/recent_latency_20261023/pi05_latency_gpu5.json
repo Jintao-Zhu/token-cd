@@ -1,0 +1,44 @@
+{
+  "checkpoint": "/home/leju-suzhou/zjt_ws/checkpoints/pi05_robocasa",
+  "gpu_physical": 5,
+  "input_path": "artifacts/vtcg_per_call_latency_5backbone_20261023_223816/pi05_observation.npz",
+  "instruction": "Pick the mug from under the coffee machine dispenser and place it on the counter.",
+  "measured_calls_per_arm": 500,
+  "model": "pi0.5",
+  "protocol": "VTCG_PER_POLICY_CALL_LATENCY_V1",
+  "results": {
+    "vanilla": {
+      "max_ms": 46.072854893282056,
+      "mean_ms": 44.377013846766204,
+      "median_ms": 44.380184495821595,
+      "min_ms": 43.00525086000562,
+      "n": 500,
+      "p90_ms": 45.23302549496293,
+      "p95_ms": 45.43494072277099
+    },
+    "vtcg_harmonic_pcd_resampling": {
+      "max_ms": 501.7489888705313,
+      "mean_ms": 494.9026829409413,
+      "median_ms": 494.8406150797382,
+      "min_ms": 484.9644370842725,
+      "n": 500,
+      "p90_ms": 499.27050119731575,
+      "p95_ms": 499.8679324053228
+    }
+  },
+  "task": "PickPlaceCoffee",
+  "timing_scope": "raw RoboCasa observation through one decoded action output; includes processors, prompt-attention/KMeans selection, harmonic reconstruction, candidate action sampling/scoring/resampling and action postprocessing; excludes model load, environment reset/render/step, logging",
+  "vtcg_config": {
+    "alpha": 1.0,
+    "bandwidth_scale": 0.35,
+    "layer_index": 10,
+    "n_action_steps": 16,
+    "n_candidates": 16,
+    "primary_view_index": 0,
+    "resample": "multinomial",
+    "variant": "harmonic counterfactual + PCD KDE resampling"
+  },
+  "vtcg_minus_vanilla_mean_ms": 450.5256690941751,
+  "vtcg_over_vanilla_mean_latency_ratio": 11.152230401302798,
+  "warmup_per_arm": 50
+}

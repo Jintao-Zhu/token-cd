@@ -14,8 +14,14 @@ TASKS = (
     "google_robot_open_drawer", "google_robot_close_drawer",
     "google_robot_pick_coke_can", "google_robot_move_near",
 )
+C_EXTENDED_TASKS = (
+    "widowx_carrot_on_plate",
+    "widowx_put_eggplant_in_basket",
+    "widowx_spoon_on_towel",
+)
 ARMS = ("full", "zero", "clean_global_mean")
 PROTOCOL = "OPENVLA_L11_HARMONIC_ZERO_GLOBALMEAN_FRESH_300_499_V1"
+C_EXTENDED_PROTOCOL = "OPENVLA_L11_HARMONIC_ZERO_GLOBALMEAN_C_EXTENDED_300_499_V1"
 
 
 def parse_seeds(text: str) -> list[int]:
@@ -31,13 +37,14 @@ def parse_seeds(text: str) -> list[int]:
 
 def main() -> None:
     ap = argparse.ArgumentParser()
-    ap.add_argument("--task", choices=TASKS, required=True)
+    ap.add_argument("--task", choices=TASKS + C_EXTENDED_TASKS, required=True)
     ap.add_argument("--seeds", required=True)
     ap.add_argument("--gpu", type=int, required=True)
     ap.add_argument("--worker-id", required=True)
     ap.add_argument("--artifact", type=Path, required=True)
     ap.add_argument("--snapshot-artifact", type=Path, required=True)
     ap.add_argument("--phase", choices=("preflight", "formal"), required=True)
+    ap.add_argument("--protocol", choices=(PROTOCOL, C_EXTENDED_PROTOCOL), default=PROTOCOL)
     args = ap.parse_args()
 
     os.environ["CUDA_VISIBLE_DEVICES"] = str(args.gpu)
@@ -55,12 +62,14 @@ def main() -> None:
     artifact = args.artifact.resolve()
     snaproot = args.snapshot_artifact.resolve()
     artifact.mkdir(parents=True, exist_ok=True)
+    protocol_tasks = C_EXTENDED_TASKS if args.protocol == C_EXTENDED_PROTOCOL else TASKS
+    lock_seeds = list(range(300, 500))
     lock = {
-        "protocol_id": PROTOCOL, "phase": "paired fresh-seed reconstruction ablation",
+        "protocol_id": args.protocol, "phase": "paired fresh-seed reconstruction ablation",
         "model": "OpenVLA-7B Fractal SIMPLER checkpoint",
         "task_renderer": {t: {"shader_dir": "rt", "depth": table2.RT_DEPTH[t],
-                              "samples_per_pixel": 32, "denoiser": True} for t in TASKS},
-        "seeds": list(range(300, 500)), "arms": list(ARMS), "lambda": 0.5,
+                              "samples_per_pixel": 32, "denoiser": True} for t in protocol_tasks},
+        "seeds": lock_seeds, "arms": list(ARMS), "lambda": 0.5,
         "attention_layer": 11, "budget": "dynamic Matched", "ranking": "L11 prompt attention",
         "intervention": "projector output", "guidance": "z+ + 0.5*(z+ - z-)",
         "positive_negative_prefix": "same clean teacher-forced action prefix",
@@ -69,12 +78,14 @@ def main() -> None:
             "zero": "zero projector feature on selected tokens",
             "clean_global_mean": "same-state mean of clean projector visual tokens",
         },
-        "new_closed_loop_episodes": 2400,
+        "new_closed_loop_episodes": 1800 if args.protocol == C_EXTENDED_PROTOCOL else 2400,
     }
     lockpath = artifact / "CONFIG_LOCK.json"
     if lockpath.exists() and json.loads(lockpath.read_text()) != lock:
         raise RuntimeError(f"CONFIG_LOCK mismatch: {lockpath}")
-    lockpath.write_text(json.dumps(lock, indent=2, sort_keys=True) + "\n")
+    lock_tmp = lockpath.with_suffix(f".tmp.{os.getpid()}")
+    lock_tmp.write_text(json.dumps(lock, indent=2, sort_keys=True) + "\n")
+    os.replace(lock_tmp, lockpath)
 
     env, env_id = shared.make_environment(args.task)
     cfg = get_policy_config("openvla", str(PCD_SOURCE / "pretrained/openvla-7b"), args.task, {}, False)
@@ -116,7 +127,7 @@ def main() -> None:
             arrays_path = out / f"episode_{seed:03d}_arrays.npz"
             if summary_path.exists() and arrays_path.exists():
                 old = json.loads(summary_path.read_text())
-                if old.get("protocol_id") != PROTOCOL:
+                if old.get("protocol_id") != args.protocol:
                     raise RuntimeError(f"incompatible existing result {summary_path}")
                 hashes.append((old["initial_state_sha256"], old["initial_rgb_sha256"]))
                 continue
@@ -137,7 +148,7 @@ def main() -> None:
             checks = table2.audit(trace, arm, card)
             table2.write_arrays(arrays_path, policy._episode_logits, actions)
             payload = {
-                "protocol_id": PROTOCOL, "task": args.task, "seed": seed, "episode_id": seed,
+                "protocol_id": args.protocol, "task": args.task, "seed": seed, "episode_id": seed,
                 "phase": args.phase, "arm": arm, "success": bool(result["success"]),
                 "result": table2.jsonable(result), "failure_reason": reason, "steps": steps,
                 "runtime_seconds": time.monotonic() - started, "worker_id": args.worker_id,

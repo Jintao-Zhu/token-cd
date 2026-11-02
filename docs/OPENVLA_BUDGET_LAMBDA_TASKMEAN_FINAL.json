@@ -1,0 +1,1006 @@
+{
+  "generated_at": "2026-10-16T11:54:35+0800",
+  "generator": "scripts/analyze_openvla_budget_lambda_taskmean.py",
+  "design": {
+    "tasks": [
+      "google_robot_open_drawer",
+      "google_robot_close_drawer",
+      "google_robot_pick_coke_can",
+      "google_robot_move_near"
+    ],
+    "seeds": [
+      200,
+      299
+    ],
+    "lambdas": [
+      0.5,
+      1.0
+    ],
+    "rules": [
+      "matched",
+      "fixed16",
+      "fixed48",
+      "random48",
+      "topp90"
+    ],
+    "pairing": "every contrast is paired on identical (task, seed)"
+  },
+  "rates": [
+    {
+      "rule": "matched",
+      "label": "Matched",
+      "lambda": 0.5,
+      "successes": 205,
+      "n": 400,
+      "rate": 0.5125,
+      "wilson_low": 0.4636306970848221,
+      "wilson_high": 0.5611314955568205,
+      "per_task": {
+        "open_drawer": [
+          50,
+          100
+        ],
+        "close_drawer": [
+          71,
+          100
+        ],
+        "pick_coke_can": [
+          32,
+          100
+        ],
+        "move_near": [
+          52,
+          100
+        ]
+      },
+      "complete": true
+    },
+    {
+      "rule": "matched",
+      "label": "Matched",
+      "lambda": 1.0,
+      "successes": 201,
+      "n": 400,
+      "rate": 0.5025,
+      "wilson_low": 0.45371132720791196,
+      "wilson_high": 0.5512411113204164,
+      "per_task": {
+        "open_drawer": [
+          40,
+          100
+        ],
+        "close_drawer": [
+          84,
+          100
+        ],
+        "pick_coke_can": [
+          29,
+          100
+        ],
+        "move_near": [
+          48,
+          100
+        ]
+      },
+      "complete": true
+    },
+    {
+      "rule": "fixed16",
+      "label": "Fixed 16",
+      "lambda": 0.5,
+      "successes": 165,
+      "n": 400,
+      "rate": 0.4125,
+      "wilson_low": 0.36531214409863494,
+      "wilson_high": 0.46135250740986694,
+      "per_task": {
+        "open_drawer": [
+          36,
+          100
+        ],
+        "close_drawer": [
+          61,
+          100
+        ],
+        "pick_coke_can": [
+          25,
+          100
+        ],
+        "move_near": [
+          43,
+          100
+        ]
+      },
+      "complete": true
+    },
+    {
+      "rule": "fixed16",
+      "label": "Fixed 16",
+      "lambda": 1.0,
+      "successes": 206,
+      "n": 400,
+      "rate": 0.515,
+      "wilson_low": 0.46611356033171036,
+      "wilson_high": 0.5636010708382608,
+      "per_task": {
+        "open_drawer": [
+          45,
+          100
+        ],
+        "close_drawer": [
+          78,
+          100
+        ],
+        "pick_coke_can": [
+          36,
+          100
+        ],
+        "move_near": [
+          47,
+          100
+        ]
+      },
+      "complete": true
+    },
+    {
+      "rule": "fixed48",
+      "label": "Fixed 48",
+      "lambda": 0.5,
+      "successes": 199,
+      "n": 400,
+      "rate": 0.4975,
+      "wilson_low": 0.44875888867958347,
+      "wilson_high": 0.5462886727920879,
+      "per_task": {
+        "open_drawer": [
+          50,
+          100
+        ],
+        "close_drawer": [
+          72,
+          100
+        ],
+        "pick_coke_can": [
+          32,
+          100
+        ],
+        "move_near": [
+          45,
+          100
+        ]
+      },
+      "complete": true
+    },
+    {
+      "rule": "fixed48",
+      "label": "Fixed 48",
+      "lambda": 1.0,
+      "successes": 202,
+      "n": 400,
+      "rate": 0.505,
+      "wilson_low": 0.45618935783904724,
+      "wilson_high": 0.5537155192176098,
+      "per_task": {
+        "open_drawer": [
+          43,
+          100
+        ],
+        "close_drawer": [
+          81,
+          100
+        ],
+        "pick_coke_can": [
+          35,
+          100
+        ],
+        "move_near": [
+          43,
+          100
+        ]
+      },
+      "complete": true
+    },
+    {
+      "rule": "random48",
+      "label": "Random 48",
+      "lambda": 0.5,
+      "successes": 157,
+      "n": 400,
+      "rate": 0.3925,
+      "wilson_low": 0.34588652662317476,
+      "wilson_high": 0.44115861665869904,
+      "per_task": {
+        "open_drawer": [
+          28,
+          100
+        ],
+        "close_drawer": [
+          55,
+          100
+        ],
+        "pick_coke_can": [
+          25,
+          100
+        ],
+        "move_near": [
+          49,
+          100
+        ]
+      },
+      "complete": true
+    },
+    {
+      "rule": "random48",
+      "label": "Random 48",
+      "lambda": 1.0,
+      "successes": 189,
+      "n": 400,
+      "rate": 0.4725,
+      "wilson_low": 0.4240692032756731,
+      "wilson_high": 0.5214539729127131,
+      "per_task": {
+        "open_drawer": [
+          40,
+          100
+        ],
+        "close_drawer": [
+          64,
+          100
+        ],
+        "pick_coke_can": [
+          32,
+          100
+        ],
+        "move_near": [
+          53,
+          100
+        ]
+      },
+      "complete": true
+    },
+    {
+      "rule": "topp90",
+      "label": "TopP 0.90",
+      "lambda": 0.5,
+      "successes": 201,
+      "n": 400,
+      "rate": 0.5025,
+      "wilson_low": 0.45371132720791196,
+      "wilson_high": 0.5512411113204164,
+      "per_task": {
+        "open_drawer": [
+          46,
+          100
+        ],
+        "close_drawer": [
+          65,
+          100
+        ],
+        "pick_coke_can": [
+          40,
+          100
+        ],
+        "move_near": [
+          50,
+          100
+        ]
+      },
+      "complete": true
+    },
+    {
+      "rule": "topp90",
+      "label": "TopP 0.90",
+      "lambda": 1.0,
+      "successes": 226,
+      "n": 400,
+      "rate": 0.565,
+      "wilson_low": 0.516026076233405,
+      "wilson_high": 0.6127373255031363,
+      "per_task": {
+        "open_drawer": [
+          52,
+          100
+        ],
+        "close_drawer": [
+          79,
+          100
+        ],
+        "pick_coke_can": [
+          34,
+          100
+        ],
+        "move_near": [
+          61,
+          100
+        ]
+      },
+      "complete": true
+    }
+  ],
+  "within_lambda_vs_matched": [
+    {
+      "n_pairs": 400,
+      "both_success": 116,
+      "both_failure": 146,
+      "rescue_by_first": 89,
+      "harm_to_first": 49,
+      "net": 40,
+      "first_successes": 205,
+      "second_successes": 165,
+      "first_rate": 0.5125,
+      "second_rate": 0.4125,
+      "diff_pp": 10.0,
+      "mcnemar_exact_p": 0.0008360058024357577,
+      "rule": "fixed16",
+      "rule_label": "Fixed 16",
+      "lambda": 0.5,
+      "reference": "matched",
+      "bootstrap": {
+        "observed_pp": 10.0,
+        "ci_low_pp": 3.2500000000000013,
+        "ci_high_pp": 16.75,
+        "p_two_sided": 0.0054,
+        "draws": 10000
+      },
+      "holm_p": 0.0025080174073072734,
+      "holm_family_size": 4
+    },
+    {
+      "n_pairs": 400,
+      "both_success": 155,
+      "both_failure": 151,
+      "rescue_by_first": 50,
+      "harm_to_first": 44,
+      "net": 6,
+      "first_successes": 205,
+      "second_successes": 199,
+      "first_rate": 0.5125,
+      "second_rate": 0.4975,
+      "diff_pp": 1.5,
+      "mcnemar_exact_p": 0.6062959376939652,
+      "rule": "fixed48",
+      "rule_label": "Fixed 48",
+      "lambda": 0.5,
+      "reference": "matched",
+      "bootstrap": {
+        "observed_pp": 1.5,
+        "ci_low_pp": -5.499999999999998,
+        "ci_high_pp": 8.000000000000004,
+        "p_two_sided": 0.6802,
+        "draws": 10000
+      },
+      "holm_p": 1.0,
+      "holm_family_size": 4
+    },
+    {
+      "n_pairs": 400,
+      "both_success": 117,
+      "both_failure": 155,
+      "rescue_by_first": 88,
+      "harm_to_first": 40,
+      "net": 48,
+      "first_successes": 205,
+      "second_successes": 157,
+      "first_rate": 0.5125,
+      "second_rate": 0.3925,
+      "diff_pp": 12.0,
+      "mcnemar_exact_p": 2.662995749743137e-05,
+      "rule": "random48",
+      "rule_label": "Random 48",
+      "lambda": 0.5,
+      "reference": "matched",
+      "bootstrap": {
+        "observed_pp": 11.999999999999998,
+        "ci_low_pp": 5.250000000000001,
+        "ci_high_pp": 18.5,
+        "p_two_sided": 0.0006,
+        "draws": 10000
+      },
+      "holm_p": 0.00010651982998972548,
+      "holm_family_size": 4
+    },
+    {
+      "n_pairs": 400,
+      "both_success": 145,
+      "both_failure": 139,
+      "rescue_by_first": 60,
+      "harm_to_first": 56,
+      "net": 4,
+      "first_successes": 205,
+      "second_successes": 201,
+      "first_rate": 0.5125,
+      "second_rate": 0.5025,
+      "diff_pp": 1.0,
+      "mcnemar_exact_p": 0.7807391284762693,
+      "rule": "topp90",
+      "rule_label": "TopP 0.90",
+      "lambda": 0.5,
+      "reference": "matched",
+      "bootstrap": {
+        "observed_pp": 0.9999999999999981,
+        "ci_low_pp": -5.500000000000002,
+        "ci_high_pp": 7.9999999999999964,
+        "p_two_sided": 0.771,
+        "draws": 10000
+      },
+      "holm_p": 1.0,
+      "holm_family_size": 4
+    },
+    {
+      "n_pairs": 400,
+      "both_success": 152,
+      "both_failure": 145,
+      "rescue_by_first": 49,
+      "harm_to_first": 54,
+      "net": -5,
+      "first_successes": 201,
+      "second_successes": 206,
+      "first_rate": 0.5025,
+      "second_rate": 0.515,
+      "diff_pp": -1.25,
+      "mcnemar_exact_p": 0.6936859650244839,
+      "rule": "fixed16",
+      "rule_label": "Fixed 16",
+      "lambda": 1.0,
+      "reference": "matched",
+      "bootstrap": {
+        "observed_pp": -1.250000000000001,
+        "ci_low_pp": -7.500000000000003,
+        "ci_high_pp": 5.249999999999999,
+        "p_two_sided": 0.702,
+        "draws": 10000
+      },
+      "holm_p": 1.0,
+      "holm_family_size": 4
+    },
+    {
+      "n_pairs": 400,
+      "both_success": 143,
+      "both_failure": 140,
+      "rescue_by_first": 58,
+      "harm_to_first": 59,
+      "net": -1,
+      "first_successes": 201,
+      "second_successes": 202,
+      "first_rate": 0.5025,
+      "second_rate": 0.505,
+      "diff_pp": -0.25,
+      "mcnemar_exact_p": 1.0,
+      "rule": "fixed48",
+      "rule_label": "Fixed 48",
+      "lambda": 1.0,
+      "reference": "matched",
+      "bootstrap": {
+        "observed_pp": -0.2500000000000016,
+        "ci_low_pp": -6.750000000000002,
+        "ci_high_pp": 6.000000000000001,
+        "p_two_sided": 0.9542,
+        "draws": 10000
+      },
+      "holm_p": 1.0,
+      "holm_family_size": 4
+    },
+    {
+      "n_pairs": 400,
+      "both_success": 137,
+      "both_failure": 147,
+      "rescue_by_first": 64,
+      "harm_to_first": 52,
+      "net": 12,
+      "first_successes": 201,
+      "second_successes": 189,
+      "first_rate": 0.5025,
+      "second_rate": 0.4725,
+      "diff_pp": 3.0,
+      "mcnemar_exact_p": 0.3070896636491836,
+      "rule": "random48",
+      "rule_label": "Random 48",
+      "lambda": 1.0,
+      "reference": "matched",
+      "bootstrap": {
+        "observed_pp": 2.9999999999999973,
+        "ci_low_pp": -3.500000000000001,
+        "ci_high_pp": 9.499999999999998,
+        "p_two_sided": 0.387,
+        "draws": 10000
+      },
+      "holm_p": 0.9212689909475509,
+      "holm_family_size": 4
+    },
+    {
+      "n_pairs": 400,
+      "both_success": 154,
+      "both_failure": 127,
+      "rescue_by_first": 47,
+      "harm_to_first": 72,
+      "net": -25,
+      "first_successes": 201,
+      "second_successes": 226,
+      "first_rate": 0.5025,
+      "second_rate": 0.565,
+      "diff_pp": -6.25,
+      "mcnemar_exact_p": 0.027379102500930338,
+      "rule": "topp90",
+      "rule_label": "TopP 0.90",
+      "lambda": 1.0,
+      "reference": "matched",
+      "bootstrap": {
+        "observed_pp": -6.250000000000003,
+        "ci_low_pp": -12.749999999999998,
+        "ci_high_pp": 1.3877787807814457e-15,
+        "p_two_sided": 0.0536,
+        "draws": 10000
+      },
+      "holm_p": 0.10951641000372135,
+      "holm_family_size": 4
+    }
+  ],
+  "within_rule_lambda_effect": [
+    {
+      "n_pairs": 400,
+      "both_success": 138,
+      "both_failure": 132,
+      "rescue_by_first": 63,
+      "harm_to_first": 67,
+      "net": -4,
+      "first_successes": 201,
+      "second_successes": 205,
+      "first_rate": 0.5025,
+      "second_rate": 0.5125,
+      "diff_pp": -1.0,
+      "mcnemar_exact_p": 0.7925825227940961,
+      "rule": "matched",
+      "rule_label": "Matched",
+      "direction": "lambda=1.0 minus lambda=0.5",
+      "bootstrap": {
+        "observed_pp": -1.0000000000000009,
+        "ci_low_pp": -7.499999999999998,
+        "ci_high_pp": 5.499999999999999,
+        "p_two_sided": 0.7564,
+        "draws": 10000
+      },
+      "holm_p": 1.0,
+      "holm_family_size": 5
+    },
+    {
+      "n_pairs": 400,
+      "both_success": 124,
+      "both_failure": 153,
+      "rescue_by_first": 82,
+      "harm_to_first": 41,
+      "net": 41,
+      "first_successes": 206,
+      "second_successes": 165,
+      "first_rate": 0.515,
+      "second_rate": 0.4125,
+      "diff_pp": 10.25,
+      "mcnemar_exact_p": 0.0002756176335340418,
+      "rule": "fixed16",
+      "rule_label": "Fixed 16",
+      "direction": "lambda=1.0 minus lambda=0.5",
+      "bootstrap": {
+        "observed_pp": 10.25,
+        "ci_low_pp": 3.5000000000000004,
+        "ci_high_pp": 16.75,
+        "p_two_sided": 0.0026,
+        "draws": 10000
+      },
+      "holm_p": 0.001378088167670209,
+      "holm_family_size": 5
+    },
+    {
+      "n_pairs": 400,
+      "both_success": 141,
+      "both_failure": 140,
+      "rescue_by_first": 61,
+      "harm_to_first": 58,
+      "net": 3,
+      "first_successes": 202,
+      "second_successes": 199,
+      "first_rate": 0.505,
+      "second_rate": 0.4975,
+      "diff_pp": 0.75,
+      "mcnemar_exact_p": 0.8546300421797669,
+      "rule": "fixed48",
+      "rule_label": "Fixed 48",
+      "direction": "lambda=1.0 minus lambda=0.5",
+      "bootstrap": {
+        "observed_pp": 0.7500000000000007,
+        "ci_low_pp": -5.750000000000001,
+        "ci_high_pp": 7.5,
+        "p_two_sided": 0.84,
+        "draws": 10000
+      },
+      "holm_p": 1.0,
+      "holm_family_size": 5
+    },
+    {
+      "n_pairs": 400,
+      "both_success": 116,
+      "both_failure": 170,
+      "rescue_by_first": 73,
+      "harm_to_first": 41,
+      "net": 32,
+      "first_successes": 189,
+      "second_successes": 157,
+      "first_rate": 0.4725,
+      "second_rate": 0.3925,
+      "diff_pp": 8.0,
+      "mcnemar_exact_p": 0.003504683784608791,
+      "rule": "random48",
+      "rule_label": "Random 48",
+      "direction": "lambda=1.0 minus lambda=0.5",
+      "bootstrap": {
+        "observed_pp": 8.0,
+        "ci_low_pp": 1.250000000000001,
+        "ci_high_pp": 14.75,
+        "p_two_sided": 0.0204,
+        "draws": 10000
+      },
+      "holm_p": 0.014018735138435164,
+      "holm_family_size": 5
+    },
+    {
+      "n_pairs": 400,
+      "both_success": 153,
+      "both_failure": 126,
+      "rescue_by_first": 73,
+      "harm_to_first": 48,
+      "net": 25,
+      "first_successes": 226,
+      "second_successes": 201,
+      "first_rate": 0.565,
+      "second_rate": 0.5025,
+      "diff_pp": 6.25,
+      "mcnemar_exact_p": 0.02870319917373699,
+      "rule": "topp90",
+      "rule_label": "TopP 0.90",
+      "direction": "lambda=1.0 minus lambda=0.5",
+      "bootstrap": {
+        "observed_pp": 6.25,
+        "ci_low_pp": -0.4999999999999963,
+        "ci_high_pp": 13.0,
+        "p_two_sided": 0.0688,
+        "draws": 10000
+      },
+      "holm_p": 0.08610959752121097,
+      "holm_family_size": 5
+    }
+  ],
+  "interaction": [
+    {
+      "observed_pp": 11.25,
+      "ci_low_pp": 3.75,
+      "ci_high_pp": 18.75,
+      "p_two_sided": 0.0052,
+      "draws": 10000,
+      "definition": "(matched - rule) at lambda=0.5 minus (matched - rule) at lambda=1.0",
+      "rule": "fixed16",
+      "rule_label": "Fixed 16",
+      "against": "matched",
+      "holm_p": 0.0208,
+      "holm_family_size": 4
+    },
+    {
+      "observed_pp": 1.7499999999999998,
+      "ci_low_pp": -5.5,
+      "ci_high_pp": 9.0,
+      "p_two_sided": 0.661,
+      "draws": 10000,
+      "definition": "(matched - rule) at lambda=0.5 minus (matched - rule) at lambda=1.0",
+      "rule": "fixed48",
+      "rule_label": "Fixed 48",
+      "against": "matched",
+      "holm_p": 0.661,
+      "holm_family_size": 4
+    },
+    {
+      "observed_pp": 9.000000000000002,
+      "ci_low_pp": 1.5000000000000002,
+      "ci_high_pp": 16.25,
+      "p_two_sided": 0.0192,
+      "draws": 10000,
+      "definition": "(matched - rule) at lambda=0.5 minus (matched - rule) at lambda=1.0",
+      "rule": "random48",
+      "rule_label": "Random 48",
+      "against": "matched",
+      "holm_p": 0.0576,
+      "holm_family_size": 4
+    },
+    {
+      "observed_pp": 7.250000000000001,
+      "ci_low_pp": -0.4999999999999998,
+      "ci_high_pp": 15.000000000000002,
+      "p_two_sided": 0.0648,
+      "draws": 10000,
+      "definition": "(matched - rule) at lambda=0.5 minus (matched - rule) at lambda=1.0",
+      "rule": "topp90",
+      "rule_label": "TopP 0.90",
+      "against": "matched",
+      "holm_p": 0.1296,
+      "holm_family_size": 4
+    }
+  ],
+  "taskmean_new": {
+    "050": {
+      "n_pairs": 400,
+      "both_success": 128,
+      "both_failure": 141,
+      "rescue_by_first": 54,
+      "harm_to_first": 77,
+      "net": -23,
+      "first_successes": 182,
+      "second_successes": 205,
+      "first_rate": 0.455,
+      "second_rate": 0.5125,
+      "diff_pp": -5.75,
+      "mcnemar_exact_p": 0.05417080038723309,
+      "lambda": 0.5,
+      "arm": "taskmean",
+      "reference": "matched",
+      "complete": true,
+      "coverage": {
+        "open_drawer": 100,
+        "close_drawer": 100,
+        "pick_coke_can": 100,
+        "move_near": 100
+      },
+      "bootstrap": {
+        "observed_pp": -5.749999999999998,
+        "ci_low_pp": -12.499999999999998,
+        "ci_high_pp": 0.9999999999999996,
+        "p_two_sided": 0.0932,
+        "draws": 10000
+      },
+      "per_task": {
+        "open_drawer": {
+          "n_pairs": 100,
+          "both_success": 24,
+          "both_failure": 40,
+          "rescue_by_first": 10,
+          "harm_to_first": 26,
+          "net": -16,
+          "first_successes": 34,
+          "second_successes": 50,
+          "first_rate": 0.34,
+          "second_rate": 0.5,
+          "diff_pp": -16.0,
+          "mcnemar_exact_p": 0.011330984183587134
+        },
+        "close_drawer": {
+          "n_pairs": 100,
+          "both_success": 57,
+          "both_failure": 21,
+          "rescue_by_first": 8,
+          "harm_to_first": 14,
+          "net": -6,
+          "first_successes": 65,
+          "second_successes": 71,
+          "first_rate": 0.65,
+          "second_rate": 0.71,
+          "diff_pp": -6.0,
+          "mcnemar_exact_p": 0.28627872467041016
+        },
+        "pick_coke_can": {
+          "n_pairs": 100,
+          "both_success": 16,
+          "both_failure": 52,
+          "rescue_by_first": 16,
+          "harm_to_first": 16,
+          "net": 0,
+          "first_successes": 32,
+          "second_successes": 32,
+          "first_rate": 0.32,
+          "second_rate": 0.32,
+          "diff_pp": 0.0,
+          "mcnemar_exact_p": 1.0
+        },
+        "move_near": {
+          "n_pairs": 100,
+          "both_success": 31,
+          "both_failure": 28,
+          "rescue_by_first": 20,
+          "harm_to_first": 21,
+          "net": -1,
+          "first_successes": 51,
+          "second_successes": 52,
+          "first_rate": 0.51,
+          "second_rate": 0.52,
+          "diff_pp": -1.0,
+          "mcnemar_exact_p": 1.0
+        }
+      },
+      "holm_p": 0.10834160077446618,
+      "holm_family_size": 2
+    },
+    "100": {
+      "n_pairs": 400,
+      "both_success": 136,
+      "both_failure": 136,
+      "rescue_by_first": 63,
+      "harm_to_first": 65,
+      "net": -2,
+      "first_successes": 199,
+      "second_successes": 201,
+      "first_rate": 0.4975,
+      "second_rate": 0.5025,
+      "diff_pp": -0.5,
+      "mcnemar_exact_p": 0.9296139078299851,
+      "lambda": 1.0,
+      "arm": "taskmean",
+      "reference": "matched",
+      "complete": true,
+      "coverage": {
+        "open_drawer": 100,
+        "close_drawer": 100,
+        "pick_coke_can": 100,
+        "move_near": 100
+      },
+      "bootstrap": {
+        "observed_pp": -0.49999999999999767,
+        "ci_low_pp": -6.999999999999998,
+        "ci_high_pp": 5.750000000000003,
+        "p_two_sided": 0.902,
+        "draws": 10000
+      },
+      "per_task": {
+        "open_drawer": {
+          "n_pairs": 100,
+          "both_success": 24,
+          "both_failure": 31,
+          "rescue_by_first": 29,
+          "harm_to_first": 16,
+          "net": 13,
+          "first_successes": 53,
+          "second_successes": 40,
+          "first_rate": 0.53,
+          "second_rate": 0.4,
+          "diff_pp": 13.0,
+          "mcnemar_exact_p": 0.07245426016254441
+        },
+        "close_drawer": {
+          "n_pairs": 100,
+          "both_success": 64,
+          "both_failure": 7,
+          "rescue_by_first": 9,
+          "harm_to_first": 20,
+          "net": -11,
+          "first_successes": 73,
+          "second_successes": 84,
+          "first_rate": 0.73,
+          "second_rate": 0.84,
+          "diff_pp": -11.0,
+          "mcnemar_exact_p": 0.06142834573984146
+        },
+        "pick_coke_can": {
+          "n_pairs": 100,
+          "both_success": 11,
+          "both_failure": 54,
+          "rescue_by_first": 17,
+          "harm_to_first": 18,
+          "net": -1,
+          "first_successes": 28,
+          "second_successes": 29,
+          "first_rate": 0.28,
+          "second_rate": 0.29,
+          "diff_pp": -1.0,
+          "mcnemar_exact_p": 1.0
+        },
+        "move_near": {
+          "n_pairs": 100,
+          "both_success": 37,
+          "both_failure": 44,
+          "rescue_by_first": 8,
+          "harm_to_first": 11,
+          "net": -3,
+          "first_successes": 45,
+          "second_successes": 48,
+          "first_rate": 0.45,
+          "second_rate": 0.48,
+          "diff_pp": -3.0,
+          "mcnemar_exact_p": 0.6476058959960938
+        }
+      },
+      "holm_p": 0.9296139078299851,
+      "holm_family_size": 2
+    }
+  },
+  "taskmean_replication_100_199": {
+    "n_pairs": 400,
+    "both_success": 141,
+    "both_failure": 143,
+    "rescue_by_first": 44,
+    "harm_to_first": 72,
+    "net": -28,
+    "first_successes": 185,
+    "second_successes": 213,
+    "first_rate": 0.4625,
+    "second_rate": 0.5325,
+    "diff_pp": -7.0,
+    "mcnemar_exact_p": 0.011849889910578776,
+    "lambda": 0.5,
+    "seeds": [
+      100,
+      199
+    ],
+    "arm": "taskmean",
+    "reference": "matched",
+    "bootstrap": {
+      "observed_pp": -6.999999999999999,
+      "ci_low_pp": -13.749999999999998,
+      "ci_high_pp": -0.2500000000000016,
+      "p_two_sided": 0.0408,
+      "draws": 10000
+    },
+    "per_task": {
+      "open_drawer": {
+        "n_pairs": 100,
+        "both_success": 24,
+        "both_failure": 44,
+        "rescue_by_first": 12,
+        "harm_to_first": 20,
+        "net": -8,
+        "first_successes": 36,
+        "second_successes": 44,
+        "first_rate": 0.36,
+        "second_rate": 0.44,
+        "diff_pp": -8.0,
+        "mcnemar_exact_p": 0.21532714972272515
+      },
+      "close_drawer": {
+        "n_pairs": 100,
+        "both_success": 56,
+        "both_failure": 16,
+        "rescue_by_first": 8,
+        "harm_to_first": 20,
+        "net": -12,
+        "first_successes": 64,
+        "second_successes": 76,
+        "first_rate": 0.64,
+        "second_rate": 0.76,
+        "diff_pp": -12.0,
+        "mcnemar_exact_p": 0.03569813817739487
+      },
+      "pick_coke_can": {
+        "n_pairs": 100,
+        "both_success": 17,
+        "both_failure": 55,
+        "rescue_by_first": 12,
+        "harm_to_first": 16,
+        "net": -4,
+        "first_successes": 29,
+        "second_successes": 33,
+        "first_rate": 0.29,
+        "second_rate": 0.33,
+        "diff_pp": -4.0,
+        "mcnemar_exact_p": 0.5715881884098053
+      },
+      "move_near": {
+        "n_pairs": 100,
+        "both_success": 44,
+        "both_failure": 28,
+        "rescue_by_first": 12,
+        "harm_to_first": 16,
+        "net": -4,
+        "first_successes": 56,
+        "second_successes": 60,
+        "first_rate": 0.56,
+        "second_rate": 0.6,
+        "diff_pp": -4.0,
+        "mcnemar_exact_p": 0.5715881884098053
+      }
+    },
+    "source_arms": {
+      "arm": "l11_taskmean_budget_100_199_v1:taskmean",
+      "reference": "prompt_attn_l11_token_count_v1:l11_matched"
+    }
+  },
+  "caveats": [
+    "The interaction is estimated directly as a paired contrast; it is never inferred from one comparison being significant and another not.",
+    "Non-significance is not equivalence: every non-significant contrast is reported with its observed difference and a task-stratified paired bootstrap interval.",
+    "The task-mean arm uses constants computed from the lambda=1.0 Matched reference on the SAME seeds 200-299 and reuses them at lambda=0.5. It is therefore a post-hoc mean-matched ablation, not an independently calibrated baseline, and at lambda=0.5 it is not a same-lambda mean-matched control.",
+    "Random 48 changes both the count rule and the token content, so its contrast with Matched mixes both; content is isolated only by Fixed 48 versus Random 48.",
+    "Closed-loop m_t values come from divergent trajectories and are not same-state causal evidence.",
+    "The 100-199 replication runs on an older renderer/protocol than the 200-299 grid for pick and move, so it is a directional replication of the lambda=0.5 task-mean effect, not a bitwise continuation of the same experiment."
+  ]
+}

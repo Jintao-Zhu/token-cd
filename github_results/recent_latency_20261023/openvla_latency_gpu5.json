@@ -1,0 +1,41 @@
+{
+  "model": "openvla",
+  "task": "google_robot_pick_coke_can",
+  "instruction": "pick coke can",
+  "image_shape": [
+    512,
+    640,
+    3
+  ],
+  "image_state_hash": "a24b2b28e27bf57fad00e2538c7ae01077293f399c34e913cebee09f3d0056e3",
+  "image_rgb_hash": "14d452837c602f9de9ba92ef8ced0e1628d1dd1ee3bf9ec05cbc0c06805a423a",
+  "warmup": 50,
+  "measured_steps_per_arm": 500,
+  "timing_scope": "policy inference, preprocessing, counterfactual branch and action decoding; no simulator step/render",
+  "results": {
+    "vanilla": {
+      "n": 500,
+      "mean_ms": 167.78530561813386,
+      "median_ms": 167.7067430136958,
+      "p90_ms": 168.47200867778156,
+      "p95_ms": 168.9945718506351,
+      "policy_only_hz_from_mean": 5.959997487955955,
+      "peak_allocated_gib": 14.415836811065674,
+      "peak_reserved_gib": 14.494140625
+    },
+    "l11_matched_full": {
+      "n": 500,
+      "mean_ms": 426.605504974199,
+      "median_ms": 425.8576934953453,
+      "p90_ms": 430.55708051251713,
+      "p95_ms": 431.4493375059101,
+      "policy_only_hz_from_mean": 2.344086019378676,
+      "peak_allocated_gib": 14.412519931793213,
+      "peak_reserved_gib": 14.49609375
+    },
+    "forward_branches_per_replan": {
+      "vanilla": 1,
+      "l11_matched_full": 2
+    }
+  }
+}

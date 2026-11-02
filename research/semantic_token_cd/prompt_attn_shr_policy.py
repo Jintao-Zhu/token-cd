@@ -1107,7 +1107,9 @@ class PromptAttentionSHRInference(STSHRCDInference):
             )
         else:
             m = int(self.selection_count)
-            if m not in {16, 24, 32, 48, 64}:
+            # any count inside the visual grid is legal; the enum was only a typo guard and
+            # cannot express task-mean budgets such as 29/33/35/37.
+            if not 1 <= m <= int(N_VISUAL):
                 raise RuntimeError(f"invalid fixed token count: {m}")
             # Fixed-count selection must not call or otherwise depend on KMeans.
             labels = None
@@ -1245,7 +1247,7 @@ class PromptAttentionSHRInference(STSHRCDInference):
                     raise RuntimeError("GT patch overlap values must be in [0,1]")
                 target_pool = np.flatnonzero(overlap_map > 0.0).astype(np.int64).tolist()
                 non_target_pool = np.flatnonzero(overlap_map <= 0.0).astype(np.int64).tolist()
-                if not target_pool or len(non_target_pool) < m:
+                if len(non_target_pool) < m:
                     raise RuntimeError(
                         f"invalid target/non-target support: target={len(target_pool)}, "
                         f"non_target={len(non_target_pool)}, m={m}"

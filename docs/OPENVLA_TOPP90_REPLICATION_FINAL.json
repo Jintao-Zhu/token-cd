@@ -1,0 +1,128 @@
+{
+  "generated_at": "2026-10-16T19:23:36+0800",
+  "generator": "scripts/analyze_openvla_topp90_repl.py",
+  "design": "matched_l100 and top_p090_l100 on seeds 100-199, 4 Google tasks, both arms in the same process per chunk; independent of the seeds-200-299 evidence",
+  "complete": true,
+  "coverage": {
+    "close_drawer": [
+      100,
+      100
+    ],
+    "open_drawer": [
+      100,
+      100
+    ],
+    "pick_coke_can": [
+      100,
+      100
+    ],
+    "move_near": [
+      100,
+      100
+    ]
+  },
+  "pooled": {
+    "n_pairs": 400,
+    "top_p_successes": 177,
+    "matched_successes": 188,
+    "rescue_by_top_p": 53,
+    "harm_to_top_p": 64,
+    "net": -11,
+    "top_p_rate": 0.4425,
+    "matched_rate": 0.47,
+    "diff_pp": -2.75,
+    "mcnemar_exact_p": 0.35527968165224744,
+    "bootstrap": {
+      "observed_pp": -2.750000000000001,
+      "ci_low_pp": -9.000000000000002,
+      "ci_high_pp": 3.500000000000001,
+      "draws": 10000
+    },
+    "per_task": {
+      "close_drawer": {
+        "n_pairs": 100,
+        "top_p_successes": 73,
+        "matched_successes": 83,
+        "rescue_by_top_p": 11,
+        "harm_to_top_p": 21,
+        "net": -10,
+        "top_p_rate": 0.73,
+        "matched_rate": 0.83,
+        "diff_pp": -10.0,
+        "mcnemar_exact_p": 0.11018416518345475
+      },
+      "open_drawer": {
+        "n_pairs": 100,
+        "top_p_successes": 35,
+        "matched_successes": 40,
+        "rescue_by_top_p": 14,
+        "harm_to_top_p": 19,
+        "net": -5,
+        "top_p_rate": 0.35,
+        "matched_rate": 0.4,
+        "diff_pp": -5.0,
+        "mcnemar_exact_p": 0.48685024166479707
+      },
+      "pick_coke_can": {
+        "n_pairs": 100,
+        "top_p_successes": 31,
+        "matched_successes": 25,
+        "rescue_by_top_p": 16,
+        "harm_to_top_p": 10,
+        "net": 6,
+        "top_p_rate": 0.31,
+        "matched_rate": 0.25,
+        "diff_pp": 6.0,
+        "mcnemar_exact_p": 0.32693958282470703
+      },
+      "move_near": {
+        "n_pairs": 100,
+        "top_p_successes": 38,
+        "matched_successes": 40,
+        "rescue_by_top_p": 12,
+        "harm_to_top_p": 14,
+        "net": -2,
+        "top_p_rate": 0.38,
+        "matched_rate": 0.4,
+        "diff_pp": -2.0,
+        "mcnemar_exact_p": 0.8450189828872681
+      }
+    }
+  },
+  "m_t": {
+    "top_p090": 57.87327737831859,
+    "matched": 33.356528761061945
+  },
+  "earlier_measurements": [
+    {
+      "setting": "\u03bb=1.0, seeds 200-299, 4 Google \u4efb\u52a1",
+      "top_p": 226,
+      "matched": 201,
+      "n": 400,
+      "p": 0.0274,
+      "note": "\u7f51\u683c\u5b9e\u9a8c\uff08\u539f\u59cb p\uff1bHolm(8)=0.164\uff09\u2014\u2014 9 \u4efb\u52a1\u5b9e\u9a8c\u7684 4 \u4efb\u52a1\u5b50\u96c6\uff0c\u5c5e\u540c\u4e00\u4efd\u8bc1\u636e"
+    },
+    {
+      "setting": "\u03bb=1.0, seeds 200-299, \u5168\u90e8 9 \u4efb\u52a1",
+      "top_p": 293,
+      "matched": 281,
+      "n": 900,
+      "p": 0.4604,
+      "note": "\u52a0\u5165 WidowX \u4e0e apple \u540e\u5dee\u5f02\u7f29\u5c0f\u5230 +1.33pp"
+    },
+    {
+      "setting": "\u03bb=0.5, seeds 100-199, 4 Google \u4efb\u52a1",
+      "top_p": 191,
+      "matched": 213,
+      "n": 400,
+      "p": 0.0651,
+      "note": "\u65e7\u7ba1\u7ebf\uff08TopP \u65e0 m_t \u8bb0\u5f55\uff09\uff0c\u65b9\u5411\u76f8\u53cd\uff1aTopP90 \u660e\u663e\u66f4\u5dee"
+    }
+  ],
+  "verdict_rule": "If TopP90 wins again here with a CI excluding zero, the seeds-200-299 advantage is corroborated. If the difference is near zero or negative, the advantage was multiplicity noise.",
+  "caveats": [
+    "Seeds 100-199 are an independent seed range for THIS contrast at lambda=1.0, but the same states were used by older lambda=0.5 studies; that does not affect this test.",
+    "Both arms were run in one process per chunk, so the pairs share process history.",
+    "A single seed range still cannot separate 'TopP90 is better on Google tasks' from 'this seed range happens to favour it'; the verdict combines three measurements."
+  ]
+}

@@ -1,0 +1,143 @@
+{
+  "dataset": "pi0fast_bridge_widowx_4task_100seed",
+  "protocol_id": "PI0FAST_L6MATCHED_WIDOWX_BRIDGE_RTFULL_4TASK_0_99_V1",
+  "created": "2026-10-14 12:18:52",
+  "run_dir": "runs/pi0fast_bridge_widowx_4task_100seed",
+  "checkpoint": "/home/leju-suzhou/zjt_ws/checkpoints/openpi_fast_finetuned/bridge",
+  "norm_stats": "checkpoint's own assets/local/bridge_lerobot/norm_stats.json (--norm-stats auto)",
+  "state_layout": "[x,y,z,roll,pitch,yaw,PAD(0),gripper] with R_topdown conjugation (PI0FAST_WIDOWX_LAYOUT=bridge)",
+  "action_postprocessing": "clip dims 0-5 to training q01/q99; gripper binarised to {-1,+1}",
+  "renderer": {
+    "shader_dir": "rt",
+    "rt_max_path_depth": 8,
+    "rt_samples_per_pixel": 32,
+    "rt_use_denoiser": true
+  },
+  "tasks": [
+    "widowx_carrot_on_plate",
+    "widowx_put_eggplant_in_basket",
+    "widowx_spoon_on_towel",
+    "widowx_stack_cube"
+  ],
+  "arms": [
+    "vanilla",
+    "l6_matched_025",
+    "l6_matched_050",
+    "l6_matched_075",
+    "l6_matched_100",
+    "l6_matched_125",
+    "l6_matched_150"
+  ],
+  "seeds": [
+    0,
+    99
+  ],
+  "episodes_expected": 2800,
+  "episodes_complete": 2800,
+  "episodes_missing": [],
+  "episodes_error_rows": 0,
+  "duplicates": 0,
+  "per_task_per_arm_counts": {
+    "widowx_carrot_on_plate": {
+      "vanilla": 100,
+      "l6_matched_025": 100,
+      "l6_matched_050": 100,
+      "l6_matched_075": 100,
+      "l6_matched_100": 100,
+      "l6_matched_125": 100,
+      "l6_matched_150": 100
+    },
+    "widowx_put_eggplant_in_basket": {
+      "vanilla": 100,
+      "l6_matched_025": 100,
+      "l6_matched_050": 100,
+      "l6_matched_075": 100,
+      "l6_matched_100": 100,
+      "l6_matched_125": 100,
+      "l6_matched_150": 100
+    },
+    "widowx_spoon_on_towel": {
+      "vanilla": 100,
+      "l6_matched_025": 100,
+      "l6_matched_050": 100,
+      "l6_matched_075": 100,
+      "l6_matched_100": 100,
+      "l6_matched_125": 100,
+      "l6_matched_150": 100
+    },
+    "widowx_stack_cube": {
+      "vanilla": 100,
+      "l6_matched_025": 100,
+      "l6_matched_050": 100,
+      "l6_matched_075": 100,
+      "l6_matched_100": 100,
+      "l6_matched_125": 100,
+      "l6_matched_150": 100
+    }
+  },
+  "success_counts": {
+    "widowx_carrot_on_plate": {
+      "vanilla": 15,
+      "l6_matched_025": 23,
+      "l6_matched_050": 22,
+      "l6_matched_075": 25,
+      "l6_matched_100": 24,
+      "l6_matched_125": 25,
+      "l6_matched_150": 24
+    },
+    "widowx_put_eggplant_in_basket": {
+      "vanilla": 41,
+      "l6_matched_025": 38,
+      "l6_matched_050": 34,
+      "l6_matched_075": 36,
+      "l6_matched_100": 46,
+      "l6_matched_125": 44,
+      "l6_matched_150": 50
+    },
+    "widowx_spoon_on_towel": {
+      "vanilla": 7,
+      "l6_matched_025": 32,
+      "l6_matched_050": 27,
+      "l6_matched_075": 26,
+      "l6_matched_100": 31,
+      "l6_matched_125": 19,
+      "l6_matched_150": 24
+    },
+    "widowx_stack_cube": {
+      "vanilla": 3,
+      "l6_matched_025": 13,
+      "l6_matched_050": 13,
+      "l6_matched_075": 13,
+      "l6_matched_100": 14,
+      "l6_matched_125": 12,
+      "l6_matched_150": 12
+    }
+  },
+  "success_totals": {
+    "vanilla": 66,
+    "l6_matched_025": 106,
+    "l6_matched_050": 96,
+    "l6_matched_075": 100,
+    "l6_matched_100": 115,
+    "l6_matched_125": 100,
+    "l6_matched_150": 110
+  },
+  "success_vector_sha256": "3b62b31659758e59f4c820df47b6c757b2957d5275de4d837a97f54cdf39b634",
+  "guided_fallbacks": {
+    "replans": 81,
+    "episodes": 78
+  },
+  "matched_units_all_arms": 400,
+  "runtime_seconds": {
+    "mean": 397.9,
+    "median": 385.876
+  },
+  "serving_topology_final": "9 policy servers (3 per GPU x 2 workers) on GPU 1/2/3 + 18 rollout workers on GPU 1/2/3",
+  "docs": [
+    "docs/PI0FAST_L6MATCHED_WIDOWX_BRIDGE_4TASK_100SEED_FINAL.md",
+    "docs/PI0FAST_L6MATCHED_WIDOWX_BRIDGE_4TASK_100SEED_FINAL.json",
+    "docs/PI0FAST_L6_MATCHED_9TASK_COMBINED.md",
+    "docs/PI0FAST_L6_MATCHED_9TASK_TABLE.md",
+    "runs/pi0fast_l6_matched_9task_100seed/WIDOWX_ROADMAP.md"
+  ]
+}

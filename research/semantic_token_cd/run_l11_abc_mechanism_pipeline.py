@@ -7,6 +7,7 @@ workers pinned to physical GPUs 1, 2, and 3, three workers per GPU.
 from __future__ import annotations
 
 import json
+import argparse
 import os
 import shlex
 import subprocess
@@ -38,6 +39,8 @@ def log(message: str) -> None:
 def launch(session: str, gpu: int, body: str, log_path: Path, exit_path: Path) -> None:
     if subprocess.run(["tmux", "has-session", "-t", session], capture_output=True).returncode == 0:
         raise RuntimeError(f"tmux session already exists: {session}")
+    # A resumed worker must not inherit an exit marker from an earlier attempt.
+    exit_path.unlink(missing_ok=True)
     inner = (
         f"cd {shlex.quote(str(ROOT))}; source scripts/activate_simpler_local.sh; set +e; "
         f"export CUDA_VISIBLE_DEVICES={int(gpu)}; {body} > {shlex.quote(str(log_path))} 2>&1; "
@@ -393,15 +396,20 @@ def launch_c_formal() -> None:
 def main() -> None:
     os.chdir(ROOT)
     LOG.parent.mkdir(parents=True, exist_ok=True)
-    log("PIPELINE START; GPU allowlist fixed to 1,2,3; 3 workers per card")
-    wait_state_library()
-    state_count = run_a1()
-    log(f"A1_DONE sampled_states={state_count}")
-    run_a2()
-    log("A_DONE spatial support and same-state budget response")
-    b_preflight()
-    launch_b_formal()
-    log("B_DONE target-enriched versus target-sparing")
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--resume-from", choices=("all", "B", "C"), default="all")
+    args = parser.parse_args()
+    log(f"PIPELINE START; resume_from={args.resume_from}; GPU allowlist fixed to 1,2,3; 3 workers per card")
+    if args.resume_from == "all":
+        wait_state_library()
+        state_count = run_a1()
+        log(f"A1_DONE sampled_states={state_count}")
+        run_a2()
+        log("A_DONE spatial support and same-state budget response")
+    if args.resume_from in ("all", "B"):
+        b_preflight()
+        launch_b_formal()
+        log("B_DONE target-enriched versus target-sparing")
     c_preflight()
     launch_c_formal()
     log("PIPELINE_COMPLETE A/B/C; see artifacts/l11_abc_mechanism_v1")

@@ -1,0 +1,45 @@
+{
+  "checkpoint": "/home/leju-suzhou/zjt_ws/checkpoints/univla-7b-224-sft-simpler-bridge",
+  "gpu_physical": 5,
+  "input_path": "artifacts/vtcg_per_call_latency_5backbone_20261023_223816/canonical_observation.npz",
+  "input_shape": [
+    512,
+    640,
+    3
+  ],
+  "instruction": "pick coke can",
+  "measured_calls_per_arm": 500,
+  "model": "UniVLA",
+  "protocol": "VTCG_PER_POLICY_CALL_LATENCY_V1",
+  "results": {
+    "vanilla": {
+      "max_ms": 136.3811669871211,
+      "mean_ms": 117.01113170199096,
+      "median_ms": 115.81287404987961,
+      "min_ms": 113.70822391472757,
+      "n": 500,
+      "p90_ms": 121.0740537615493,
+      "p95_ms": 121.96199158206582
+    },
+    "vtcg_l14_matched_lambda_0.5": {
+      "max_ms": 391.16967492736876,
+      "mean_ms": 366.089494433254,
+      "median_ms": 365.3997424989939,
+      "min_ms": 358.85673807933927,
+      "n": 500,
+      "p90_ms": 371.5817674063146,
+      "p95_ms": 373.9102841936983
+    }
+  },
+  "task": "google_robot_pick_coke_can",
+  "timing_scope": "policy call from observation preprocessing through action decoding; includes prompt attention, KMeans/matched selection, harmonic reconstruction, counterfactual forward and guided action decoding; excludes model load, environment/render/step, reset, logging",
+  "vtcg_config": {
+    "hidden_alignment": "act1234",
+    "lambda_h": 0.5,
+    "layer": 14,
+    "variant": "L14-Matched harmonic counterfactual"
+  },
+  "vtcg_minus_vanilla_mean_ms": 249.07836273126304,
+  "vtcg_over_vanilla_mean_latency_ratio": 3.128672367391734,
+  "warmup_per_arm": 50
+}

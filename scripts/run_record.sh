@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+set -u
+ROOT=/home/leju-suzhou/zjt_ws
+source /home/leju-suzhou/miniconda3/etc/profile.d/conda.sh
+conda activate pi0
+export CUDA_VISIBLE_DEVICES="${1:-1}"
+export VK_ICD_FILENAMES=/usr/share/vulkan/icd.d/nvidia_icd.json
+export TOKENIZERS_PARALLELISM=false
+export OMP_NUM_THREADS=1 MKL_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1
+export JAX_PLATFORMS=cpu
+export PYTHONPATH="/home/leju-suzhou/.cache/pi0fast_client_deps:$ROOT/openpi/packages/openpi-client/src:$ROOT/pcd_openvla_simpler_box_31b027e/source:$ROOT/SimplerEnv:$ROOT/SpatialVLA-SimplerEnv:$ROOT/SpatialVLA-SimplerEnv/ManiSkill2_real2sim:$ROOT/SpatialVLA/ManiSkill2_real2sim:$ROOT/token-cd:$ROOT/openpi/src"
+exec /home/leju-suzhou/miniconda3/envs/pi0/bin/python "$ROOT/token-cd/scripts/record_comparison.py"

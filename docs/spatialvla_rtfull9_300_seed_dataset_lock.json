@@ -1,0 +1,91 @@
+{
+  "dataset_id": "SPATIALVLA_RTfull9_300_SEEDS_V1",
+  "recorded": "2026-10-13",
+  "status": "canonical",
+  "description": "SpatialVLA 9-task, 300-seed-per-task, 2-arm paired evaluation. Canonical record: docs/SPATIALVLA_RTfull9_300_SEEDS_V1_DATASET.md",
+  "scale": {
+    "tasks": 9,
+    "seeds_per_task": 300,
+    "seed_range": [0, 299],
+    "arms": ["vanilla", "l10_matched"],
+    "episodes": 5400,
+    "per_arm_episodes": 2700
+  },
+  "models_by_policy_setup": {
+    "google_robot": "/home/leju-suzhou/zjt_ws/checkpoints/spatialvla-4b-224-sft-fractal",
+    "widowx_bridge": "/home/leju-suzhou/zjt_ws/checkpoints/spatialvla-4b-224-sft-bridge"
+  },
+  "arms": {
+    "vanilla": "official SpatialVLA inference",
+    "l10_matched": {
+      "lambda": 0.5,
+      "selector_layer_zero_based": 10,
+      "negative": "16x16 4-neighbor harmonic reconstruction, beta=0, post-projector/post-Ego3D",
+      "contrastive": "(1+0.5)*positive - 0.5*negative, greedy full-vocabulary",
+      "action_chunk_size": 4
+    }
+  },
+  "renderer": {
+    "backend": "SAPIEN RT",
+    "mode": "full",
+    "path_depth": 8,
+    "spp": 32,
+    "denoiser": true,
+    "uniform_across_all_5400_episodes": true
+  },
+  "pairing": "same task/seed canonical snapshot (vanilla_recon_shr_canonical_0_299_v2); initial RGB / agent-state hashes recorded per episode",
+  "tasks": [
+    "google_robot_open_drawer",
+    "google_robot_close_drawer",
+    "google_robot_move_near",
+    "google_robot_pick_coke_can",
+    "google_robot_place_apple_in_closed_top_drawer",
+    "widowx_carrot_on_plate",
+    "widowx_put_eggplant_in_basket",
+    "widowx_spoon_on_towel",
+    "widowx_stack_cube"
+  ],
+  "composition": [
+    {"artifact": "spatialvla_l10_vanilla_rtfull7_to300_v1", "task_group": "non_drawer_7", "arm": "vanilla", "seeds": "0-99,200-299", "n": 1400, "path_depth": 8},
+    {"artifact": "spatialvla_l10_vanilla_rtfull7_to300_v1", "task_group": "non_drawer_7", "arm": "l10_matched", "seeds": "0-99,200-299", "n": 1400, "path_depth": 8},
+    {"artifact": "spatialvla_remaining7_rtfull_vanilla_100_199_v1", "task_group": "non_drawer_7", "arm": "vanilla", "seeds": "100-199", "n": 700, "path_depth": 8},
+    {"artifact": "spatialvla_l10_matched_rtfull7_n100_199", "task_group": "non_drawer_7", "arm": "l10_matched", "seeds": "100-199", "n": 700, "path_depth": 8},
+    {"artifact": "spatialvla_l10_vanilla_expand9_to300_v1", "task_group": "drawer_2", "arm": "vanilla", "seeds": "0-99,200-299", "n": 400, "path_depth": 8},
+    {"artifact": "spatialvla_l10_vanilla_expand9_to300_v1", "task_group": "drawer_2", "arm": "l10_matched", "seeds": "0-99,200-299", "n": 400, "path_depth": 8},
+    {"artifact": "spatialvla_simpler_l11matched_4task_n100", "task_group": "drawer_2", "arm": "vanilla", "seeds": "100-199", "n": 200, "path_depth": 8},
+    {"artifact": "spatialvla_l10_vs_l11_4task_n100", "task_group": "drawer_2", "arm": "l10_matched", "seeds": "100-199", "n": 200, "path_depth": 8}
+  ],
+  "excluded_depth0": [
+    {"artifact": "spatialvla_l10_vanilla_expand9_to300_v1", "task_group": "non_drawer_7", "arms": ["vanilla", "l10_matched"], "n_each": 1400, "path_depth": 0, "reason": "expand9 non-drawer subset is depth0; use the rtfull7 artifacts instead"},
+    {"artifact": "spatialvla_simpler_l11matched_4task_n100", "tasks": ["google_robot_move_near", "google_robot_pick_coke_can"], "n_each": 400, "path_depth": 0, "reason": "4task non-drawer subset is depth0"},
+    {"artifact": "spatialvla_l10_vs_l11_4task_n100", "tasks": ["google_robot_move_near", "google_robot_pick_coke_can"], "n_each": 400, "path_depth": 0, "reason": "4task non-drawer subset is depth0"},
+    {"artifact": "spatialvla_drawers_rt_depth0_vanilla_l10_100_199_v1", "task_group": "drawer_2", "arms": ["vanilla", "l10_matched"], "n_each": 200, "path_depth": 0, "reason": "name says 'rt' but renderer is depth0 - excluded entirely"}
+  ],
+  "results_per_task": {
+    "google_robot_open_drawer": {"vanilla": [152, 300], "l10_matched": [189, 300], "rescue": 41, "harm": 4},
+    "google_robot_close_drawer": {"vanilla": [198, 300], "l10_matched": [240, 300], "rescue": 53, "harm": 11},
+    "google_robot_move_near": {"vanilla": [112, 300], "l10_matched": [183, 300], "rescue": 87, "harm": 16},
+    "google_robot_pick_coke_can": {"vanilla": [112, 300], "l10_matched": [238, 300], "rescue": 139, "harm": 13},
+    "google_robot_place_apple_in_closed_top_drawer": {"vanilla": [0, 300], "l10_matched": [13, 300], "rescue": 13, "harm": 0},
+    "widowx_carrot_on_plate": {"vanilla": [82, 300], "l10_matched": [104, 300], "rescue": 37, "harm": 15},
+    "widowx_put_eggplant_in_basket": {"vanilla": [298, 300], "l10_matched": [286, 300], "rescue": 2, "harm": 14},
+    "widowx_spoon_on_towel": {"vanilla": [66, 300], "l10_matched": [98, 300], "rescue": 48, "harm": 16},
+    "widowx_stack_cube": {"vanilla": [99, 300], "l10_matched": [111, 300], "rescue": 15, "harm": 3}
+  },
+  "results_overall": {
+    "vanilla": [1119, 2700],
+    "l10_matched": [1462, 2700],
+    "vanilla_rate": 0.41444444444444445,
+    "l10_matched_rate": 0.5414814814814815,
+    "delta_pp": 12.703703703703704,
+    "rescue": 435,
+    "harm": 92,
+    "paired_net": 343
+  },
+  "verify": {
+    "script": "token-cd/scripts/build_spatialvla_rtfull9_300_table.py",
+    "expected": "5400 kept, 4000 dropped, n=300 per task-arm, MEAN 41.4 -> 54.1 (+12.7)",
+    "table": "token-cd/docs/spatialvla_rtfull9_300_seed_table.md",
+    "record": "token-cd/docs/SPATIALVLA_RTfull9_300_SEEDS_V1_DATASET.md"
+  }
+}
